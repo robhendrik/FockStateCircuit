@@ -1,2 +1,111 @@
 # FockStateCircuit
-FockStateCircuit' is intended to model (quantum) optical quantum circuits where the different channels carry well defined number of photons
+'FockStateCircuit' is intended to model (quantum) optical quantum circuits where the different channels carry well defined number of photons (typically low numbers like 0,1,2,3, ...). These states where the number of photons is well defined are called 'Fock states'. The class supports optical channels where interaction is established through optical components, like beamsplitters or waveplates. Circuits can also contain classical channels. These can be used to store the result of a measurement or to set the behavior of optical componens.
+
+FockStateCircuits run instances from the class 'CollectionOfStates'. These are collections of states belonging to the FockStateCircuit. The states describe photon numbers in the optical channels and the values of the classical channels. When we run a collection of states on a circuit the collection will evolve through the circuit from an 'input' collection of states to an 'output' collection of states.
+
+The states in the collections are instances of the class 'State'. The states describe photon numbers in the optical channels and the values of the classical channels. The states also carry the history of the different measurement results during evolution through the circuit, as well as a reference to the initial state they originate from. 
+
+## Installing
+Right now you would need to copy the modules fock_state_circuit.py and collection_of_states.py from the src folder on Github. We are working on posting the modules on PyPi.
+
+## Quick Start
+This is an example modelling the HOM effect on a beamsplitter. The circuit has 4 optical channels (two polarizations for the two input ports of the beamsplitter). After the beamsplitter the photon number in two channels is measured and written to the two classical channels. The `initial_collection_of_states` is set up such that the input states are only those where we have one horizontally polarized photon in each input port, or where we have two horizontally polarized photon simultaneously at the two input ports. After ' evaluating' the circuit with the given collection of states the variable results contains the states which result if the input states evolve through the circuit. The resulting states are plotted and the schematics of the circuit are drawn.
+```
+circuit = fsc.FockStateCircuit(length_of_fock_state = 3, 
+                                no_of_optical_channels = 4,
+                                no_of_classical_channels=2
+                                )
+circuit.non_polarizing_50_50_beamsplitter(input_channels_a=(0,1), input_channels_b=(2,3))
+circuit.measure_optical_to_classical(optical_channels_to_be_measured=[0,2], classical_channels_to_be_written=[0,1])
+
+initial_collection_of_states = cos.CollectionOfStates(fock_state_circuit=circuit)
+initial_collection_of_states.filter_on_initial_state(initial_state_to_filter=['1000', '0010', '1010'])
+
+result = circuit.evaluate_circuit(collection_of_states_input=initial_collection_of_states)
+
+result.plot()
+
+circuit.draw()
+```
+The code should show this when running `result.plot()`: When using one photon the likelihood of finding it in any of the output ports is 50%. When using two photons (one for each input port) simultaneously we only see outcomes where both photons are in the same output ports, and not outcomes where they are each in a different output port. 
+![title](./images/output_HOM_effect.png)
+
+The schematics of the circuit (shown when calling `circuit.draw()` are these:
+![title](./images/output_fock_state_circuit_example.png)
+
+## Basic explanation
+### Circuits
+A FockStateCircuit consists of a series of 'nodes'. The variable `circuit.node_list` contains the nodes with all relevant information for evaluating the states and displaying the nodes. There are 4 types of nodes:
+* Optical nodes: These only contain interactions between optical channels (beamsplitters, wave plates)
+* Classical nodes: These only contain interactions between classical channels (e.g., to perform a calculation based on values in these channels)
+* Measurement nodes: These contain measurements where classical channels are written with photon numbers measured in the optical channels. The optical channels will 'collapse' into the value corresponding to the measurement result.
+* Combined nodes: These nodes have optical components which characteristics are set by values in the classical channels. This could be a wave plate whose angular orientation and/or phase delay is determined by a value the classical channels.
+
+### States
+Circuits run collections for states. The collections contain instances of the class `State`. Each state describes pure state which can be run on the circuit (i.e., it has the right number of classical and optical channels). The format for a state is:
+```
+Identifier: 'identifier_1-M1a'
+Initial state: '10'
+Cumulative probability: 1.00
+Classical values: ['0.00', '1.00']
+Last measurement result:  
+	Value: ['0.00', '1.00'], Probability: 1.00
+Optical components: 
+	Component: '01' Amplitude: (1.00 - 0.00i), Probability: 1.00
+```
+
+* __initial_state__ (str) : 
+                Typically the state from which the current state has evolved in the circuit, but user can customize for other purposes. Also 
+                used to group together states in a statistical mixture.
+
+* __cumulative_probability__ (float) :
+                Probability to evolve from initial state to current state (as consequence of measurement or decoherence). Alternatively used
+                to give the weight of this state in a statistical mixture of states indicated with the same initial_state
+
+* __optical_components__ (dictionary) : 
+                Optical components of the state described as number states per channel (i.e., '1001' can mean one photon in channel 0 and channel 3). 
+                Each component has an amplitude (complex number type np.cdouble) and a probability (float). The probability is always the square
+                of the absolute value of the amplitude (so effectively redundant information). The format for optical_components is for example:
+                ```{ '1011': {'amplitude': 0.71 + 0j, 'probability': 0.5}, '1110': {'amplitude': 0.71 + 0j, 'probability': 0.5}}```
+
+* __classical_channel_values__ (list of floats) :
+                A list holding the values for classical channels in the fock state circuit.
+
+* __measurement_results__ (list of dictionaries) :
+                Measurement_results holds the outcomes of all measurements. New measurements should appended to the end of the list.
+                At each measurement the classical channel values after the measurement are store together with the probability to get 
+                that measurement result. The format for measurement results is for example:
+                ```[{'measurement_results': [1, 3, 3.14], 'probability': 0.5}, {'measurement_results': [0, 0, 3.14], 'probability': 0.25}]```
+
+## Wacht outs
+* When defining a circuit the parameter `length_of_fock_state` has to be set. If `length_of_fock_state` is for instance 3 the possible values for any optical channel are 0, 1 or 2 photons. So the maximum photon number in this case is 2. In general the maximum photon number is equal to `length_of_fock_state`-1. When the system encounters a transition between Fock States where the photon number is larger than `length_of_fock_state`-1 it will artificially set the transition amplitude to 1, leading to non-physical outcomes.
+* After measurement the optical states 'collapse' to the value corresponding to the measurement. If more measurement outcomes are possible one state will turn into a statistical mixture. The photons will not disappear once they are measured (so this is a kind of 'non-destructive measurement')
+* Under the hood the system uses quite large data structures. The basis is typically of size `length_of_fock_state` to the power `no_of_optical_channels`. There is some optimization to reduce the size of these matrices but it is still wise to minimize values to lowest number possible.
+                
+        
+## Features
+* Evaluate quantummechanical interaction between optical channels
+* Easy to model famous experiments like Alain Aspects nobel prize winning experiment, the HOM effect, GHZ state generation as first demonstrator by Anton Zeilinger, quantum teleportation, ...
+* Optical and quantum channels combined to easily process a variety of input states
+* Features for easy plotting and visualizing the circuits and the states
+
+# To do
+Next up are
+* Inclusion of custom nodes with arbitrary transitions between Fock states for the optical channels. This would enable non-linear interactions i.e. Kerr gates.
+* Decoherence nodes to model the impact of optical delay (for finite bandwidth optics) and coupling to external environment.
+* Optimized calculation for systems with large channel numbers and/or large photon numbers.
+
+## Documentation
+On github you will find:
+* This README.md in the main directory
+* In the directory docs:
+    * A tutorial
+    * Pydoc documentation generated from the docstrings in the modules
+The you can check https://armchairquantumphysicist.com/ where a number of applications are covered blogposts
+
+## Authors
+Rob Hendriks
+
+
+
+
