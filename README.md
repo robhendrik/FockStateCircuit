@@ -40,6 +40,8 @@ A FockStateCircuit consists of a series of 'nodes'. The variable `circuit.node_l
 * Classical nodes: These only contain interactions between classical channels (e.g., to perform a calculation based on values in these channels)
 * Measurement nodes: These contain measurements where classical channels are written with photon numbers measured in the optical channels. The optical channels will 'collapse' into the value corresponding to the measurement result.
 * Combined nodes: These nodes have optical components which characteristics are set by values in the classical channels. This could be a wave plate whose angular orientation and/or phase delay is determined by a value the classical channels.
+* Custom nodes: These nodes can perform and action on the optical circuit which is not limited to linear optical components. We can use this to model non-linear optical effects, or even non-physical effects.
+* Bridge nodes: These nodes create a connection between two circuits with different characteristics. You use this for instance when you want to extend or shrink the number of channels in your circuit.
 
 ### States
 Circuits run collections for states. The collections contain instances of the class `State`. Each state describes pure state which can be run on the circuit (i.e., it has the right number of classical and optical channels). The format for a state is:
@@ -89,20 +91,80 @@ Optical components:
 * Optical and quantum channels combined to easily process a variety of input states
 * Features for easy plotting and visualizing the circuits and the states
 
-# To do
-Next up are
-* Inclusion of custom nodes with arbitrary transitions between Fock states for the optical channels. This would enable non-linear interactions i.e. Kerr gates.
-* Decoherence nodes to model the impact of optical delay (for finite bandwidth optics) and coupling to external environment.
-* Optimized calculation for systems with large channel numbers and/or large photon numbers.
-
 ## Documentation
 On github you will find:
 * This README.md in the main directory
 * In the directory docs:
-    * A tutorial
-    * Pydoc documentation generated from the docstrings in the modules
-The you can check https://armchairquantumphysicist.com/ where a number of applications are covered blogposts
 
+        tutorials
+                fock_state_circuit_getting_started_tutorial.ipynb
+                fock_state_circuit_tutorial.ipynb
+
+        background on specific
+                combining_fock_state_circuits_tutorial.ipynb
+                drawing_fock_state_circuit_tutorial.ipynb
+        
+        application examples:
+                GHZ simulation with FockStateCircuit.ipynb
+                Quantum Teleportation with FockStateCircuit.ipynb
+
+    * Pydoc documentation generated from the docstrings in the modules
+You can also check https://armchairquantumphysicist.com/ where a number of applications are covered in blogposts
+
+## Version history
+### Version 0.0.9
+* Added a new class CompoundFockStateCircuit
+        The class is used to work with a list of circuits that have to be executed sequentially. 
+        
+* Added function: CollectionOfStates.extend
+        Adds optical channels to every state and loads this with desired values. Creates statistical mixture if new channel is initiated with more than one value.
+* Added function: CollectionOfStates.reduce
+        Reduces number of optical channels by 'tracing out'. Most likely creates a statistical mixure in the remaining collection of states.
+* Added function: CollectionOfStates.clean_up:
+        Removes states and components with probability lower than threshold (self._threshold_probability_for_setting_to_zero)
+        Groups states with same optical components together in one state while adding the cumulative probabilities.
+* Added function: CollectionOfStates.density_matrix
+        Returns a dictionary containing the density matric, trance of the density matrix and trace of the square of the density matric
+* Added function: CollectionOfStates.adjust_length_of_fock_state
+        Adjusts the length of the Fock state used in the calculation. This allows scaling up or down the maximum number of photons per channel
+        and can enable more efficient calculation.
+
+* Added function: State._rescale_optical_components
+        Rescales optical components by removing the ones with (too) low probability and re-normalizing the remaining ones.
+
+* Added function: State._identical_optical_components
+        Returns True if optical components are the same, otherwise False.  
+        
+* Added function: FockStateCircuit.basis
+        Returns a dictonary with valid components names as keys and the corresponding photon numbers in the values
+* Added function: FockStateCircuit.custom_fock_state_node
+        Apply a custom Fock state matrix to the circuit.
+* Added function: FockStateCircuit.channel_coupling
+        Apply a node to the circuit to couple channels with the given 'coupling_strength'.
+* Added function: FockStateCircuit.bridge
+        Apply a bridge node to the circuit to transfer the collection of states from one circuit to another.
+* Added function FockStateCircuit.c_shift
+        Apply a controlled shift node to the circuit
+* Added function FockStateCircuit.get_fock_state_matrix
+        Returns the fock state matrix for a given set of nodes in the circuit
+* Added function fock_state_circuit.about() to module fock_state_circuit.py
+        
+#### Changes
+* Added 'import fock_state_circuit as fsc'
+* Added node-types 'bridge to other circuit' and 'custom optical'
+* Added option to set optical components via a list of tuples, rather than a full dictionary
+* Updated function FockStateCircuit.draw() to include bridge nodes
+* Added a constant indicating version (_VERSION = '0.0.9')
+    
+#### Bug fixes
+* Removed return value from CollectionOfStates.add_state
+
+### Version 0.0.8
+
+updated version: Published November 21, 2023 on https://github.com/robhendrik/FockStateCircuit/tree/main
+### Version 0.0.8
+
+initial version: Published June 20, 2023 on https://github.com/robhendrik/FockStateCircuit/tree/main
 ## Authors
 Rob Hendriks
 
