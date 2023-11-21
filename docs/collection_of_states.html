@@ -8,7 +8,7 @@
 <table class="heading">
 <tr class="heading-text decor">
 <td class="title">&nbsp;<br><strong class="title">collection_of_states</strong></td>
-<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cnly99857%5Conedrive%20-%20philips%5Csw%20projects%5Cgithubclones%5Cghz%20simulation%20on%20quantum%20computer%5Ccollection_of_states.py">c:\users\nly99857\onedrive - philips\sw projects\githubclones\ghz simulation on quantum computer\collection_of_states.py</a></td></tr></table>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cnly99857%5Conedrive%20-%20philips%5Csw%20projects%5Cgithubclones-newpc%5Cfockstatecircuit009%5Csrc%5Ccollection_of_states.py">c:\users\nly99857\onedrive - philips\sw projects\githubclones-newpc\fockstatecircuit009\src\collection_of_states.py</a></td></tr></table>
     <p></p>
 <p>
 <table class="section">
@@ -16,11 +16,12 @@
 <td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
     
 <tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
-<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="matplotlib.html">matplotlib</a><br>
-<a href="numpy.html">numpy</a><br>
-</td><td class="multicolumn"><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
-<a href="random.html">random</a><br>
-</td><td class="multicolumn"><a href="string.html">string</a><br>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="math.html">math</a><br>
+<a href="matplotlib.html">matplotlib</a><br>
+</td><td class="multicolumn"><a href="numpy.html">numpy</a><br>
+<a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+</td><td class="multicolumn"><a href="random.html">random</a><br>
+<a href="string.html">string</a><br>
 </td><td class="multicolumn"></td></tr></table></td></tr></table><p>
 <table class="section">
 <tr class="decor index-decor heading-text">
@@ -42,13 +43,16 @@
 <td class="section-title" colspan=3>&nbsp;<br><a name="CollectionOfStates">class <strong>CollectionOfStates</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
     
 <tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
-<td class="decor title-decor" colspan=2><span class="code"><a href="#CollectionOfStates">CollectionOfStates</a>(fock_state_circuit:&nbsp;&amp;lt;built-in&nbsp;function&nbsp;any&amp;gt;,&nbsp;input_collection_as_a_dict=None)<br>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#CollectionOfStates">CollectionOfStates</a>(fock_state_circuit:&nbsp;&amp;lt;built-in&nbsp;function&nbsp;any&amp;gt;,&nbsp;input_collection_as_a_dict:&nbsp;dict[str,&nbsp;'<a href="#State">State</a>']&nbsp;=&nbsp;None)<br>
 &nbsp;<br>
 <a href="#CollectionOfStates">CollectionOfStates</a>&nbsp;is&nbsp;a&nbsp;class&nbsp;describing&nbsp;collections&nbsp;of&nbsp;states&nbsp;as&nbsp;input&nbsp;and&nbsp;output&nbsp;to&nbsp;a&nbsp;FockStateCircuit.&nbsp;An&nbsp;instance&nbsp;can&nbsp;be&nbsp;generate&nbsp;by<br>
 by&nbsp;passing&nbsp;a&nbsp;FockStateCircuit&nbsp;from&nbsp;which&nbsp;the&nbsp;collection&nbsp;of&nbsp;states&nbsp;takes&nbsp;parameters&nbsp;like&nbsp;the&nbsp;number&nbsp;of&nbsp;optical&nbsp;channels&nbsp;and&nbsp;the&nbsp;number&nbsp;of&nbsp;classical<br>
 channels&nbsp;in&nbsp;the&nbsp;circuit.&nbsp;<br>
 &nbsp;<br>
 The&nbsp;collection_of_states&nbsp;is&nbsp;an&nbsp;iterable.&nbsp;We&nbsp;can&nbsp;run&nbsp;though&nbsp;all&nbsp;states&nbsp;with&nbsp;'for&nbsp;state&nbsp;in&nbsp;collection_of_states'.<br>
+&nbsp;<br>
+States&nbsp;are&nbsp;stored&nbsp;in&nbsp;a&nbsp;dictionary.&nbsp;The&nbsp;key&nbsp;is&nbsp;an&nbsp;'identifier'.&nbsp;Data&nbsp;structure&nbsp;(including&nbsp;the&nbsp;structure&nbsp;of&nbsp;the&nbsp;underlying&nbsp;class&nbsp;<a href="#State">State</a>)&nbsp;is&nbsp;given&nbsp;below.<br>
+&nbsp;<br>
 {'identifier_1':&nbsp;{<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'initial_state':&nbsp;'state_name1',<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'cumulative_probability'&nbsp;:&nbsp;1.0,<br>
@@ -80,8 +84,13 @@ Methods<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-__str__">__str__</a>(self):&nbsp;Function&nbsp;to&nbsp;print&nbsp;a&nbsp;collection&nbsp;of&nbsp;states&nbsp;in&nbsp;a&nbsp;digestible&nbsp;format.<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-add_state">add_state</a>(self,&nbsp;state:&nbsp;'<a href="#State">State</a>',&nbsp;identifier=None):&nbsp;Add&nbsp;a&nbsp;new&nbsp;state&nbsp;to&nbsp;the&nbsp;circuit.&nbsp;If&nbsp;identifier&nbsp;is&nbsp;given&nbsp;that&nbsp;will&nbsp;be&nbsp;used,&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;otherwise&nbsp;random&nbsp;new&nbsp;identifier&nbsp;will&nbsp;be&nbsp;generated.&nbsp;Take&nbsp;carecwhen&nbsp;using&nbsp;existing&nbsp;identifier,&nbsp;the&nbsp;function&nbsp;will&nbsp;overwrite&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;otherwise&nbsp;random&nbsp;new&nbsp;identifier&nbsp;will&nbsp;be&nbsp;generated.&nbsp;Take&nbsp;care&nbsp;when&nbsp;using&nbsp;existing&nbsp;identifier,&nbsp;the&nbsp;function&nbsp;will&nbsp;overwrite&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;previous&nbsp;state&nbsp;with&nbsp;that&nbsp;identifier.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-adjust_length_of_fock_state">adjust_length_of_fock_state</a>(self,&nbsp;new_length_of_fock_state:&nbsp;int&nbsp;=&nbsp;0):&nbsp;Function&nbsp;adjusts&nbsp;the&nbsp;'length&nbsp;of&nbsp;Fock&nbsp;state'&nbsp;for&nbsp;the&nbsp;collection.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-clean_up">clean_up</a>(initial_state:&nbsp;str&nbsp;=&nbsp;''):&nbsp;Function&nbsp;cleans&nbsp;up&nbsp;the&nbsp;collection_of_states.&nbsp;All&nbsp;optical&nbsp;components&nbsp;with&nbsp;low&nbsp;probability&nbsp;are&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;removed&nbsp;and&nbsp;the&nbsp;total&nbsp;set&nbsp;of&nbsp;optical&nbsp;components&nbsp;is&nbsp;renormalized.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-clear">clear</a>(self):&nbsp;Function&nbsp;to&nbsp;completely&nbsp;clear&nbsp;the&nbsp;collection&nbsp;of&nbsp;states.<br>
 &nbsp;<br>
@@ -97,6 +106,13 @@ Methods<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Either&nbsp;the&nbsp;identifier&nbsp;or&nbsp;the&nbsp;initial_state&nbsp;is&nbsp;used&nbsp;to&nbsp;identify&nbsp;to&nbsp;state&nbsp;to&nbsp;remove.&nbsp;If&nbsp;more&nbsp;states&nbsp;exist&nbsp;with&nbsp;the&nbsp;same&nbsp;initial_state&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;first&nbsp;one&nbsp;will&nbsp;be&nbsp;removed.&nbsp;If&nbsp;identier&nbsp;or&nbsp;initial_states&nbsp;given&nbsp;as&nbsp;argument&nbsp;are&nbsp;not&nbsp;present&nbsp;in&nbsp;the&nbsp;collection&nbsp;the&nbsp;function&nbsp;will&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;do&nbsp;nothing&nbsp;and&nbsp;leave&nbsp;the&nbsp;collection&nbsp;as&nbsp;it&nbsp;was.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-density_matrix">density_matrix</a>(initial_state:&nbsp;str&nbsp;=&nbsp;'',&nbsp;decimal_places_for_trace:&nbsp;int&nbsp;=&nbsp;2):&nbsp;Function&nbsp;to&nbsp;create&nbsp;density&nbsp;matrix&nbsp;as&nbsp;well&nbsp;as&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trace&nbsp;of&nbsp;the&nbsp;density&nbsp;matrix&nbsp;and&nbsp;trace&nbsp;of&nbsp;density&nbsp;matrix&nbsp;squared.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-extend">extend</a>(extra_optical_channels:&nbsp;int&nbsp;=&nbsp;0,&nbsp;extra_classical_channels:&nbsp;int&nbsp;=&nbsp;0,&nbsp;statistical_distribution:&nbsp;list[int]&nbsp;=&nbsp;[]):&nbsp;Function&nbsp;extends&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;original&nbsp;collection&nbsp;of&nbsp;states&nbsp;with&nbsp;new&nbsp;optical&nbsp;and/or&nbsp;classical&nbsp;channels.&nbsp;The&nbsp;optical&nbsp;channels&nbsp;will&nbsp;be&nbsp;filled&nbsp;according&nbsp;to&nbsp;the&nbsp;parameter&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'statistical_distribution'.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-filter_on_classical_channel">filter_on_classical_channel</a>(self,&nbsp;classical_channel_numbers:&nbsp;list,&nbsp;values_to_filter:&nbsp;list):&nbsp;Removes&nbsp;all&nbsp;states&nbsp;from&nbsp;the&nbsp;collection&nbsp;which&nbsp;do&nbsp;not&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match&nbsp;the&nbsp;filter&nbsp;criterium.&nbsp;In&nbsp;this&nbsp;case&nbsp;the&nbsp;classical&nbsp;channels&nbsp;need&nbsp;to&nbsp;have&nbsp;the&nbsp;right&nbsp;values.&nbsp;If&nbsp;no&nbsp;state&nbsp;has&nbsp;the&nbsp;correct&nbsp;values&nbsp;in&nbsp;<br>
@@ -121,6 +137,8 @@ Methods<br>
 &nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-plot">plot</a>(self,&nbsp;classical_channels=[],&nbsp;initial_states=[],&nbsp;info_for_bar_plot={}):&nbsp;Function&nbsp;to&nbsp;plot&nbsp;a&nbsp;bar&nbsp;graph&nbsp;for&nbsp;a&nbsp;circuit.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-reduce">reduce</a>(optical_channels_to_keep:&nbsp;list[int]&nbsp;=&nbsp;[],&nbsp;classical_channels_to_keep:&nbsp;list[int]&nbsp;=&nbsp;[])&nbsp;:&nbsp;Reduces&nbsp;the&nbsp;number&nbsp;of&nbsp;optical&nbsp;and/or&nbsp;classical&nbsp;channels.&nbsp;<br>
+&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates-set_collection_as_statistical_mixture">set_collection_as_statistical_mixture</a>(self,&nbsp;list_of_tuples_state_weight:&nbsp;list):&nbsp;Sets&nbsp;the&nbsp;collection&nbsp;of&nbsp;states&nbsp;to&nbsp;a&nbsp;statistical&nbsp;mixture.&nbsp;All<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content&nbsp;in&nbsp;the&nbsp;collection&nbsp;is&nbsp;replaced<br>
 &nbsp;<br>
@@ -132,12 +150,14 @@ Methods<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;dictionary&nbsp;is&nbsp;valid,&nbsp;otherwise&nbsp;false.</span></dd></dl>
 
-<dl><dt><a name="CollectionOfStates-__getitem__"><strong>__getitem__</strong></a>(self, index)</dt></dl>
+<dl><dt><a name="CollectionOfStates-__getitem__"><strong>__getitem__</strong></a>(self, identifier)</dt></dl>
 
-<dl><dt><a name="CollectionOfStates-__init__"><strong>__init__</strong></a>(self, fock_state_circuit: &lt;built-in function any&gt;, input_collection_as_a_dict=None)</dt><dd><span class="code">Constructor&nbsp;for&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;class&nbsp;<a href="#CollectionOfStates">CollectionOfStates</a>.&nbsp;The&nbsp;instance&nbsp;takes&nbsp;its&nbsp;parameters&nbsp;from&nbsp;the&nbsp;FockStateCircuit&nbsp;in&nbsp;<br>
+<dl><dt><a name="CollectionOfStates-__init__"><strong>__init__</strong></a>(self, fock_state_circuit: &lt;built-in function any&gt;, input_collection_as_a_dict: dict[str, 'State'] = None)</dt><dd><span class="code">Constructor&nbsp;for&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;class&nbsp;<a href="#CollectionOfStates">CollectionOfStates</a>.&nbsp;The&nbsp;instance&nbsp;takes&nbsp;its&nbsp;parameters&nbsp;from&nbsp;the&nbsp;FockStateCircuit&nbsp;in&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;arguments.&nbsp;If&nbsp;input_collection_as_a_dict&nbsp;is&nbsp;passed&nbsp;together&nbsp;with&nbsp;a&nbsp;circuit&nbsp;that&nbsp;dictionary&nbsp;will&nbsp;be&nbsp;used&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;populate&nbsp;the&nbsp;states.&nbsp;If&nbsp;no&nbsp;input_collection_as_a_dict&nbsp;is&nbsp;passed&nbsp;the&nbsp;collection&nbsp;will&nbsp;be&nbsp;populated&nbsp;by&nbsp;all<br>
-&nbsp;&nbsp;&nbsp;&nbsp;basis&nbsp;states&nbsp;supported&nbsp;by&nbsp;the&nbsp;circuit.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;populate&nbsp;the&nbsp;states.&nbsp;In&nbsp;that&nbsp;case&nbsp;the&nbsp;dictionary&nbsp;needs&nbsp;to&nbsp;have&nbsp;values&nbsp;of&nbsp;type&nbsp;'<a href="#State">State</a>'.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;no&nbsp;input_collection_as_a_dict&nbsp;is&nbsp;passed&nbsp;the&nbsp;collection&nbsp;will&nbsp;be&nbsp;populated&nbsp;by&nbsp;all<br>
+&nbsp;&nbsp;&nbsp;&nbsp;basis&nbsp;states&nbsp;supported&nbsp;by&nbsp;the&nbsp;circuit.&nbsp;If&nbsp;an&nbsp;empty&nbsp;dict&nbsp;is&nbsp;passed&nbsp;(input_collection_as_a_dict&nbsp;=&nbsp;dict([]))&nbsp;the&nbsp;collection&nbsp;of&nbsp;states<br>
+&nbsp;&nbsp;&nbsp;&nbsp;will&nbsp;be&nbsp;empty.<br>
 &nbsp;<br>
 Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;fock_state_circuit&nbsp;("FockStateCircuit"):&nbsp;FockStateCircuit&nbsp;to&nbsp;take&nbsp;the&nbsp;parameters&nbsp;from&nbsp;to&nbsp;form&nbsp;the&nbsp;collection&nbsp;of&nbsp;states.&nbsp;<br>
@@ -156,13 +176,41 @@ collection_of_states.print_only_last_measurement&nbsp;=&nbsp;True/False&nbsp;det
 <dl><dt><a name="CollectionOfStates-add_state"><strong>add_state</strong></a>(self, state: 'State', identifier=None) -&gt; str</dt><dd><span class="code">Add&nbsp;a&nbsp;new&nbsp;state&nbsp;to&nbsp;the&nbsp;circuit.&nbsp;If&nbsp;identifier&nbsp;is&nbsp;given&nbsp;that&nbsp;will&nbsp;be&nbsp;used,&nbsp;otherwise&nbsp;random&nbsp;new&nbsp;identifier&nbsp;will&nbsp;be&nbsp;generated.&nbsp;Take&nbsp;care<br>
 when&nbsp;using&nbsp;existing&nbsp;identifier,&nbsp;the&nbsp;function&nbsp;will&nbsp;overwrite&nbsp;the&nbsp;previous&nbsp;state&nbsp;with&nbsp;that&nbsp;identifier.<br>
 &nbsp;<br>
+Returns:&nbsp;Nothing</span></dd></dl>
+
+<dl><dt><a name="CollectionOfStates-adjust_length_of_fock_state"><strong>adjust_length_of_fock_state</strong></a>(self, new_length_of_fock_state: int = 0)</dt><dd><span class="code">Adjusts&nbsp;the&nbsp;'length&nbsp;of&nbsp;Fock&nbsp;state'&nbsp;for&nbsp;the&nbsp;collection.&nbsp;This&nbsp;determines&nbsp;the&nbsp;maximum<br>
+&nbsp;&nbsp;&nbsp;&nbsp;number&nbsp;of&nbsp;photons&nbsp;per&nbsp;channel.&nbsp;If&nbsp;'length&nbsp;of&nbsp;Fock&nbsp;state'&nbsp;is&nbsp;for&nbsp;instance&nbsp;4&nbsp;the&nbsp;allowed&nbsp;photon<br>
+&nbsp;&nbsp;&nbsp;&nbsp;numbers&nbsp;are&nbsp;0,1,2&nbsp;and&nbsp;3.&nbsp;<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;will&nbsp;modify&nbsp;the&nbsp;current&nbsp;collection&nbsp;'in_place'.&nbsp;For&nbsp;a&nbsp;new&nbsp;collection&nbsp;with&nbsp;different<br>
+settings&nbsp;first&nbsp;create&nbsp;a&nbsp;copy&nbsp;and&nbsp;then&nbsp;modify&nbsp;the&nbsp;copy.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;new_length_of_fock_state&nbsp;(int):&nbsp;Should&nbsp;be&nbsp;integer&nbsp;larger&nbsp;than&nbsp;1.&nbsp;<br>
+&nbsp;<br>
 Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;Returns&nbsp;the&nbsp;identifier&nbsp;used&nbsp;for&nbsp;the&nbsp;newly&nbsp;added&nbsp;state</span></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;Nothing.&nbsp;The&nbsp;'collection&nbsp;of&nbsp;states'&nbsp;will&nbsp;be&nbsp;modified&nbsp;in-place.</span></dd></dl>
+
+<dl><dt><a name="CollectionOfStates-clean_up"><strong>clean_up</strong></a>(self, initial_state: str = '') -&gt; None</dt><dd><span class="code">Cleans&nbsp;up&nbsp;the&nbsp;collection_of_states.&nbsp;All&nbsp;optical&nbsp;components&nbsp;with&nbsp;low&nbsp;probability&nbsp;are&nbsp;removed&nbsp;and&nbsp;the&nbsp;total&nbsp;set&nbsp;<br>
+of&nbsp;optical&nbsp;components&nbsp;is&nbsp;renormalized.&nbsp;Then&nbsp;all&nbsp;states&nbsp;with&nbsp;the&nbsp;same&nbsp;'initial_state'&nbsp;and&nbsp;the&nbsp;same&nbsp;'optical_components'<br>
+are&nbsp;grouped&nbsp;together&nbsp;(i.e.,&nbsp;replaced&nbsp;by&nbsp;one&nbsp;state&nbsp;with&nbsp;as&nbsp;'cumulative_probability'&nbsp;the&nbsp;sum&nbsp;of&nbsp;probabilities&nbsp;of&nbsp;the<br>
+identical&nbsp;states).&nbsp;Finally,&nbsp;states&nbsp;with&nbsp;a&nbsp;low&nbsp;'cumulative_probability'&nbsp;are&nbsp;removed.&nbsp;The&nbsp;threshold&nbsp;for&nbsp;removing&nbsp;is&nbsp;defined&nbsp;<br>
+by&nbsp;the&nbsp;parameter&nbsp;'threshold_probability_for_setting_to_zero'&nbsp;which&nbsp;can&nbsp;be&nbsp;passed&nbsp;to&nbsp;the&nbsp;FockStateCircuit&nbsp;for&nbsp;which&nbsp;this&nbsp;<br>
+collection&nbsp;of&nbsp;states&nbsp;is&nbsp;valid.<br>
+&nbsp;<br>
+Warning:&nbsp;Function&nbsp;only&nbsp;checks&nbsp;for&nbsp;same&nbsp;'initial_state'&nbsp;and&nbsp;same&nbsp;'optical_components'&nbsp;if&nbsp;any&nbsp;other&nbsp;parameter&nbsp;differs&nbsp;between&nbsp;<br>
+the&nbsp;states&nbsp;will&nbsp;be&nbsp;discarded.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;initial_state&nbsp;(str):&nbsp;initial&nbsp;state&nbsp;to&nbsp;clean_up.&nbsp;If&nbsp;none&nbsp;is&nbsp;given&nbsp;all&nbsp;initial_states&nbsp;will&nbsp;be&nbsp;'cleaned'&nbsp;sequentially<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Nothing.&nbsp;The&nbsp;'collection&nbsp;of&nbsp;states'&nbsp;will&nbsp;be&nbsp;modified&nbsp;in-place.</span></dd></dl>
 
 <dl><dt><a name="CollectionOfStates-clear"><strong>clear</strong></a>(self) -&gt; None</dt><dd><span class="code">Function&nbsp;to&nbsp;completely&nbsp;clear&nbsp;the&nbsp;collection&nbsp;of&nbsp;states.</span></dd></dl>
 
-<dl><dt><a name="CollectionOfStates-collection_as_dict"><strong>collection_as_dict</strong></a>(self) -&gt; dict</dt><dd><span class="code">Function&nbsp;to&nbsp;return&nbsp;the&nbsp;content&nbsp;of&nbsp;teh&nbsp;collection&nbsp;of&nbsp;states&nbsp;as&nbsp;a&nbsp;dictionary.&nbsp;The&nbsp;keys&nbsp;will&nbsp;be&nbsp;the&nbsp;identifiers.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;values&nbsp;will&nbsp;be&nbsp;the&nbsp;state.<br>
+<dl><dt><a name="CollectionOfStates-collection_as_dict"><strong>collection_as_dict</strong></a>(self) -&gt; dict</dt><dd><span class="code">Function&nbsp;to&nbsp;return&nbsp;the&nbsp;content&nbsp;of&nbsp;the&nbsp;collection&nbsp;of&nbsp;states&nbsp;as&nbsp;a&nbsp;dictionary.&nbsp;The&nbsp;keys&nbsp;will&nbsp;be&nbsp;the&nbsp;identifiers.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;values&nbsp;will&nbsp;be&nbsp;the&nbsp;state&nbsp;(and&nbsp;will&nbsp;be&nbsp;of&nbsp;type&nbsp;"<a href="#State">State</a>").&nbsp;To&nbsp;also&nbsp;get&nbsp;the&nbsp;state&nbsp;in&nbsp;type&nbsp;dict&nbsp;further&nbsp;conversion&nbsp;is&nbsp;needed.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;dict:&nbsp;dictionary&nbsp;with&nbsp;the&nbsp;content&nbsp;from&nbsp;the&nbsp;collection&nbsp;of&nbsp;states.</span></dd></dl>
@@ -174,6 +222,7 @@ Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;dictionary&nbsp;is&nbsp;valid,&nbsp;otherwise&nbsp;false.</span></dd></dl>
 
 <dl><dt><a name="CollectionOfStates-copy"><strong>copy</strong></a>(self) -&gt; 'CollectionOfStates'</dt><dd><span class="code">Function&nbsp;to&nbsp;create&nbsp;a&nbsp;deep&nbsp;copy&nbsp;of&nbsp;the&nbsp;collection&nbsp;of&nbsp;states.&nbsp;Changing&nbsp;the&nbsp;copy&nbsp;will&nbsp;not&nbsp;affect&nbsp;the&nbsp;original&nbsp;state.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Note:&nbsp;copy&nbsp;function&nbsp;will&nbsp;create&nbsp;new&nbsp;collection&nbsp;for&nbsp;"self.<strong>_fock_state_circuit</strong>".&nbsp;Ensure&nbsp;this&nbsp;is&nbsp;set&nbsp;to&nbsp;the&nbsp;right&nbsp;circuit.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#CollectionOfStates">CollectionOfStates</a>:&nbsp;new&nbsp;collection&nbsp;of&nbsp;states&nbsp;with&nbsp;identical&nbsp;values&nbsp;and&nbsp;parameters&nbsp;as&nbsp;the&nbsp;original</span></dd></dl>
@@ -185,6 +234,44 @@ Returns:<br>
 Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;identifier&nbsp;(str,&nbsp;optional):&nbsp;identifier&nbsp;for&nbsp;the&nbsp;state&nbsp;to&nbsp;be&nbsp;removed.&nbsp;Defaults&nbsp;to&nbsp;None.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;initial_state&nbsp;(str,&nbsp;optional):&nbsp;initial_state&nbsp;for&nbsp;the&nbsp;state&nbsp;to&nbsp;be&nbsp;removed.&nbsp;Defaults&nbsp;to&nbsp;None.</span></dd></dl>
+
+<dl><dt><a name="CollectionOfStates-density_matrix"><strong>density_matrix</strong></a>(self, initial_state: str = '', decimal_places_for_trace: int = 2) -&gt; dict</dt><dd><span class="code">Create&nbsp;density&nbsp;matrix&nbsp;as&nbsp;well&nbsp;as&nbsp;trace&nbsp;of&nbsp;the&nbsp;density&nbsp;matrix&nbsp;and&nbsp;trace&nbsp;of&nbsp;density&nbsp;matrix&nbsp;squared.&nbsp;If&nbsp;no&nbsp;initial&nbsp;state&nbsp;<br>
+is&nbsp;given&nbsp;in&nbsp;the&nbsp;arguments&nbsp;all&nbsp;initial&nbsp;states&nbsp;are&nbsp;used&nbsp;(function&nbsp;returns&nbsp;densitry&nbsp;matices&nbsp;and&nbsp;traces&nbsp;per&nbsp;initial&nbsp;state).&nbsp;For&nbsp;trace&nbsp;values&nbsp;<br>
+the&nbsp;precision&nbsp;can&nbsp;be&nbsp;set&nbsp;with&nbsp;'decimal_places_for_trace'.<br>
+&nbsp;<br>
+The&nbsp;function&nbsp;returns&nbsp;a&nbsp;dictionary:&nbsp;<br>
+{initial_state&nbsp;:&nbsp;{'density_matrix'&nbsp;:&nbsp;dm_mixed_state,&nbsp;'trace'&nbsp;:&nbsp;trace_dm,&nbsp;'trace_dm_squared'&nbsp;:&nbsp;trace_dm_squared}}<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;initial_state&nbsp;(str):&nbsp;initial&nbsp;state&nbsp;for&nbsp;which&nbsp;to&nbsp;generate&nbsp;density&nbsp;matrix.&nbsp;If&nbsp;non&nbsp;given&nbsp;all&nbsp;initial_states&nbsp;are&nbsp;used.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;decimal_places_for_trace&nbsp;(int)&nbsp;:&nbsp;decimal&nbsp;places&nbsp;(precision)&nbsp;for&nbsp;the&nbsp;returned&nbsp;traces<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict:&nbsp;dictionary&nbsp;with&nbsp;initial&nbsp;state&nbsp;as&nbsp;key.&nbsp;dict&nbsp;contains&nbsp;density&nbsp;matrix&nbsp;and&nbsp;values&nbsp;for&nbsp;the&nbsp;two&nbsp;traces</span></dd></dl>
+
+<dl><dt><a name="CollectionOfStates-extend"><strong>extend</strong></a>(self, extra_optical_channels: int = 0, extra_classical_channels: int = 0, statistical_distribution: list[int] = []) -&gt; &lt;built-in function any&gt;</dt><dd><span class="code">Extends&nbsp;the&nbsp;original&nbsp;collection&nbsp;of&nbsp;states&nbsp;with&nbsp;new&nbsp;optical&nbsp;and/or&nbsp;classical&nbsp;channels.&nbsp;<br>
+The&nbsp;optical&nbsp;channels&nbsp;will&nbsp;be&nbsp;filled&nbsp;according&nbsp;to&nbsp;the&nbsp;parameter&nbsp;'statistical_distribution'.&nbsp;<br>
+If&nbsp;the&nbsp;'length_of_fock_state'&nbsp;for&nbsp;the&nbsp;circuit&nbsp;is&nbsp;for&nbsp;instance&nbsp;3&nbsp;the&nbsp;allowed&nbsp;photon&nbsp;numbers&nbsp;are&nbsp;0,1&nbsp;and&nbsp;2.&nbsp;<br>
+'statistical_distribution'&nbsp;should&nbsp;then&nbsp;be&nbsp;a&nbsp;list&nbsp;of&nbsp;length&nbsp;three.&nbsp;<br>
+-&nbsp;The&nbsp;probability&nbsp;for&nbsp;0&nbsp;photons&nbsp;in&nbsp;the&nbsp;new&nbsp;channels&nbsp;will&nbsp;be&nbsp;statistical_distribution[0]<br>
+-&nbsp;The&nbsp;probability&nbsp;for&nbsp;1&nbsp;photon&nbsp;&nbsp;in&nbsp;the&nbsp;new&nbsp;channels&nbsp;will&nbsp;be&nbsp;statistical_distribution[1]<br>
+-&nbsp;etc<br>
+So&nbsp;to&nbsp;fill&nbsp;new&nbsp;channels&nbsp;with&nbsp;value&nbsp;0&nbsp;photons&nbsp;'statistical_distribution'&nbsp;should&nbsp;be&nbsp;[1,0,0,&nbsp;..]<br>
+(which&nbsp;will&nbsp;be&nbsp;created&nbsp;as&nbsp;default&nbsp;when&nbsp;an&nbsp;empty&nbsp;list&nbsp;[]&nbsp;is&nbsp;passed&nbsp;as&nbsp;parameter&nbsp;)<br>
+&nbsp;<br>
+Number&nbsp;of&nbsp;classical&nbsp;channels&nbsp;can&nbsp;also&nbsp;be&nbsp;extended.&nbsp;These&nbsp;will&nbsp;always&nbsp;be&nbsp;filled&nbsp;with&nbsp;value&nbsp;0.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;will&nbsp;modify&nbsp;the&nbsp;current&nbsp;collection&nbsp;'in_place'.&nbsp;For&nbsp;a&nbsp;new&nbsp;collection&nbsp;with&nbsp;different<br>
+settings&nbsp;first&nbsp;create&nbsp;a&nbsp;copy&nbsp;and&nbsp;then&nbsp;modify&nbsp;the&nbsp;copy.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;extra_optical_channels&nbsp;(int):&nbsp;number&nbsp;of&nbsp;optical&nbsp;channels&nbsp;to&nbsp;be&nbsp;added<br>
+&nbsp;&nbsp;&nbsp;&nbsp;extra_classical_channels&nbsp;(int):&nbsp;number&nbsp;of&nbsp;classical&nbsp;channels&nbsp;to&nbsp;be&nbsp;added<br>
+&nbsp;&nbsp;&nbsp;&nbsp;statistical_distribution&nbsp;(list[int]):&nbsp;probabilities&nbsp;for&nbsp;photon&nbsp;numbers&nbsp;in&nbsp;new&nbsp;channels.&nbsp;Default&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new&nbsp;channels&nbsp;will&nbsp;be&nbsp;filled&nbsp;with&nbsp;0&nbsp;photons.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Nothing.&nbsp;The&nbsp;'collection&nbsp;of&nbsp;states'&nbsp;will&nbsp;be&nbsp;modified&nbsp;in-place.</span></dd></dl>
 
 <dl><dt><a name="CollectionOfStates-filter_on_classical_channel"><strong>filter_on_classical_channel</strong></a>(self, classical_channel_numbers: list, values_to_filter: list) -&gt; None</dt><dd><span class="code">Removes&nbsp;all&nbsp;states&nbsp;from&nbsp;the&nbsp;collection&nbsp;which&nbsp;do&nbsp;not&nbsp;match&nbsp;the&nbsp;filter&nbsp;criterium.&nbsp;In&nbsp;this&nbsp;case&nbsp;the&nbsp;classical&nbsp;channels&nbsp;need&nbsp;to&nbsp;have&nbsp;the&nbsp;right&nbsp;values.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;classical_channel_numbers&nbsp;=&nbsp;[0,3]&nbsp;and&nbsp;values_to_filter&nbsp;=&nbsp;[9,10]&nbsp;only&nbsp;states&nbsp;with&nbsp;classical&nbsp;channel&nbsp;[0]&nbsp;value&nbsp;9&nbsp;and&nbsp;channel[3]&nbsp;value<br>
@@ -255,7 +342,11 @@ The&nbsp;states&nbsp;all&nbsp;have&nbsp;as&nbsp;identifier&nbsp;'state_x',&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'measurement_results':&nbsp;[{'classical_channel_values':&nbsp;[0,0,0],'probability':&nbsp;1.0}]<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span></dd></dl>
 
-<dl><dt><a name="CollectionOfStates-plot"><strong>plot</strong></a>(self, classical_channels=[], initial_states=[], info_for_bar_plot={})</dt><dd><span class="code">Function&nbsp;to&nbsp;plot&nbsp;a&nbsp;bar&nbsp;graph&nbsp;for&nbsp;a&nbsp;circuit.&nbsp;The&nbsp;bars&nbsp;indicate&nbsp;the&nbsp;probability&nbsp;to&nbsp;go&nbsp;from&nbsp;an&nbsp;initial&nbsp;state<br>
+<dl><dt><a name="CollectionOfStates-items"><strong>items</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CollectionOfStates-keys"><strong>keys</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="CollectionOfStates-plot"><strong>plot</strong></a>(self, classical_channels=[], initial_states=[], info_for_bar_plot={}, histo_output_instead_of_plot=False)</dt><dd><span class="code">Function&nbsp;to&nbsp;plot&nbsp;a&nbsp;bar&nbsp;graph&nbsp;for&nbsp;a&nbsp;circuit.&nbsp;The&nbsp;bars&nbsp;indicate&nbsp;the&nbsp;probability&nbsp;to&nbsp;go&nbsp;from&nbsp;an&nbsp;initial&nbsp;state<br>
 &nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;an&nbsp;outcome&nbsp;in&nbsp;the&nbsp;classical&nbsp;channels.&nbsp;The&nbsp;circuit&nbsp;has&nbsp;to&nbsp;include&nbsp;measurement&nbsp;to&nbsp;the&nbsp;classical&nbsp;channels.&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Optionally&nbsp;the&nbsp;classical&nbsp;channels&nbsp;to&nbsp;use&nbsp;can&nbsp;be&nbsp;specified&nbsp;as&nbsp;well&nbsp;as&nbsp;a&nbsp;selection&nbsp;of&nbsp;initial&nbsp;states.&nbsp;The&nbsp;<br>
 &nbsp;<br>
@@ -268,7 +359,25 @@ Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contains&nbsp;more&nbsp;states&nbsp;than&nbsp;should&nbsp;be&nbsp;plotted.&nbsp;Default&nbsp;all<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initial&nbsp;states&nbsp;in&nbsp;'result'&nbsp;are&nbsp;used.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;info_for_bar_plot:&nbsp;optional&nbsp;information&nbsp;for&nbsp;the&nbsp;bar&nbsp;plot.&nbsp;info_for_bar_plot.get['title']<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sets&nbsp;the&nbsp;title&nbsp;for&nbsp;the&nbsp;graph.</span></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sets&nbsp;the&nbsp;title&nbsp;for&nbsp;the&nbsp;graph.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;histo_output_instead_of_plot:&nbsp;if&nbsp;this&nbsp;bool&nbsp;is&nbsp;set&nbsp;to&nbsp;True&nbsp;the&nbsp;function&nbsp;will&nbsp;return&nbsp;a&nbsp;dict&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;histogram&nbsp;instead&nbsp;of&nbsp;creating&nbsp;a&nbsp;plot</span></dd></dl>
+
+<dl><dt><a name="CollectionOfStates-reduce"><strong>reduce</strong></a>(self, optical_channels_to_keep: list[int] = [], classical_channels_to_keep: list[int] = []) -&gt; None</dt><dd><span class="code">Reduces&nbsp;the&nbsp;number&nbsp;of&nbsp;optical&nbsp;and/or&nbsp;classical&nbsp;channels.&nbsp;<br>
+&nbsp;<br>
+Optical&nbsp;channels&nbsp;are&nbsp;removed&nbsp;by&nbsp;'tracing&nbsp;out'.&nbsp;Pure&nbsp;states&nbsp;will&nbsp;become&nbsp;statistical&nbsp;mixtures&nbsp;<br>
+since&nbsp;the&nbsp;channels&nbsp;that&nbsp;are&nbsp;traced&nbsp;out&nbsp;are&nbsp;effectively&nbsp;'measured'.&nbsp;Classical&nbsp;channels&nbsp;are&nbsp;simply&nbsp;<br>
+removed&nbsp;irrespective&nbsp;of&nbsp;data.&nbsp;Note&nbsp;that&nbsp;measurement_results&nbsp;for&nbsp;states&nbsp;is&nbsp;not&nbsp;affected.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;will&nbsp;modify&nbsp;the&nbsp;current&nbsp;collection&nbsp;'in_place'.&nbsp;For&nbsp;a&nbsp;new&nbsp;collection&nbsp;with&nbsp;different<br>
+settings&nbsp;first&nbsp;create&nbsp;a&nbsp;copy&nbsp;and&nbsp;then&nbsp;modify&nbsp;the&nbsp;copy.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;optical_channels_to_keep&nbsp;(list):&nbsp;list&nbsp;of&nbsp;optical&nbsp;channel&nbsp;numbers&nbsp;that&nbsp;should&nbsp;remain<br>
+&nbsp;&nbsp;&nbsp;&nbsp;classical_channels_to_keep&nbsp;(list):&nbsp;list&nbsp;of&nbsp;classical&nbsp;channel&nbsp;numbers&nbsp;that&nbsp;should&nbsp;remain<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Nothing.&nbsp;The&nbsp;'collection&nbsp;of&nbsp;states'&nbsp;will&nbsp;be&nbsp;modified&nbsp;in-place.</span></dd></dl>
 
 <dl><dt><a name="CollectionOfStates-set_collection_as_statistical_mixture"><strong>set_collection_as_statistical_mixture</strong></a>(self, list_of_tuples_state_weight: list) -&gt; None</dt><dd><span class="code">Sets&nbsp;the&nbsp;collection&nbsp;of&nbsp;states&nbsp;to&nbsp;a&nbsp;statistical&nbsp;mixture.&nbsp;The&nbsp;function&nbsp;replaces&nbsp;the&nbsp;original&nbsp;content&nbsp;of&nbsp;the&nbsp;collection.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;input&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;tuples&nbsp;in&nbsp;the&nbsp;form&nbsp;(state,&nbsp;weight).&nbsp;The&nbsp;collection&nbsp;is&nbsp;populated&nbsp;by&nbsp;all&nbsp;states&nbsp;in&nbsp;the&nbsp;input&nbsp;list,&nbsp;each<br>
@@ -285,6 +394,8 @@ Args:<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;list:&nbsp;list&nbsp;of&nbsp;state&nbsp;identifiers</span></dd></dl>
+
+<dl><dt><a name="CollectionOfStates-values"><strong>values</strong></a>(self)</dt></dl>
 
 <hr>
 Data descriptors defined here:<br>
@@ -416,7 +527,7 @@ and&nbsp;the&nbsp;classical&nbsp;channels&nbsp;will&nbsp;be&nbsp;[0,0]&nbsp;(aga
 &nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;number&nbsp;returned&nbsp;by&nbsp;the&nbsp;function&nbsp;is&nbsp;the&nbsp;highest&nbsp;over&nbsp;all&nbsp;optical&nbsp;components<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<br>
 Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;First&nbsp;element&nbsp;in&nbsp;the&nbsp;tuple&nbsp;is&nbsp;the&nbsp;photon&nbsp;number,&nbsp;the&nbsp;second&nbsp;is&nbsp;True&nbsp;is&nbsp;all&nbsp;components&nbsp;have&nbsp;the&nbsp;same&nbsp;photon&nbsp;number.</span></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;First&nbsp;element&nbsp;in&nbsp;the&nbsp;tuple&nbsp;is&nbsp;the&nbsp;photon&nbsp;number,&nbsp;the&nbsp;second&nbsp;is&nbsp;True&nbsp;if&nbsp;all&nbsp;components&nbsp;have&nbsp;the&nbsp;same&nbsp;photon&nbsp;number.</span></dd></dl>
 
 <dl><dt><a name="State-set_state_components_from_vector"><strong>set_state_components_from_vector</strong></a>(self, state_vector: list) -&gt; None</dt><dd><span class="code">Set&nbsp;the&nbsp;optical&nbsp;components&nbsp;for&nbsp;the&nbsp;state&nbsp;from&nbsp;the&nbsp;vector&nbsp;which&nbsp;is&nbsp;given&nbsp;as&nbsp;argument.&nbsp;The&nbsp;function&nbsp;assumes&nbsp;the&nbsp;basis&nbsp;is&nbsp;the&nbsp;same&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;used&nbsp;by&nbsp;function&nbsp;'translate_state_components_to_vector'.&nbsp;For&nbsp;that&nbsp;function&nbsp;the&nbsp;basis&nbsp;is&nbsp;generated&nbsp;as&nbsp;output.<br>
