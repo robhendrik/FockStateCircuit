@@ -2,10 +2,28 @@ import numpy as np
 import qutip as qt
 import math
 import string
+import matplotlib as mtplt
 import matplotlib.pyplot as plt
 import matplotlib.lines
+from matplotlib.patches  import Rectangle
 import matplotlib.colors
 import collection_of_states as cos
+
+def about():
+    """
+    About box for FockStateCircuit. Gives version numbers for
+    FockStateCircuit, CollectionOfStates, NumPy and MatPlotLib.
+    """
+    print("")
+    print("FockStateCircuit: Quantum Optics with Fock States for Python")
+    print("Copyright (c) 2023 and later.")
+    print("Rob Hendriks")
+    print("")
+    print("FockStateCircuit:   %s" % FockStateCircuit._VERSION)
+    print("CollectionOfStates: %s" % cos._VERSION)
+    print("Numpy Version:      %s" % np.__version__)
+    print("Matplotlib version: %s" % mtplt.__version__)
+
 
 
 class FockStateCircuit:
@@ -45,7 +63,7 @@ class FockStateCircuit:
                 
                     The instance also has parameters for how to 'write' an optical state ('channel_0_left_in_state_name'). Of channel 0 has
                     one photon and the other channels zero photon then default the state is written as '1000'. With 
-                    'channel_0_left_in_state_name' set to False this state would be written as '0001'. Teh value only affects the string value 
+                    'channel_0_left_in_state_name' set to False this state would be written as '0001'. The value only affects the string value 
                     to indicate the state. All underlying mathematics and ordering of matrices and vectors is unaffected.
                 
                     The paramater 'threshold_probability_for_setting_to_zero' forces rounding to zero for probabilities below the given level. 
@@ -62,7 +80,7 @@ class FockStateCircuit:
                     nodes_to_be_evaluated: list = ['all']
                     ) -> collection_of_states.CollectionOfStates
 
-                    Evaluate the fock state circuit for a give collection of input states. If no collection of input states
+                    Evaluate the fock state circuit for a given collection of input states. If no collection of input states
                     is given the function will generate a collection consisting of all basis states. If a list is given for
                     'nodes_to_be_evaluated' only those nodes are included (first node being '0', second node '1'). The function
                     returns a collection of states as the output of the fock state circuit consisting of the selected nodes.
@@ -91,8 +109,28 @@ class FockStateCircuit:
             conventions(self) 
                     Function to print return the conventions used in this class as a string
 
+            basis(self)
+                    Function returns a dictonary with valid components names as keys and the corresponding photon numbers in the channels as values.
+
+            get_fock_state_matrix(self, 
+                    nodes_to_be_evaluated: list[int] = 'all'
+                    ) -> np.array:
+                    Function returns the fock state matrix for a given set of nodes in the circuit
+
 
         Method(s) to add wave plates to the circuit:
+
+            wave_plate(self, 
+                    channel_horizontal: int = 0, 
+                    channel_vertical: int = 1, 
+                    theta: float = 0, 
+                    phi: float = 0,
+                    node_info: dict = None
+                    ) -> None:  
+
+                    Add a wave plate to the fock state circuit with axis rotated over angle 
+                    theta and phase delay angle phi. The phase shift will be applied to the 
+                    channel for vertical polarization.
 
             half_wave_plate(self, 
                     channel_horizontal: int = 0, 
@@ -294,25 +332,145 @@ class FockStateCircuit:
                     NOT check whether the matrix is physically possible (i.e.,invertible, unitary).
 
             custom_fock_state_node(self,
-                    custom_fock_state,
-                    node_type: str = 'custom optical', 
+                    custom_fock_matrix,
+                    node_type: str = 'custom fock matrix', 
                     node_info: dict = None
                     ) -> None
-                    TO BE IMPLEMENTED
 
-                    
-        Method(s) to export to Qiskit and Qutip
-            TO BE IMPLEMENTED
- 
-    """    
-    _TYPES_OF_NODES = ['optical','custom optical','optical and classical combined','classical', 'measurement optical to classical']
+                    Apply a custom Fock state matrix to the circuit. The matrix has to be an LxL numpy array with numpy cdouble entries. L is the total size
+                    of the Fock state basis (which can be retrieved via FockStateCircuit.basis() )The function does NOT check whether the matrix is physically 
+                    possible (i.e.,invertible, unitary). 
+
+        Method(s) to create special nodes
+
+            bridge(self,
+                    next_fock_state_circuit,
+                    node_type: str = 'bridge', 
+                    node_info: dict = None
+                    ) -> None:
+                    Apply a bridge node to the circuit to transfer the collection of states from one circuit to another. Used when the characteristics
+                    of the circuit change (i.e., change number of optical/classical channels). 
+                                
+            channel_coupling(self, 
+                    control_channels: list[int] = [0],
+                    target_channels: list[int] = [1],
+                    coupling_strength: float = 0,
+                    node_info: dict = None
+                    ) -> None:  
+                    Apply a node to the circuit to couple channels with the given 'coupling_strength'. The node will effectively 
+                    apply a controlled shift from control channels to target channels.
+
+            shift(  self, 
+                    target_channels: list[int] = [1],
+                    shift_per_channel: list[int] = [0],
+                    node_info: dict = None
+                    ) -> None:  
+                    Apply a shift node to the circuit. The photon value in the target channel(s) is increased by the value in 
+                    the list 'shift_per_channel' modulo the maximum allowed photon number. So if 'length_of_fock_state' is 3, 
+                    shift value is 2 and target channel value is 1 the result is that target becomes (2+1)%3 = 0. This is not a 
+                    linear optical operation (photons are created in this process). 
+
+            c_shift(self, 
+                    control_channels: list[int] = [0],
+                    target_channels: list[int] = [1],
+                    node_info: dict = None
+                    ) -> None:  
+                    Apply a controlled-shift (c-shift) node to the circuit. The photon value in the target channel(s) is increased by the value in 
+                    the control channels(s) modulo the maximum allowed photon number. So if 'length_of_fock_state' is 3, control channel value is 2 and 
+                    target channel valie is 1 the result is that control value remains 2 and target becomes (2+1)%3 = 0
+
+            time_delay(self,
+                    affected_channels: list[int] = None,
+                    delay: float = 0,
+                    bandwidth: float = 0,
+                    node_type: str = 'spectrum', 
+                    node_info: dict = None
+                    ) -> None:
+
+                    Apply a time delay for a given bandwidth. The node will turn a pure state into 
+                    a statistical mixture where states obtain a phase shift that depends on the bandwidth and the time delay
+
+                    Note: Do not use more than one time delay gates in one circuit.
+
+            time_delay_classical_control(self,
+                    affected_channels: list[int] = None,
+                    classical_channel_for_delay: int = 0,
+                    bandwidth: float = 0,
+                    node_type: str = 'spectrum', 
+                    node_info: dict = None
+                    ) -> None:
+
+                    Apply a time delay for a given bandwidth. Read the delay value from classical channel. 
+                    The node will turn a pure state into a statistical mixture where states
+                    obtain a phase shift that depends on the bandwidth and the time delay. 
+
+                    Note: Do not use more than one time delay gates in one circuit.
+    """
+    _VERSION = '0.0.9'
+
+    _TYPES_OF_NODES = ['optical','custom fock matrix','optical and classical combined','classical', 'measurement optical to classical', 'spectrum', 'bridge']
+
+    # default settings for circuit drawing (can be overwritten when calling function)
+    _CIRCUIT_DRAW_DEFAULT_SETTINGS = {
+            'figure_width_in_inches' : 16,
+            'channel_line_length_as_fraction_of_figure_width' : 0.8,
+            'number_of_nodes_on_a_line': 10,
+            'spacing_between_lines_in_relation_to_spacing_between_nodes' : 1,
+            'compound_circuit_title' : 'Optical circuit',
+            'channel_label_string_max_length': 15,
+            'node_label_string_max_length': 15,
+            'compound_plot_title_font_size' : 25,
+            'circuit_name_font_size': 15,
+            'channel_label_font_size': 10,
+            'node_label_font_size' : 6.5,
+            'classical_channel_line_color' : 'black',
+            'classical_channel_line_marker' : 'o',
+            'classical_channel_line_marker_size' : 5,
+            'optical_channel_line_color' :'blue',
+            'optical_channel_line_marker': 'o',
+            'optical_channel_line_marker_size' : 5,
+            'bridge_marker' : 'o',
+            'bridge_marker_size' : 12,
+            'bridge_markeredgewidth' : 2,
+            'box_around_node_linestyle' : ':',
+            'box_around_node_linewidth': 0.5,
+            'box_around_node_color' : 'grey'
+        }
+    
+    # default settings for drawing nodes in the circuit (can be overwritten when adding node to circuit)
+    _NODE_DRAW_DEFAULT_SETTINGS = {
+            'label' : '',
+            'connection_linestyle' : 'solid',
+            'connection_linewidth': 2,
+            'connection_linecolor_optical': 'blue',
+            'connection_linecolor_classical': 'black',
+            'channels' : [],
+            'channels_classical': [],
+            'markers' : ['o'],
+            'markercolor' : ['blue'],
+            'markerfacecolor' : ['white'],
+            'marker_text' : [''],
+            'marker_text_fontsize': [10],
+            'marker_text_color': ['white'],
+            'markersize' : [20],
+            'markeredgewidth' : 1,
+            'fillstyle' : ['full'],
+            'classical_marker_color' : ['black'],
+            'classical_marker' : ['o'],
+            'classical_marker_size' : ['10'],
+            'classical_marker_text' : [''],
+            'classical_marker_text_color' : ['white'],
+            'classical_marker_text_fontsize': [10],
+            'combined_gate': 'single'
+        }
 
     def __init__(self, length_of_fock_state: int = 2, 
                  no_of_optical_channels: int = 2, 
                  no_of_classical_channels: int = 0, 
                  channel_0_left_in_state_name: bool = True,
                  threshold_probability_for_setting_to_zero: float = 0.0001,
-                 use_full_fock_matrix:bool = False
+                 use_full_fock_matrix:bool = False,
+                 circuit_name : str = None
                  ):
         """ Constructor for an instance of the FockStateCircuit class. The instance will be created 'empty' without any nodes.
             The instance has a fixed number of channels (optical channels for photons and classical channels which can contain
@@ -325,19 +483,20 @@ class FockStateCircuit:
             'channel_0_left_in_state_name' set to False this state would be written as '0001'. Teh value only affects the string value 
             to indicate the state. All underlying mathematics and ordering of matrices and vectors is unaffected.
 
-            The paramater 'threshold_probability_for_setting_to_zero' forces rounding to zero for probabilities below the given level. 
+            The parameter 'threshold_probability_for_setting_to_zero' forces rounding to zero for probabilities below the given level. 
 
             Default the class optimizes calculations by reducing the size of the Fock state matrix to match the photon population
             (i.e., if states are empty they are discarded from the fock matrix). When the bool 'use_full_fock_matrix' is set to True 
             the system will always use the full size Fock matrix and skip the optimization.
 
         Args:
-            length_of_fock_state (int, optional): _description_. Defaults to 2.
-            no_of_optical_channels (int, optional): _description_. Defaults to 2.
-            no_of_classical_channels (int, optional): _description_. Defaults to 0.
-            channel_0_left_in_state_name (bool, optional): _description_. Defaults to True.
-            threshold_probability_for_setting_to_zero (float, optional): _description_. Defaults to 0.0001.
-            use_full_fock_matrix (bool, optional): _description_. Defaults to False.
+            length_of_fock_state (int, optional): Defaults to 2.
+            no_of_optical_channels (int, optional): Defaults to 2.
+            no_of_classical_channels (int, optional): Defaults to 0.
+            channel_0_left_in_state_name (bool, optional): Defaults to True.
+            threshold_probability_for_setting_to_zero (float, optional): Defaults to 0.0001.
+            use_full_fock_matrix (bool, optional): Defaults to False.
+            circuit_name (str, optional): Defaults to None
 
         Raises:
             Exception: _description_
@@ -354,7 +513,7 @@ class FockStateCircuit:
         # we need at least a fock states with length 2 (0 or 1 photon) and two optical channels. Anything else is a 
         # trivial circuit with either zero photons or one channel without interaction.
         if self._length_of_fock_state < 1 or self._no_of_optical_channels < 2:
-            raise Exception('length_of_fock_state minimal value is 1, no_of_optical_channels minumum value is 2')
+            raise Exception('length_of_fock_state minimal value is 1, no_of_optical_channels minimum value is 2')
 
         # for naming the states we need a convention. if 'channel_0_left_in_state_name' is set to 'True' we
         # write a state with 2 photons in channel 0 and 5 photons in channel 1 as '05'. With this value set
@@ -381,6 +540,9 @@ class FockStateCircuit:
         # list of nodes for the optical states. each item is a dict
         self.node_list = [] 
         
+        # name for the circuit
+        self._circuit_name = circuit_name
+
         # generate a list of all possible values in the optical channels 
         index_list = [index for index in range(0,length_of_fock_state**self._no_of_optical_channels)]
         self._list_of_fock_states = [[] for index in index_list]
@@ -389,6 +551,18 @@ class FockStateCircuit:
                 n = int(index_list[index]%length_of_fock_state)
                 self._list_of_fock_states[index].append(n)
                 index_list[index] = int(index_list[index]/length_of_fock_state)
+
+    def __str__(self) -> str:
+        """ Return the string for 'pretty printing' the circuit.
+
+        Returns:
+            str: string describing the circuit
+        """ 
+        text = 'FockStateCircuit name: ' + self._circuit_name + '\n'
+        text += 'Optical Channels: ' + str(self._no_of_optical_channels) + '\n'
+        text += 'Classical Channels: ' + str(self._no_of_classical_channels) + '\n'
+        text += 'Length of Fock state: ' + str(self._length_of_fock_state) + '\n'
+        return text
 
     def conventions(self) -> str:
         """ Function to print return the conventions used in this class as a string
@@ -475,6 +649,8 @@ class FockStateCircuit:
 
         if node_to_be_added['node_type'] == 'optical':
             self.node_list.append(node_to_be_added)
+        if node_to_be_added['node_type'] == 'custom fock matrix':
+            self.node_list.append(node_to_be_added)
         if node_to_be_added['node_type'] == 'optical non-linear':
             self.node_list.append(node_to_be_added)
         if node_to_be_added['node_type'] == 'optical and classical combined':
@@ -482,6 +658,10 @@ class FockStateCircuit:
         if node_to_be_added['node_type'] == 'classical':
             self.node_list.append(node_to_be_added)
         if node_to_be_added['node_type'] == 'measurement optical to classical':
+            self.node_list.append(node_to_be_added)
+        if node_to_be_added['node_type'] == 'spectrum':
+            self.node_list.append(node_to_be_added)
+        if node_to_be_added['node_type'] == 'bridge':
             self.node_list.append(node_to_be_added)
 
         return
@@ -610,6 +790,19 @@ class FockStateCircuit:
         Raises:
             Exception: If the matrix is not 2x2
         """
+        node_info = {
+                'label' : "custom",
+                'channels' : optical_channels,
+                'channels_classical' : [],
+                'markers' : ['*'],
+                'markercolor' : ['blue'],
+                'markerfacecolor' : ['lightblue'],
+                'marker_text' : [r"$c$"],
+                'marker_text_fontsize' : [7],
+                'markersize' : 25,
+                'fillstyle' : 'full'
+            }
+ 
         if len(matrix_optical) != 2 and len(matrix_optical[0]) != 2:
             raise Exception('Only optical nodes with 2-channel interaction are implemented')
         channel_numbers = optical_channels
@@ -617,6 +810,70 @@ class FockStateCircuit:
         matrix_optical = matrix_optical
         self.__update_list_of_nodes({'matrix_optical': matrix_optical, 'tensor_list':tensor_list, 'node_type': node_type, 'node_info': node_info})
 
+        return
+
+    def custom_fock_state_node(self,
+            custom_fock_matrix,
+            node_type: str = 'custom fock matrix', 
+            node_info: dict = None
+            ) -> None:
+        """ Apply a custom Fock state matrix to the circuit. The matrix has to be an LxL numpy array with numpy cdouble entries. L is the total size
+            of the Fock state basis (which can be retrieved via FockStateCircuit.basis() )The function does NOT check whether the matrix is physically 
+            possible (i.e.,invertible, unitary). 
+        """
+        if node_info == None:
+            node_info = {
+                    'label' : "custom",
+                    'channels' : [channel for channel in range(self._no_of_optical_channels)],
+                    'channels_classical' : [],
+                    'markers' : ['*'],
+                    'markercolor' : ['blue'],
+                    'markerfacecolor' : ['lightblue'],
+                    'marker_text' : [r"$c$"],
+                    'marker_text_fontsize' : [7],
+                    'markersize' : 25,
+                    'fillstyle' : 'full'
+                }
+        self.__update_list_of_nodes({'custom_fock_matrix':custom_fock_matrix,'node_type': node_type, 'node_info': node_info})
+
+        return
+    
+    def wave_plate(self, 
+                        channel_horizontal: int = 0, 
+                        channel_vertical: int = 1, 
+                        theta: float = 0, 
+                        phi: float = 0,
+                        node_info: dict = None) -> None:  
+        """ Add a wave plate to the fock state circuit with axis rotated over angle 
+            theta and phase delay angle phi. The phase shift will be applied to the 
+            channel for vertical polarization.
+
+        Args:
+            channel_horizontal (int): channel number for horizontal polarization
+            channel_vertical (int): channel number for vertical polarization
+            theta (float): rotation of the axis in radians
+            phi (float): phase delay applied to channel for vertical polarization
+            node_info (dict): Information for displaying the node when drawing circuit. Defaults to None, in that case default image is used.
+
+        Returns:
+            nothing
+        
+        Raises:
+            nothing
+        """
+        if node_info == None:
+            node_info = {
+                    'label' : "wave plate",
+                    'channels' : [channel_horizontal, channel_vertical],
+                    'markers' : ['s'],
+                    'markercolor' : ['purple'],
+                    'markerfacecolor' : ['grey'],
+                    'marker_text' : [r"$\lambda$"],
+                    'markersize' : 20,
+                    'fillstyle' : 'full'
+                }
+
+        self.__apply_generic_rotation_2_channels(channel_horizontal, channel_vertical, theta = theta, phi = phi, node_info = node_info)
         return
 
     def half_wave_plate(self, 
@@ -644,9 +901,9 @@ class FockStateCircuit:
                     'label' : "half-wave plate",
                     'channels' : [channel_horizontal, channel_vertical],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$\frac{\lambda}{2}$",''],
+                    'marker_text' : [r"$\frac{\lambda}{2}$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -677,9 +934,9 @@ class FockStateCircuit:
                     'label' : "half-wave plate",
                     'channels' : [channel_horizontal, channel_vertical],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$\frac{\lambda}{2}$",''],
+                    'marker_text' : [r"$\frac{\lambda}{2}$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -711,9 +968,9 @@ class FockStateCircuit:
                     'label' : "half-wave plate",
                     'channels' : [channel_horizontal, channel_vertical],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$\frac{\lambda}{2}$",''],
+                    'marker_text' : [r"$\frac{\lambda}{2}$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -743,12 +1000,12 @@ class FockStateCircuit:
         """
         if node_info == None:
             node_info = {
-                    'label' : "Qtr-wave plate",
+                    'label' : "qtr-wave plate",
                     'channels' : [channel_horizontal, channel_vertical],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$\frac{\lambda}{4}$",''],
+                    'marker_text' : [r"$\frac{\lambda}{4}$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -773,17 +1030,21 @@ class FockStateCircuit:
         Raises:
             nothing
         """  
-        if node_info == None:
-            node_info = {
-                    'label' : "Qtr-wave plate",
+
+        default_node_info_for_this_node = {
+                    'label' : "qtr-wave plate",
                     'channels' : [channel_horizontal, channel_vertical],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$\frac{\lambda}{4}$",''],
+                    'marker_text' : [r"$\frac{\lambda}{4}$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
+        if node_info == None:
+            node_info = default_node_info_for_this_node
+        else:
+            node_info =  default_node_info_for_this_node | node_info
         self.quarter_wave_plate(channel_horizontal, channel_vertical, angle = math.pi/4, node_info = node_info)
         return
     
@@ -807,12 +1068,12 @@ class FockStateCircuit:
         """
         if node_info == None:
             node_info = {
-                    'label' : "Qtr-wave plate",
+                    'label' : "qtr-wave plate",
                     'channels' : [channel_horizontal, channel_vertical],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$\frac{\lambda}{4}$",''],
+                    'marker_text' : [r"$\frac{\lambda}{4}$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -838,9 +1099,9 @@ class FockStateCircuit:
                     'label' : "phase-shift",
                     'channels' : [channel_for_shift],
                     'markers' : ['o'],
-                    'color' : ['pink'],
+                    'markercolor' : ['pink'],
                     'markerfacecolor' : ['pink'],
-                    'market_text' : [r"$\phi$"],
+                    'marker_text' : [r"$\phi$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -889,13 +1150,14 @@ class FockStateCircuit:
                     'label' : "phase-shift(c)",
                     'channels' : [optical_channel_to_shift],
                     'channels_classical' : [classical_channel_for_phase_shift],
-                    'classical_use_case': 'read', 
                     'markers' : ['o'],
-                    'color' : ['pink'],
+                    'markercolor' : ['pink'],
                     'markerfacecolor' : ['pink'],
-                    'market_text' : [r"$\phi$"],
+                    'marker_text' : [r"$\phi$"],
                     'markersize' : 20,
-                    'fillstyle' : 'full'
+                    'fillstyle' : 'full',
+                    'classical_marker_text' : [r"$c$"],
+                    'classical_marker_text_fontsize' : [5]
                 }
         # we use a generic rotation with theta is zero, so phase shift is applied to the second ('the vertical') channel. 
         # so channel_to_be_shifted has to be the vertical channel. Another option would be to rotate the phase plate over 
@@ -963,13 +1225,14 @@ class FockStateCircuit:
                     'label' : "wave_plate(c)",
                     'channels' : [optical_channel_horizontal, optical_channel_vertical],
                     'channels_classical' : [classical_channel_for_phase_shift, classical_channel_for_orientation],
-                    'classical_use_case': 'read', 
                     'markers' : ['o'],
-                    'color' : ['pink'],
+                    'markercolor' : ['pink'],
                     'markerfacecolor' : ['pink'],
-                    'market_text' : [r"$\theta$"],
+                    'marker_text' : [r"$\theta$"],
                     'markersize' : 20,
-                    'fillstyle' : 'full'
+                    'fillstyle' : 'full',
+                    'classical_marker_text' : [r"$c$"],
+                    'classical_marker_text_fontsize' : [5]
                 }
         
         # add to list of nodes
@@ -1013,15 +1276,16 @@ class FockStateCircuit:
     
         if node_info == None:
             node_info = {
-                    'label' : "Measurement",
+                    'label' : "measurement",
                     'channels' : optical_channels_to_be_measured,
                     'channels_classical'  : classical_channels_to_be_written,
-                    'classical_use_case': 'measure', 
-                    'color' : ['black'],
+                    'markercolor' : ['black'],
                     'markerfacecolor' : ['black'],
-                    'market_text' : [r"$M$"],
+                    'marker_text' : [r"$M$"],
                     'markersize' : 20,
-                    'fillstyle' : 'full'
+                    'fillstyle' : 'full',
+                    'classical_marker_text' : [r"$t$"],
+                    'classical_marker_text_fontsize' : [5]
                 }
         
         node_to_be_added = {
@@ -1067,23 +1331,24 @@ class FockStateCircuit:
         Raises:
             nothing
         """ 
-        if node_info == None:
-            node_info = {
-                    'label' : "class-fnct",
-                    'channels' : [],
-                    'channels_classical' : [channel for channel in range(self._no_of_classical_channels)],
-                    'classical_use_case': 'only', 
-                    'color' : ['black'],
-                    'markerfacecolor' : ['black'],
-                    'market_text' : [],
-                    'markersize' : 20,
-                    'fillstyle' : 'full'
-                }
         if affected_channels == None:
             affected_channels = []
         
         if new_input_values == None:
             new_input_values = []
+
+        if node_info == None:
+            node_info = {
+                    'label' : "class. function",
+                    'channels' : [],
+                    'channels_classical' : affected_channels,
+                    'markercolor' : ['black'],
+                    'markerfacecolor' : ['black'],
+                    'marker_text' : [],
+                    'markersize' : 20,
+                    'fillstyle' : 'full'
+                }
+
         
         node_to_be_added = {
             'function' : function,
@@ -1125,6 +1390,18 @@ class FockStateCircuit:
             for index, channel in enumerate(list_of_classical_channel_numbers):
                 classical_channel_values[channel] = list_of_values_for_classical_channels[index]
             return classical_channel_values
+
+        if node_info == None:
+            node_info = {
+                    'label' : "set classic",
+                    'channels' : [],
+                    'channels_classical' : list_of_classical_channel_numbers,
+                    'markercolor' : ['black'],
+                    'markerfacecolor' : ['black'],
+                    'marker_text' : [],
+                    'markersize' : 20,
+                    'fillstyle' : 'full'
+                }
         self.classical_channel_function(function, 
                                         affected_channels=list_of_classical_channel_numbers, 
                                         new_input_values=list_of_values_for_classical_channels,
@@ -1149,14 +1426,17 @@ class FockStateCircuit:
         Raises:
             nothing
         """
+        if first_channel > second_channel:
+            first_channel, second_channel = second_channel, first_channel
         if node_info == None:
             node_info = {
-                    'label' : "Swap gate",
+                    'label' : "swap gate",
                     'channels' : [first_channel, second_channel],
-                    'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markers' : ['v','^'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$\triangledown$",r"$\triangle$"],
+                    'marker_text' : [r"$s$",r"$s$"],
+                    'marker_text_fontsize' : [5,5],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -1183,12 +1463,12 @@ class FockStateCircuit:
         """
         if node_info == None:
             node_info = {
-                    'label' : "Mix gate",
+                    'label' : "mix 50/50",
                     'channels' : [first_channel, second_channel],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$M$",r"$M$"],
+                    'marker_text' : [r"$M$",r"$M$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -1217,12 +1497,12 @@ class FockStateCircuit:
         """
         if node_info == None:
             node_info = {
-                    'label' : "Mix",
+                    'label' : "mix generic",
                     'channels' : [first_channel, second_channel],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$M$",r"$M$"],
+                    'marker_text' : [r"$M$",r"$M$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -1255,9 +1535,9 @@ class FockStateCircuit:
                     'label' : "PBS",
                     'channels' : [input_channels_a[1], input_channels_b[1]],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$M$",r"$M$"],
+                    'marker_text' : [r"$M$",r"$M$"],
                     'markersize' : 20,
                     'fillstyle' : 'full'
                 }
@@ -1286,24 +1566,26 @@ class FockStateCircuit:
         """
         if node_info == None:
             node_info_0 = {
-                    'label' : "NPBS",
+                    'label' : "NPBS 50/50",
                     'channels' : [input_channels_a[0], input_channels_b[0]],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$M$",r"$M$"],
+                    'marker_text' : [r"$M$",r"$M$"],
                     'markersize' : 20,
-                    'fillstyle' : 'full'
+                    'fillstyle' : 'full',
+                    'combined_gate': 'NPBS5050'
                 }
             node_info_1 = {
                     'label' : "NPBS",
                     'channels' : [input_channels_a[1], input_channels_b[1]],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$M$",r"$M$"],
+                    'marker_text' : [r"$M$",r"$M$"],
                     'markersize' : 20,
-                    'fillstyle' : 'full'
+                    'fillstyle' : 'full',
+                    'combined_gate': 'NPBS5050'
                 }
         if self._no_of_optical_channels < 4:
             raise Exception('For beamsplitter 4 channels are needed in the circuit')
@@ -1343,21 +1625,23 @@ class FockStateCircuit:
                     'label' : "NPBS",
                     'channels' : [input_channels_a[0], input_channels_b[0]],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$M$",r"$M$"],
+                    'marker_text' : [r"$M$",r"$M$"],
                     'markersize' : 20,
-                    'fillstyle' : 'full'
+                    'fillstyle' : 'full',
+                    'combined_gate': 'NPBS'
                 }
             node_info_1 = {
                     'label' : "NPBS",
                     'channels' : [input_channels_a[1], input_channels_b[1]],
                     'markers' : ['s'],
-                    'color' : ['purple'],
+                    'markercolor' : ['purple'],
                     'markerfacecolor' : ['grey'],
-                    'market_text' : [r"$M$",r"$M$"],
+                    'marker_text' : [r"$M$",r"$M$"],
                     'markersize' : 20,
-                    'fillstyle' : 'full'
+                    'fillstyle' : 'full',
+                    'combined_gate': 'NPBS'
                 }
         if self._no_of_optical_channels < 4:
             raise Exception('For beamsplitter 4 channels are needed in the circuit')
@@ -1376,6 +1660,320 @@ class FockStateCircuit:
             node_info = node_info_1
             )
         return
+    
+    def shift(  self, 
+                target_channels: list[int] = [1],
+                shift_per_channel: list[int] = [0],
+                node_info: dict = None
+                ) -> None:  
+        """ Apply a shift node to the circuit. The photon value in the target channel(s) is increased by the value in 
+            the list 'shift_per_channel' modulo the maximum allowed photon number. So if 'length_of_fock_state' is 3, 
+            shift value is 2 and target channel value is 1 the result is that target becomes (2+1)%3 = 0. This is not a 
+            linear optical operation (photons are created in this process). 
+
+            Args: 
+                target_channels (list[int]): Channels that change value based on the values in 'shift_per_channel'
+                shift_per_channel (list[int]): Shift value per channel
+                node_info (dict): Information for displaying the node when drawing circuit. Defaults to None, in that case default image is used.
+            
+            Raises: 
+                Exception when the input channel numbers do not match with the circuit.
+                
+        """
+        # check if lists with channel numbers are ok, otherwise throw exception
+        error = False
+        if len(shift_per_channel) == len(target_channels):
+            for shift, target in zip(shift_per_channel, target_channels):
+                if min(shift, target) < 0 or target > self._no_of_optical_channels:
+                    error = True
+        else:
+            error = True
+        if error:
+            Exception('Error in channel input for function FockStateCircuit.shift')
+
+        this_is_first_round = True  
+        # for each channel create a transition matrix
+        # multiply the matrices to get to the final overall matrix
+        for shift, channel_to_shift in zip(shift_per_channel,target_channels):
+            # create an identity matrix for the given combination of one target and one control channel
+            coupling_matrix_one_target_control_combination = np.zeros((len(self._list_of_fock_states),len(self._list_of_fock_states)), dtype = np.ubyte)
+            for input_index, input in enumerate(self._list_of_fock_states):
+                for output_index, output in enumerate(self._list_of_fock_states):
+                    # except for target channel values should be equal
+                    if all([input[channel] == output[channel] for channel in range(len(output)) if channel != channel_to_shift]):
+                    # for target channel the value has to be (shift + original target value) % length. So shift with control value modulus length
+                        if (output[channel_to_shift] == (shift + input[channel_to_shift])%self._length_of_fock_state):
+                                coupling_matrix_one_target_control_combination[output_index][input_index] = np.ubyte(1)
+            if this_is_first_round:
+                coupling_matrix = coupling_matrix_one_target_control_combination
+                this_is_first_round = False
+            else:
+                coupling_matrix  = np.matmul(coupling_matrix, coupling_matrix_one_target_control_combination)
+
+        node_info = {
+            'label' : "shift",
+            'channels' : target_channels ,
+            'channels_classical' : [],
+            'markers' : ['h']*len(target_channels),
+            'markercolor' : ['blue']*len(target_channels),
+            'markerfacecolor' : ['lightblue']*len(target_channels),
+            'marker_text' : [r'$s$']*len(target_channels),
+            'marker_text_fontsize' : [8],
+            'marker_text_color' : ['black']*len(target_channels),
+            'markersize' : 15,
+            'fillstyle' : 'full'
+        }
+    
+        self.custom_fock_state_node(custom_fock_matrix = coupling_matrix, 
+                                    node_type='custom fock matrix', 
+                                    node_info = node_info)
+        return
+
+    
+    def c_shift(self, 
+                control_channels: list[int] = [0],
+                target_channels: list[int] = [1],
+                node_info: dict = None
+                ) -> None:  
+        """ Apply a controlled-shift (c-shift) node to the circuit. The photon value in the target channel(s) is increased by the value in 
+            the control channels(s) modulo the maximum allowed photon number. So if 'length_of_fock_state' is 3, control channel value is 2 and 
+            target channel valie is 1 the result is that control value remains 2 and target becomes (2+1)%3 = 0The control channel(s) remain unaffected. 
+            This is not a linear optical operation (photons are created in this process). The node can create entanglement and allows 'coupling' 
+            between optical channels.
+
+            Args: 
+                control_channels (list[int]): Channels that 'control' the target channel and remain unchanged themselves
+                target_channels (list[int]): Channels that change value based on the values in the control channels
+                node_info (dict): Information for displaying the node when drawing circuit. Defaults to None, in that case default image is used.
+            
+            Raises: 
+                Exception when the input channel numbers do not match with the circuit.
+                
+        """
+               # if channel input is a channel number (integer) and not a list make it a list
+        if type(control_channels) == type(1):
+            control_channels = [control_channels]
+        if type(target_channels) == type(1):
+            target_channels = [target_channels]
+
+        if node_info == None:
+            node_info = {
+                    'label' : "c-shift",
+                    'channels' : control_channels + target_channels ,
+                    'channels_classical' : [],
+                    'markers' : ['o']*len(control_channels) + ['h']*len(target_channels),
+                    'markercolor' : ['black']*len(control_channels) + ['blue']*len(target_channels),
+                    'markerfacecolor' : ['black']*len(control_channels) + ['lightblue']*len(target_channels),
+                    'marker_text' : [r'$c$']*len(control_channels) + [r'$t$']*len(target_channels),
+                    'marker_text_fontsize' : [8],
+                    'marker_text_color' : ['white']*len(control_channels) + ['black']*len(target_channels),
+                    'markersize' : 15,
+                    'fillstyle' : 'full'
+                }
+
+
+        # check if lists with channel numbers are ok, otherwise throw exception
+        error = False
+        if len(control_channels) == len(target_channels):
+            for control, target in zip(control_channels,target_channels):
+                if min(control, target) < 0 or max(control, target) > self._no_of_optical_channels:
+                    error = True
+                if control == target:
+                    error = True
+        else:
+            error = True
+        if error:
+            Exception('Error in channel input for function FockStateCircuit.c_shift')
+            
+        
+        this_is_first_round = True  
+        # run through the combinations of control and target 
+        # for each combination create a transition matrix
+        # multiply the matrices to get to the final overall matrix
+        for control,target in zip(control_channels,target_channels):
+            # create an identity matrix for the given combination of one target and one control channel
+            coupling_matrix_one_target_control_combination = np.zeros((len(self._list_of_fock_states),len(self._list_of_fock_states)), dtype = np.ubyte)
+            for input_index, input in enumerate(self._list_of_fock_states):
+                for output_index, output in enumerate(self._list_of_fock_states):
+                    # except for target channel values should be equal
+                    if all([input[channel] == output[channel] for channel in range(self._no_of_optical_channels) if channel != target]):
+                    # for target channel the value has to be (control + original target value) % length. So shift with control value modulus length
+                        if (output[target] == (input[control] + input[target])%self._length_of_fock_state):
+                                coupling_matrix_one_target_control_combination[output_index][input_index] = np.ubyte(1)
+            if this_is_first_round:
+                coupling_matrix = coupling_matrix_one_target_control_combination
+                this_is_first_round = False
+            else:
+                coupling_matrix  = np.matmul(coupling_matrix, coupling_matrix_one_target_control_combination)
+
+        self.custom_fock_state_node(custom_fock_matrix = coupling_matrix, node_type='custom fock matrix', node_info = node_info)
+
+        return
+
+    def channel_coupling(self, 
+                        control_channels: list[int] = [0],
+                        target_channels: list[int] = [1],
+                        coupling_strength: float = 0,
+                        node_info: dict = None
+                        ) -> None:  
+        """ Apply a node to the circuit to couple channels with the given 'coupling_strength'. The node will effectively 
+            apply a controlled shift from control channels to target channels.
+
+            Args: 
+                control_channels (list[int]): Channels that 'control' the target channel and remain unchanged themselves
+                target_channels (list[int]): Channels that change value based on the values in the control channels
+                coupling_strength (float): Set coupling strength between 0 (no coupling, node does nothing) and 1 (full coupling)
+                node_info (dict): Information for displaying the node when drawing circuit. Defaults to None, in that case 
+                        default image is used.
+            
+            Raises: 
+                Exception when the input channel numbers do not match with the circuit.
+                
+        """
+        # if channel input is a channel number (integer) and not a list make it a list
+        if type(control_channels) == type(1):
+            control_channels = [control_channels]
+        if type(target_channels) == type(1):
+            target_channels = [target_channels]
+
+        if node_info == None:
+            node_info = {
+                    'label' : "coupling",
+                    'channels' : control_channels + target_channels ,
+                    'channels_classical' : [],
+                    'markers' : ['o']*len(control_channels) + ['h']*len(target_channels),
+                    'markercolor' : ['black']*len(control_channels) + ['blue']*len(target_channels),
+                    'markerfacecolor' : ['black']*len(control_channels) + ['lightblue']*len(target_channels),
+                    'marker_text' : [r'$c$']*len(control_channels) + [r'$t$']*len(target_channels),
+                    'marker_text_fontsize' : [8],
+                    'marker_text_color' : ['white']*len(control_channels) + ['black']*len(target_channels),
+                    'markersize' : 15,
+                    'fillstyle' : 'full'
+                }
+
+
+        # check if lists with channel numbers are ok, otherwise throw exception
+        error = False
+        if len(control_channels) == len(target_channels):
+            for control, target in zip(control_channels,target_channels):
+                if min(control, target) < 0 or max(control, target) > self._no_of_optical_channels:
+                    error = True
+                if control == target:
+                    error = True
+        else:
+            error = True
+        if error:
+            Exception('Error in channel input for function FockStateCircuit.channel_coupling')
+            
+        
+        # the coupling matrix is pre-filled as identity matrix
+        coupling_matrix = np.identity(len(self._list_of_fock_states), dtype = np.csingle)
+        
+        # run through the combinations of control and target 
+        # for each combination create a transition matrix
+        # multiply the matrices to get to the final overall matrix
+        for control,target in zip(control_channels,target_channels):
+            # create an identity matrix for the given combination of one target and one control channel
+            coupling_matrix_one_target_control_combintation = np.identity(len(self._list_of_fock_states), dtype = np.csingle)
+            for input_index, input in enumerate(self._list_of_fock_states):
+                for output_index, output in enumerate(self._list_of_fock_states):
+                    # except for target channel values should be equal
+                    valid_transition = all([input[channel] == output[channel] for channel in range(self._no_of_optical_channels) if channel != target])
+                    # for target channel the value has to be (control + original target value) % length. So shift with control value modulus length
+                    valid_transition = valid_transition and (output[target] == (input[control] + input[target])%self._length_of_fock_state)
+                    # check if on diagonal
+                    on_diagonal = (input_index == output_index)
+                    if valid_transition and not on_diagonal:
+                        coupling_matrix_one_target_control_combintation[output_index][input_index] = np.sqrt(np.cdouble(coupling_strength)*(1 + 0*1j))
+                    elif valid_transition and on_diagonal:
+                        coupling_matrix_one_target_control_combintation[output_index][input_index] = np.cdouble(1)
+                    elif (not valid_transition) and on_diagonal:
+                        coupling_matrix_one_target_control_combintation[output_index][input_index] = np.sqrt(np.cdouble((1-coupling_strength))*(1 + 0*1j))
+                    else:
+                        coupling_matrix_one_target_control_combintation[output_index][input_index] = np.cdouble(0)
+            coupling_matrix  = np.matmul(coupling_matrix, coupling_matrix_one_target_control_combintation)
+
+        self.custom_fock_state_node(custom_fock_matrix = coupling_matrix, node_type='custom fock matrix', node_info = node_info)
+
+        return
+    
+    def time_delay(self,
+            affected_channels: list[int] = None,
+            delay: float = 0,
+            bandwidth: float = 0,
+            node_type: str = 'spectrum', 
+            node_info: dict = None
+            ) -> None:
+        """ IN BETA: Apply a time delay for a given bandwidth. The node will turn a pure state into 
+            a statistical mixture where states obtain a phase shift that depends on the bandwidth and the time delay
+
+            Note: Do not use more than one time delay gates in one circuit.
+        """
+        if node_info == None:
+            node_info = {
+                    'label' : "delay",
+                    'channels' : affected_channels,
+                    'channels_classical' : [],
+                    'markers' : ['s'],
+                    'markercolor' : ['darkblue'],
+                    'markerfacecolor' : ['blue'],
+                    'marker_text' : [r"$\tau$"],
+                    'markersize' : 20,
+                    'fillstyle' : 'full'
+                }
+            
+        self.__update_list_of_nodes({'spectral information': {'bandwidth': bandwidth, 'time delay': delay, 'channels': affected_channels},'node_type': node_type, 'node_info': node_info})
+    
+    def time_delay_classical_control(self,
+            affected_channels: list[int] = None,
+            classical_channel_for_delay: int = 0,
+            bandwidth: float = 0,
+            node_type: str = 'spectrum', 
+            node_info: dict = None
+            ) -> None:
+        """ IN BETA: Apply a time delay for a given bandwidth. Read the delay value from classical channel. 
+            The node will turn a pure state into a statistical mixture where states
+            obtain a phase shift that depends on the bandwidth and the time delay. 
+
+            Note: Do not use more than one time delay gates in one circuit.
+        """
+        if node_info == None:
+            node_info = {
+                    'label' : "delay(c)",
+                    'channels' : affected_channels,
+                    'channels_classical' : [classical_channel_for_delay],
+                    'markers' : ['s'],
+                    'markercolor' : ['darkblue'],
+                    'markerfacecolor' : ['blue'],
+                    'marker_text' : [r"$\tau$"],
+                    'markersize' : 20,
+                    'fillstyle' : 'full'
+                }
+        
+        self.__update_list_of_nodes({'spectral information': {'bandwidth': bandwidth, 'classical_channel_for_delay': classical_channel_for_delay, 'channels': affected_channels},'node_type': node_type, 'node_info': node_info})
+    
+    def bridge(self,
+            next_fock_state_circuit,
+            node_type: str = 'bridge', 
+            node_info: dict = None
+            ) -> None:
+        """ Apply a bridge node to the circuit to transfer the collection of states from one circuit to another. Used when the characteristics
+            of the circuit change (i.e., change number of optical/classical channels). 
+        """
+        if node_info == None:
+            node_info = {
+                    'label' : "bridge",
+                    'channels' : [],
+                    'channels_classical' : [],
+                    'markers' : ['o'],
+                    'markercolor' : ['blue'],
+                    'markerfacecolor' : ['white'],
+                    'marker_text' : [''],
+                    'markersize' : 40,
+                    'fillstyle' : 'none'
+                }
+        self.__update_list_of_nodes({'next_fock_state_circuit':next_fock_state_circuit,'node_type': node_type, 'node_info': node_info})
+
     # endregion
  
     # region Code region defining the functions for evaluating the circuit
@@ -1409,10 +2007,11 @@ class FockStateCircuit:
         Returns:
             cos.CollectionOfStates : collection of states as output of the circuit
         """        
-        
         # if nodes_to_be_evaluated == ['all'] make a list with all indices in node_list
         if nodes_to_be_evaluated == ['all']:
             nodes_to_be_evaluated = list(range(len(self.node_list)))
+            if len(self.node_list) == 0: # case for empty circuit
+                return collection_of_states_input
         # if nodes_to_be_evaluated is empty return the input state. This was last recursion loop
         elif len(nodes_to_be_evaluated) == 0:
             return collection_of_states_input
@@ -1463,6 +2062,29 @@ class FockStateCircuit:
                 single_custom_node = None
                 )
 
+            return self.evaluate_circuit(collection_of_states_input = collection_of_states_output, nodes_to_be_evaluated = remaining_nodes)
+
+        #****************************************************************
+        # case where next node is of type 'custom fock matrix'              *
+        #****************************************************************
+        elif self.node_list[current_node_index].get('node_type') == 'custom fock matrix':
+
+            custom_fock_matrix = self.node_list[current_node_index].get('custom_fock_matrix')
+            # prepare a new collection of states which will be filled with the results 
+            collection_of_states_output = cos.CollectionOfStates(self, input_collection_as_a_dict=dict([]))
+
+            for identifier, old_state in collection_of_states_input.items():
+                new_state = old_state.copy()
+                # create an input state vector (numpy array)
+                state_vector, basis = old_state.translate_state_components_to_vector()
+
+                # multiply with the matrix to get output state
+                output_state_vector = np.matmul(custom_fock_matrix,state_vector)     
+
+                # now translate the output vector to a state   
+                new_state.set_state_components_from_vector(state_vector = output_state_vector)
+
+                collection_of_states_output.add_state(state= new_state)
             return self.evaluate_circuit(collection_of_states_input = collection_of_states_output, nodes_to_be_evaluated = remaining_nodes)
         
         #**********************************************
@@ -1569,7 +2191,57 @@ class FockStateCircuit:
                     collection_of_states_output.add_state(state = state2, identifier = identifier2)
             
             return self.evaluate_circuit(collection_of_states_input = collection_of_states_output, nodes_to_be_evaluated = remaining_nodes)
+        #*****************************************************************
+        # case where next node is of type 'spectrum'      *
+        #*****************************************************************
+        elif self.node_list[current_node_index].get('node_type') == 'spectrum':
 
+            spectral_information = self.node_list[current_node_index].get('spectral information')
+            channels = spectral_information['channels']
+            bandwidth_omega = spectral_information['bandwidth']
+
+            # every state can have a different value in the classical channels
+            # run through states and read classical value per state to make the matrix. 
+            # apply this to the optical components of the same state
+            collection_of_states_output = cos.CollectionOfStates(self, input_collection_as_a_dict=dict([]))
+
+            for identifier, state in collection_of_states_input.items():       
+                if 'time delay' in spectral_information.keys():
+                    time_delay_tau = spectral_information['time delay']
+                else:
+                    classical_channel_for_delay = spectral_information['classical_channel_for_delay']
+                    time_delay_tau = state.classical_channel_values[classical_channel_for_delay]
+                states_returned = self._apply_time_delay(channels, time_delay_tau,bandwidth_omega,state.copy())
+                for state in states_returned:
+                    collection_of_states_output.add_state(state = state)
+
+            return self.evaluate_circuit(collection_of_states_input = collection_of_states_output, nodes_to_be_evaluated = remaining_nodes)
+        #*****************************************************************
+        # case where next node is of type 'bridge'      *
+        #*****************************************************************
+        elif self.node_list[current_node_index].get('node_type') == 'bridge':
+            next_fock_state_circuit = self.node_list[current_node_index].get('next_fock_state_circuit')
+            
+            new_length = next_fock_state_circuit._length_of_fock_state
+            new_optical = next_fock_state_circuit._no_of_optical_channels
+            new_classical = next_fock_state_circuit._no_of_classical_channels
+            
+            collection_of_states_reshaped = collection_of_states_input.copy()
+            if new_optical > self._no_of_optical_channels:
+                collection_of_states_reshaped.extend(extra_optical_channels=(new_optical - self._no_of_optical_channels))
+            elif new_optical < self._no_of_optical_channels:
+                optical_to_keep = [channel for channel in range(new_optical)]
+                collection_of_states_reshaped.reduce(optical_channels_to_keep=optical_to_keep)
+            if new_classical > self._no_of_classical_channels:
+                collection_of_states_reshaped.extend(extra_classical_channels=(new_classical - self._no_of_classical_channels))
+            elif new_classical < self._no_of_classical_channels:
+                classical_to_keep = [channel for channel in range(new_classical)]
+                collection_of_states_reshaped.reduce(classical_channels_to_keep=classical_to_keep)
+
+            collection_of_states_reshaped.adjust_length_of_fock_state(new_length)
+            collection_of_states_output = next_fock_state_circuit.evaluate_circuit(collection_of_states_input = collection_of_states_reshaped)
+            #return self.evaluate_circuit(collection_of_states_input = collection_of_states_output, nodes_to_be_evaluated = remaining_nodes)
+            return collection_of_states_output
         raise Exception('Error in evaluate_circuit. Check if node_types are correct')
         return
  
@@ -1768,8 +2440,8 @@ class FockStateCircuit:
         if collection_of_states is None:
             collection_of_states = cos.CollectionOfStates(fock_state_circuit=self)
         else:
+            collection_of_states._fock_state_circuit = self
             collection_of_states = collection_of_states.copy()
-
         if self._use_full_fock_matrix == True:
             # if 'use_full_fock_matrix' is set to 'True' we always use the complete matrix. There is no need to group
             # states by photon number.
@@ -1779,7 +2451,7 @@ class FockStateCircuit:
             # number. we use this to efficienlty use the fock matrix which can be reused for states within a group.
             # reduction of the fock matrix helps to avoid we always need a fock matric for the full set of states 
             # (which can become a huge matrix).
-            states_grouped_by_photon_number = collection_of_states.group_states_together_by_photon_number()
+            states_grouped_by_photon_number = collection_of_states._group_states_together_by_photon_number()
 
         for key,grouped_states_by_photon_number in states_grouped_by_photon_number.items():
             # the key indicates the photon numbers in the components in the state.
@@ -1925,7 +2597,7 @@ class FockStateCircuit:
         tbc = matrix[0][1]   
         tad = matrix[1][0]  
         length = self._length_of_fock_state
-        fock_matrix = np.zeros((length**2, length**2), dtype = np.csingle) # the matrix is pre-filled as diagonal matrix
+        fock_matrix = np.zeros((length**2, length**2), dtype = np.csingle) # the matrix is pre-filled as zero matrix
         for l1 in range(0,length**2): #l1 is the vertical index in fock_matrix
             # n and m are the input photon numbers in the two channels
             n = int(l1%length)
@@ -2007,15 +2679,16 @@ class FockStateCircuit:
     # endregion
 
     # region Code region for drawing the circuit
-
-    def draw(self, print_defaults: bool = False, settings_for_drawing_circuit: dict = None) -> None:
-        """ Draw the optical circuit. self. settings_for_drawing_circuit is the dict with settings for circuit drawing. 
+    def draw(self, print_defaults: bool = False, settings_for_drawing_circuit: dict = None, compound_circuit_settings: dict = None) -> None:
+        """ Draw the optical circuit. self.settings_for_drawing_circuit is the dict with settings for circuit drawing. 
             If this dict is not defined default values will be taken. If the boolean print_defaults is set to True the function will print
-            out the default values to console
+            out the default values to console. The parameter compound_circuit_settings is used when drawing a circuit with bridges to other circuits 
+            (a.k.a. compound circuit).
         
         Args:
-            print_defaults (bool): If 'True' function will print default settings to console
-            ettings_for_drawing_circuit (dict): dict with settings for circuit drawing. If none given default will be taken.
+            print_defaults (bool): If 'True' function will print default settings to console.
+            settings_for_drawing_circuit (dict): dict with settings for circuit drawing. If none given default will be taken.
+            compound_circuit_settings (dict): only used for drawing compound circuits.
 
         Returns:
             nothing
@@ -2024,267 +2697,997 @@ class FockStateCircuit:
             nothing
         """
         # default settings for circuit drawing (can be overwritten when calling function)
-        circuit_draw_settings_dict_default = {
-                'channel_line_spacing': 5,
-                'channel_line_length': 80,
-                'nodes_per_page': 8,
-                'spacing_between_nodes' : 10, 
-                'canvas_width': 100,
-                'plt.figure.figsize': [15, 6], 
-                'circuit_title': 'Optical circuit',
-                'channel_labels': ['optical '+ str(index) for index in range(self._no_of_optical_channels)],
-                'channel_labels_classical': ['classical '+ str(index) for index in range(self._no_of_classical_channels)],
-                'channel_label_string_max_length': 15,
-                'node_label_string_max_length': 15
-            }
-        # default settings for drawing nodes in the circuit (can be overwritten when adding node to circuit)
-        default_node_info = {
-            'label' : '',
-            'connection_linestyle' : 'solid',
-            'connection_linewidth': 2,
-            'connection_linecolor': 'blue',
-            'channels' : [],
-            'channels_classical': [],
-            'markers' : ['o'],
-            'markercolor' : ['blue'],
-            'markerfacecolor' : ['white'],
-            'market_text' : [''],
-            'markersize' : 20,
-            'fillstyle' : 'full'
-        }
+        if settings_for_drawing_circuit is not None:
+            circuit_draw_settings_dict = dict(FockStateCircuit._CIRCUIT_DRAW_DEFAULT_SETTINGS | settings_for_drawing_circuit)
+        else:
+            circuit_draw_settings_dict = dict(FockStateCircuit._CIRCUIT_DRAW_DEFAULT_SETTINGS)
+
         if print_defaults == True:
+            print(FockStateCircuit._CIRCUIT_DRAW_DEFAULT_SETTINGS)
+            print(FockStateCircuit._NODE_DRAW_DEFAULT_SETTINGS)
 
-            print("These are the default setting for drawing a circuit stored as: \n'circuit_draw_settings_dict_default'")
-            print("The defaults can be overwritten by setting the variable circuit.settings_for_drawing_circuit")
-            print("Here 'circuit' is the name of your FockStateCircuit ")
-            print("----------------------------------------------------- ")
-            for item in circuit_draw_settings_dict_default.items():
-                print(item)
-            print("\n")
-            print("These are the default setting for drawing a node stored as: \n'default_node_info'")
-            print("The defaults can be overwritten by setting the variable circuit.settings_for_drawing_node")
-            print("Here 'circuit' is the name of your FockStateCircuit ")
-            print("----------------------------------------------------- ")
-            for item in default_node_info.items():
-                print(item)
-        # if no settings for circuit drawing are passed use default
-        if not settings_for_drawing_circuit:
-            circuit_draw_settings_dict = circuit_draw_settings_dict_default       
-        else:
-            # check whether all settings are passed, if not add the default value
-            circuit_draw_settings_dict = settings_for_drawing_circuit
-            for key in circuit_draw_settings_dict_default.keys():
-                if key not in circuit_draw_settings_dict.keys():
-                    circuit_draw_settings_dict.update({key:circuit_draw_settings_dict_default[key] })
+        if compound_circuit_settings is None:
+            # this is either the first of a series of connection circuits, or a single circuit.
+            number_of_nodes_compound_circuit = 0
+            number_of_optical_channels_compound_circuit = 0
+            number_of_classical_channels_compound_circuit = 0
 
-        # determine how many pages are needed to draw the complete circuit
-        number_of_nodes = len(self.node_list)
-        nodes_on_last_page = number_of_nodes%circuit_draw_settings_dict['nodes_per_page']       
-        if nodes_on_last_page == 0:
-            number_of_pages = int(number_of_nodes/circuit_draw_settings_dict['nodes_per_page'])
-        else:
-            number_of_pages = 1 + int(number_of_nodes/circuit_draw_settings_dict['nodes_per_page'])
+            # loop through all circuits in the compound circuit until you find a circuit that does not end with a 'bridge'
+            circuit = self
+            compound_circuit_names = []
+            while True:
+                # count total number of nodes in compound circuit
+                number_of_nodes_compound_circuit += len(circuit.node_list)
 
-        # determine the height needed per page, depending on the number of channels and the spacing
-        canvas_height = circuit_draw_settings_dict['channel_line_spacing']*(self._no_of_optical_channels+self._no_of_classical_channels+ 1)
-
-        fig_width = circuit_draw_settings_dict['plt.figure.figsize'][0]
-        fig_height = circuit_draw_settings_dict['plt.figure.figsize'][1]*canvas_height/40
-        plt.rcParams['figure.figsize'] = [fig_width,fig_height]
-        fig, ax = plt.subplots(nrows= number_of_pages, ncols=1)
-        fig.suptitle(circuit_draw_settings_dict['circuit_title'])
-        
-        # draw page by page
-        for page_number in range(number_of_pages):
-
-            if number_of_pages == 1:
-                axis = ax
-            else:
-                axis = ax[page_number]
-
-            # make an 'invisible' curve to size the canvas from (0,0) to (..dict['canvas_width'], canvas_height )
-            axis.axis('off') #axis invisible, border invisible
-            xpoints = [0,circuit_draw_settings_dict['canvas_width']] 
-            ypoints = [0,canvas_height]            
-            axis.plot(xpoints,ypoints,'o:r', alpha=0) # alpha = 0 means invisible
-
-            # draw an horizontal line for each channel
-            line_start_x = (circuit_draw_settings_dict['canvas_width']-circuit_draw_settings_dict['channel_line_length'])/2
-            line_end_x = line_start_x + circuit_draw_settings_dict['channel_line_length']
-            line_y_values = [canvas_height - (line_no+1)*circuit_draw_settings_dict['channel_line_spacing'] for line_no in range(self._no_of_optical_channels)]
-            for line_no in range(self._no_of_optical_channels):
-                line_y = line_y_values[line_no]
-                axis.plot([line_start_x,line_end_x],[line_y,line_y], linestyle = 'solid', marker='o', color = 'blue', alpha=1)
-            # add an horizontal line for each classical channel
-            line_y_values_classical = [min(line_y_values) - (line_no+1)*circuit_draw_settings_dict['channel_line_spacing'] for line_no in range(self._no_of_classical_channels)]
-            for line_no in range(self._no_of_classical_channels):
-                line_y = line_y_values_classical[line_no-1]
-                axis.plot([line_start_x,line_end_x],[line_y,line_y], linestyle = 'solid', marker='o', color = 'black', alpha=1)
-
-            # add the labels for the channels
-            max_characters = circuit_draw_settings_dict['channel_label_string_max_length']
-            for line_no in range(self._no_of_optical_channels):
-                axis.annotate(                  
-                    circuit_draw_settings_dict['channel_labels'][line_no][:max_characters].replace('\n', ' '), 
-                    (line_start_x-0.2*circuit_draw_settings_dict['spacing_between_nodes'], line_y_values[line_no]),
-                    fontsize=8,
-                    horizontalalignment = 'right',
-                    verticalalignment =  'center'
-                    )
-            for line_no in range(self._no_of_classical_channels):
-                axis.annotate(                  
-                    circuit_draw_settings_dict['channel_labels_classical'][line_no][:max_characters].replace('\n', ' '), 
-                    (line_start_x-0.2*circuit_draw_settings_dict['spacing_between_nodes'], line_y_values_classical[line_no]),
-                    fontsize=8,
-                    horizontalalignment = 'right',
-                    verticalalignment =  'center'
-                    )
-
-            # run through the nodes that have to be plotted on this page
-            first_node_on_page = circuit_draw_settings_dict['nodes_per_page']*page_number
-            last_node_on_page = min(number_of_nodes, first_node_on_page + circuit_draw_settings_dict['nodes_per_page'])
-            for node_number, node in enumerate(self.node_list[first_node_on_page:last_node_on_page]):
-                # if specific node information is given use that, otherwise use default for everything or per item that is not specified
-                if node['node_info'] == None:
-                    current_node = default_node_info
+                # make a list of names for the various circuits in the compound circuit
+                if circuit._circuit_name is None:
+                    this_circuit_name = 'circuit ' + str(len(compound_circuit_names))
+                    circuit._circuit_name = this_circuit_name
                 else:
-                    current_node = dict([])
-                    for key in default_node_info.keys():
-                        if key in node['node_info'].keys():
-                            current_node.update({key : node['node_info'][key]})
-                        else:
-                            current_node.update({key : default_node_info[key]})
+                    this_circuit_name = circuit._circuit_name
+                compound_circuit_names.append(this_circuit_name)
 
-                # for some items we need a list if you want to mark the node different per channel (i.e., a target and a control channel)
-                # if there is no list given we artificially make the list by adding the 0th element to the end
-                for item_needing_list in [key for key in current_node.keys() if ( type(current_node[key]) == type([]) )]:
-                    if current_node[item_needing_list]:
-                        current_node[item_needing_list] += [ current_node[item_needing_list][0] ]*len(current_node['channels'])
+                # determine maximum number of optical or classical channels in the compound circuit
+                number_of_optical_channels_compound_circuit = max(number_of_optical_channels_compound_circuit, circuit._no_of_optical_channels)                
+                number_of_classical_channels_compound_circuit = max(number_of_classical_channels_compound_circuit, circuit._no_of_classical_channels)
 
-                # bool to identify node with connection to classical channel
-                node_has_classical_channel = (len(current_node['channels_classical']) != 0)
-                node_has_optical_channel = ((len(current_node['channels']) != 0))
-                # if node affects no channels skip
-                if (not node_has_classical_channel) and (not node_has_optical_channel):
-                    continue
-                
-                # determine x value and y values for each node
-                node_x = (node_number+ 0.5) * circuit_draw_settings_dict['spacing_between_nodes'] + line_start_x
-                node_y_values = [line_y_values[channel] for channel in current_node['channels']]
-                node_y_values_classical = [line_y_values_classical[channel] for channel in current_node['channels_classical']]
-                lowest_y_value = min(node_y_values + node_y_values_classical)
-                highest_y_value = max(node_y_values + node_y_values_classical)
+                # if last node is not a bridge we have reached the end, otherwise another circuit to be added
+                if len(circuit.node_list) > 0 and circuit.node_list[-1]['node_type'] == 'bridge':
+                    circuit = circuit.node_list[-1]['next_fock_state_circuit']
+                    number_of_nodes_compound_circuit -= 1
+                else:
+                    break
+            
+            # define a coordinate system to position the elements in the circuit drawing. 
+            canvas_width = 100
 
-                if node_has_optical_channel:
-                    # plot a wide white vertical line
-                    axis.plot(
-                        [node_x]*len(node_y_values),
-                        node_y_values,
-                        linestyle = 'solid',
-                        linewidth = 5,
-                        color = 'white',
-                        alpha=1
-                        )
-                    # plot a vertical line connecting the channels affected by the node (target, control, ...)
-                    axis.plot(
-                        [node_x]*len(node_y_values),
-                        node_y_values,
-                        linestyle = current_node['connection_linestyle'],
-                        linewidth = current_node['connection_linewidth'],
-                        marker = 'none',
-                        color = current_node['connection_linecolor'],
-                        alpha=1
-                        )
-                #plot a black line connecting the lowest no classical channel and the highest no optical channel for the node
-                if node_has_classical_channel:
-                    if node_has_optical_channel:
-                        highest_y_value_classical_line = min(node_y_values) 
+            # determine the horizontal positions of the nodes and the lines
+            target_line_length = canvas_width * circuit_draw_settings_dict['channel_line_length_as_fraction_of_figure_width']
+            nodes_per_page = circuit_draw_settings_dict['number_of_nodes_on_a_line']
+            line_start_x = (canvas_width-target_line_length)/2 # centre the lines on the canvas, determine left side starting point
+            spacing_between_nodes = math.floor(target_line_length/nodes_per_page)
+            line_end_x = line_start_x + nodes_per_page * spacing_between_nodes
+            line_x_values = (line_start_x,line_end_x)
+            node_x_values = [line_x_values[0] + (node_on_page+0.5)*spacing_between_nodes for node_on_page in range(nodes_per_page)]
+
+            # determine the canvas height based on spacing between lines a number of channels
+            channel_line_spacing = circuit_draw_settings_dict['spacing_between_lines_in_relation_to_spacing_between_nodes'] * spacing_between_nodes
+            canvas_height = channel_line_spacing * (number_of_optical_channels_compound_circuit+number_of_classical_channels_compound_circuit+ 2)
+
+            # determine the vertical positions for the lines and circuit names
+            circuit_name_y_value = canvas_height
+            line_y_values_optical = [canvas_height - (line_no+2)*channel_line_spacing for line_no in range(number_of_optical_channels_compound_circuit)]
+            line_y_values_classical = [min(line_y_values_optical) - (line_no+1)*channel_line_spacing for line_no in range(number_of_classical_channels_compound_circuit)]
+            
+            # make default labels for the channels
+            if 'channel_labels_optical' not in circuit_draw_settings_dict.keys():
+                optical_channel_labels = ['optical '+ str(index) for index in range(number_of_optical_channels_compound_circuit)]
+                circuit_draw_settings_dict.update({'channel_labels_optical': optical_channel_labels})
+            if 'channel_labels_classical' not in circuit_draw_settings_dict.keys():
+                classical_channel_labels = ['classical '+ str(index) for index in range(number_of_classical_channels_compound_circuit)]
+                circuit_draw_settings_dict.update({'channel_labels_classical': classical_channel_labels})
+
+            # determine how many pages are needed to draw the compound circuit
+            nodes_on_last_page = number_of_nodes_compound_circuit%nodes_per_page       
+            if nodes_on_last_page == 0:
+                number_of_pages = int(number_of_nodes_compound_circuit/nodes_per_page)
+            else:
+                number_of_pages = 1 + int(number_of_nodes_compound_circuit/nodes_per_page)
+       
+            # create the plot, use two times expected number of pages as size. left over pages
+            # will be deleted at the end
+            # the better solution would be to dynamically add subplots when starting a new page.
+            figure_size_in_inches = (circuit_draw_settings_dict['figure_width_in_inches'], 
+                                     circuit_draw_settings_dict['figure_width_in_inches']*number_of_pages*canvas_height/canvas_width
+                                     )
+            fig, axs = plt.subplots(nrows= 2*number_of_pages, ncols=1, squeeze = False, figsize = figure_size_in_inches)
+
+            # give each page of the plot a title
+            for page in range(number_of_pages):
+                axs[page][0].set_title(circuit_draw_settings_dict['compound_circuit_title'] + ' page ' + str(page+1),
+                                    fontsize=circuit_draw_settings_dict['compound_plot_title_font_size']
+                                    )
+
+            # gather all parameters in a dictionary which can be passed on in the recursive call to next circuits
+            compound_circuit_settings = {
+                'canvas_height' : canvas_height,
+                'canvas_width' : canvas_width,
+                'plot_axs' : axs,
+                'figure' : fig,
+                'circuit_name_y_value' : circuit_name_y_value,
+                'line_y_values_optical' : line_y_values_optical,
+                'line_y_values_classical' : line_y_values_classical ,
+                'node_x_values' : node_x_values ,
+                'line_x_values': line_x_values,
+                'channel_labels_classical' : circuit_draw_settings_dict['channel_labels_classical'],
+                'channel_labels_optical' : circuit_draw_settings_dict['channel_labels_optical'],
+                'spacing_between_nodes' : spacing_between_nodes,
+                'channel_line_spacing' : channel_line_spacing,
+                'node_positions_occupied' : [],
+                'active_optical_channels_per_node' : [],
+                'active_classical_channels_per_node' : []
+            }
+        if len(self.node_list) == 0:
+            raise Exception('Error drawing empty circuit. Circuits need to contain at least one node')
+        
+        for node_index, node in enumerate(self.node_list):
+
+            # if specific node information is given use that, otherwise use default for everything or per item that is not specified
+            if node['node_info'] is not None:
+                current_node_info = FockStateCircuit._NODE_DRAW_DEFAULT_SETTINGS | node['node_info']
+            else:
+                current_node_info = FockStateCircuit._NODE_DRAW_DEFAULT_SETTINGS
+
+            for key in current_node_info.keys():
+                if key not in FockStateCircuit._NODE_DRAW_DEFAULT_SETTINGS.keys():
+                    print("Unrecognized key in parameter node_info: ", key, " Run circuit.draw(print_defaults = True) to get a list of recognized keys.")
+            
+            # for some items we need a list if you want to mark the node different per channel (i.e., a target and a control channel)
+            # if there is no list given we artificially make the list by adding the 0th element to the end
+            for item_needing_list in current_node_info.keys():
+                if type(FockStateCircuit._NODE_DRAW_DEFAULT_SETTINGS[item_needing_list]) == type([]):
+                    maximum_needed_list_length = len(current_node_info['channels']) + len(current_node_info['channels_classical'])
+                    if type(current_node_info[item_needing_list]) == type([]) and len(current_node_info[item_needing_list]) == 0 :
+                        current_node_info[item_needing_list] = []
+                    elif type(current_node_info[item_needing_list]) == type([]) and len(current_node_info[item_needing_list]) < maximum_needed_list_length:
+                        current_node_info[item_needing_list] = current_node_info[item_needing_list] + [current_node_info[item_needing_list][0]] * (maximum_needed_list_length - len(current_node_info[item_needing_list]) )
+                    elif type(current_node_info[item_needing_list]) != type([]):
+                        current_node_info[item_needing_list] = [ current_node_info[item_needing_list]]*(maximum_needed_list_length)
+
+            # determine if node is a bridge
+            this_node_is_a_bridge = (node['node_type'] == 'bridge')
+            
+            # determine if this is the very first node of a circuit
+            this_node_is_first_in_circuit = (node_index == 0)
+
+            # determine if this is the last node in the circuit
+            this_node_is_last_in_circuit = (node_index == len(self.node_list)-1)
+
+            # determine what type of node this
+            node_has_classical_channel = (len(current_node_info['channels_classical']) != 0)
+            node_has_optical_channel = ((len(current_node_info['channels']) != 0))
+
+            # determine if node is part of a combined node
+            this_is_a_combined_node = (not this_node_is_a_bridge) and ('combined_gate' in current_node_info.keys()) and  (current_node_info['combined_gate'] != 'single')
+
+            # determine if it is the first node in a combined node
+            if this_is_a_combined_node:
+                this_is_first_of_a_combined_node = (node_index == 0 or (self.node_list[node_index - 1]['node_info'].get('combined_gate', 'single') != current_node_info['combined_gate']))
+            else:
+                this_is_first_of_a_combined_node = False
+
+            # determine the length of the combined node
+            if this_is_a_combined_node and this_is_first_of_a_combined_node:
+                number_of_combined_nodes = 0 # count combined nodes
+                while True:
+                    if node_index + number_of_combined_nodes >= len(self.node_list):
+                        break
+                    elif self.node_list[node_index + number_of_combined_nodes]['node_type'] == 'bridge':
+                        break
+                    elif self.node_list[node_index + number_of_combined_nodes]['node_info'].get('combined_gate','single') != current_node_info['combined_gate']:
+                        break
                     else:
-                        highest_y_value_classical_line = max(node_y_values_classical)
-                    # plot a wide white vertical line
-                    axis.plot(
-                        [node_x, node_x],
-                        [lowest_y_value, highest_y_value_classical_line],
-                        linestyle = 'solid',
-                        linewidth = 5,
-                        color = 'white',
-                        alpha=1
-                        )
-                    axis.plot(
-                        [node_x, node_x],                
-                        [lowest_y_value, highest_y_value_classical_line],
-                        linestyle = 'solid',
-                        linewidth = 2,
-                        marker = 'none',
-                        color = 'black',
-                        alpha=1
-                        )
-                # plot dashed rectangle with the label
-                max_characters = circuit_draw_settings_dict['node_label_string_max_length']
-                axis.annotate(                  
-                    current_node['label'][:max_characters].replace('\n', ' '), 
-                    (node_x - circuit_draw_settings_dict['spacing_between_nodes']*0.4, 
-                     highest_y_value+circuit_draw_settings_dict['channel_line_spacing']*0.55),
-                     fontsize=8
-                    )
-                axis.plot(
-                    [node_x - circuit_draw_settings_dict['spacing_between_nodes']*0.4,
-                     node_x + circuit_draw_settings_dict['spacing_between_nodes']*0.4,
-                     node_x + circuit_draw_settings_dict['spacing_between_nodes']*0.4,
-                     node_x - circuit_draw_settings_dict['spacing_between_nodes']*0.4,
-                     node_x - circuit_draw_settings_dict['spacing_between_nodes']*0.4
-                    ],
-                    [lowest_y_value-circuit_draw_settings_dict['channel_line_spacing']*0.5,
-                     lowest_y_value-circuit_draw_settings_dict['channel_line_spacing']*0.5,
-                     highest_y_value+circuit_draw_settings_dict['channel_line_spacing']*0.5,
-                     highest_y_value+circuit_draw_settings_dict['channel_line_spacing']*0.5,
-                     lowest_y_value-circuit_draw_settings_dict['channel_line_spacing']*0.5
-                     ],
-                     linestyle = ':',
-                     marker = 'none',
-                     linewidth = 0.5,
-                     color = 'grey'
-                    )
+                        number_of_combined_nodes += 1
+
+                nodes_occupied_by_combined_node = number_of_combined_nodes//2
+                # if combined node does not fit on a page treat it as individual nodes (combined node is too large)
+                if (number_of_combined_nodes//2) > len(compound_circuit_settings['node_x_values']):
+                    this_is_a_combined_node = False
+                # if combined node is a single node treat it as a single node
+                if number_of_combined_nodes <= 1:
+                    this_is_a_combined_node = False
+
+            # create a number which in binary format has a 1 for occupied channels and 0 otherwise
+            if this_node_is_a_bridge:
+                # for a bridge fill string with all 1's. All channels are occupied in a bridge. 
+                # we do not want the bridge to be move on the drawing, and also other nodes should not move 'through' a bridge
+                bitlist_all_occupied = ['1'] * (len(compound_circuit_settings['line_y_values_optical'])+len(compound_circuit_settings['line_y_values_classical']))
+                bitnumber_occupied_channels = int(''.join(bitlist_all_occupied), 2)
+            
+            elif this_is_a_combined_node:
+                if this_is_first_of_a_combined_node:
+                    # for a combined node create a bitnumber indicating all channels occupied by all nodes in the combination. Avoid that another node is place somewhere inbetween
+                    bitnumber_used = 0
+                    for node in self.node_list[node_index:node_index+number_of_combined_nodes]:
+                        # we have to look forward in node list  to determine complete size of the combined node
+                        optical_channels = node['node_info'].get('channels',[])
+                        classical_channels = node['node_info'].get('channels_classical',[])
+                        # make a bitstring to indicate occupied channels
+                        bitlist_optical = ['1' if (channel in optical_channels) else '0' for channel in range(len(compound_circuit_settings['line_y_values_optical']))]
+                        bitlist_classical = ['1' if (channel in classical_channels) else '0' for channel in range(len(compound_circuit_settings['line_y_values_classical']))]
+                        bitnumber_used_individual_node = int(''.join(bitlist_optical + bitlist_classical), 2)
+                        bitnumber_used = bitnumber_used | bitnumber_used_individual_node
+
+                    # make another bitstring filled up between channels 
+                    memory, bitnumber_occupied_channels = 0, 0
+                    for bit_index in range(len(compound_circuit_settings['line_y_values_optical']) + len(compound_circuit_settings['line_y_values_classical'])):
+                        bit_value_occupied = int((bitnumber_used & (1 << bit_index )) != 0)
+                        memory |= bit_value_occupied
+                        memory &= int((bitnumber_used >> bit_index) != 0)
+                        bitnumber_occupied_channels = bitnumber_occupied_channels | (memory << bit_index )
+
+            else: # not a bridge and not a combined node
+                # make a bitstring to indicate occupied channels
+                bitlist_optical = ['1' if (channel in current_node_info['channels']) else '0' for channel in range(len(compound_circuit_settings['line_y_values_optical']))]
+                bitlist_classical = ['1' if (channel in current_node_info['channels_classical']) else '0' for channel in range(len(compound_circuit_settings['line_y_values_classical']))]
+                bitnumber_used = int(''.join(bitlist_optical + bitlist_classical), 2)
+                # make another bitstring filled up between channels 
+                memory, bitnumber_occupied_channels = 0, 0
+                for bit_index in range(len(compound_circuit_settings['line_y_values_optical']) + len(compound_circuit_settings['line_y_values_classical'])):
+                    bit_value_occupied = int((bitnumber_used & (1 << bit_index )) != 0)
+                    memory |= bit_value_occupied
+                    memory &= int((bitnumber_used >> bit_index) != 0)
+                    bitnumber_occupied_channels = bitnumber_occupied_channels | (memory << bit_index )
+                # and finally also make the 'surrounding' bits 1 to avoid that channel labels overlap
+                # we always want an empty channel inbetween two occupied channels
+                # we only need this if we want to find a position for the node that is already used, i.e., do not force node to be added to end
+                bitnumber_incl_boundaries = ((bitnumber_occupied_channels << 1) | bitnumber_occupied_channels | (bitnumber_occupied_channels >> 1))
+
+            # determine whether we force node to be added to end, or whether we try to fit it in next to an existing node
+            if this_node_is_first_in_circuit or this_node_is_a_bridge or (not node_has_classical_channel and not node_has_optical_channel) or this_is_a_combined_node:
+                add_new_node_to_end = True
+            else:
+                add_new_node_to_end = False
+
+            # determine the node x position and page number for the various cases we can encounter
+            if not add_new_node_to_end:              
+                # try to shift to left in drawing
+                # find the earliest node position that has no overlap with the current node
+                node_position = len(compound_circuit_settings['node_positions_occupied'])-1
+                while True:
+                    if node_position < 0 or compound_circuit_settings['node_positions_occupied'][node_position] & bitnumber_occupied_channels != 0:
+                        node_position += 1
+                        break
+                    else:
+                        node_position -= 1
+
+                while True:
+                    if node_position >= len(compound_circuit_settings['node_positions_occupied']) or (compound_circuit_settings['node_positions_occupied'][node_position] & bitnumber_incl_boundaries) == 0:
+                        break
+                    else:
+                        node_position += 1
                 
-                # plot a marker per channel
-                for index in range(len(current_node['channels'])):
-                    axis.plot(
-                        node_x,
-                        node_y_values[index],
-                        markeredgewidth = 1,
-                        marker = current_node['markers'][index],
-                        markersize = 20,
-                        color = current_node['markercolor'][index],
-                        markerfacecolor = current_node['markerfacecolor'][index],
-                        fillstyle='full',
-                        alpha=1
+                if node_position >= len(compound_circuit_settings['node_positions_occupied']):
+                    # it could be that we try to fit the node in an existing position but it does not fit, we have to add it to the end after all
+                    page_number, node_number_on_page= divmod(len(compound_circuit_settings['node_positions_occupied']), len(compound_circuit_settings['node_x_values']))
+                    compound_circuit_settings['node_positions_occupied'].append(bitnumber_occupied_channels)
+                    start_empty_new_page = (node_number_on_page == 0)
+                else:
+                    # we found a place to fit the node, update the list of occupied node positions
+                    compound_circuit_settings['node_positions_occupied'][node_position] = compound_circuit_settings['node_positions_occupied'][node_position] | bitnumber_occupied_channels
+                    page_number, node_number_on_page= divmod(node_position, len(compound_circuit_settings['node_x_values']))
+                    start_empty_new_page = False
+
+                # determine where to write this node
+                node_x = compound_circuit_settings['node_x_values'][node_number_on_page]
+                axis = compound_circuit_settings['plot_axs'][page_number][0]
+
+            elif add_new_node_to_end and not this_is_a_combined_node:
+                # add node in next position after the already occupied node positions
+                page_number, node_number_on_page= divmod(len(compound_circuit_settings['node_positions_occupied']), len(compound_circuit_settings['node_x_values']))
+                # if node is most left on page start a new page
+                start_empty_new_page = (node_number_on_page == 0)
+                # if this is a bridge it will be drawn 'inbetween' nodes so we have to shorten the list of nodes occupied to avoid a gap
+                compound_circuit_settings['node_positions_occupied'].append(bitnumber_occupied_channels)
+                if this_node_is_a_bridge:
+                    compound_circuit_settings['node_positions_occupied']  = compound_circuit_settings['node_positions_occupied'][1:]
+
+                # determine where to write this node
+                node_x = compound_circuit_settings['node_x_values'][node_number_on_page]
+                axis = compound_circuit_settings['plot_axs'][page_number][0]
+
+            else: # this_is_a_combined_node:
+                if this_is_first_of_a_combined_node:
+                    # add node in next position after the already occupied node positions
+                    page_number_first_combined_node, node_number_on_page_first_combined_node= divmod(len(compound_circuit_settings['node_positions_occupied']), len(compound_circuit_settings['node_x_values']))
+                    nodes_occupied_by_combined_node = (1+ number_of_combined_nodes)//2 # 0 -> 0, 1->1,  2-> 1, 3 -> 2, 4->2, ....
+                    page_number_last_combined_node, node_number_on_page_last_combined_node= divmod(len(compound_circuit_settings['node_positions_occupied']) + nodes_occupied_by_combined_node, len(compound_circuit_settings['node_x_values']))
+                    page_number = page_number_last_combined_node
+
+                    # check if full combined nodes still fits on the page, otherwise move everything to next page
+                    if page_number_last_combined_node != page_number_first_combined_node:
+                        # if we move combined node to next page fill up the empty positions in the current page
+                        for _ in range(node_number_on_page_first_combined_node, len(compound_circuit_settings['node_x_values'])):
+                            compound_circuit_settings['node_positions_occupied'].append(0)
+                        node_number_on_page_first_combined_node = 0
+                    # occupy all channels needed for the combined node
+                    for _ in range(nodes_occupied_by_combined_node):
+                        compound_circuit_settings['node_positions_occupied'].append(bitnumber_occupied_channels)
+                    
+                    # set bool for starting new page if the combined node requires a new page
+                    start_empty_new_page = (node_number_on_page_first_combined_node == 0 or (page_number_last_combined_node != page_number_first_combined_node))
+                  
+                    # generate the x-values for all nodes in the combined node
+                    combined_node_x_values = []
+                    node_spacing = compound_circuit_settings['node_x_values'][1]-compound_circuit_settings['node_x_values'][0]
+                    node_x_original_first_node_in_compound = compound_circuit_settings['node_x_values'][node_number_on_page_first_combined_node]
+                    if number_of_combined_nodes%2 == 0: #case for even number of nodes
+                        shift_combined_node = (-1/4)*node_spacing
+                    else: #case for odd number of nodes
+                        shift_combined_node = 0
+                    for combined_node_number in range(number_of_combined_nodes):                            
+                        combined_node_x_values.append(node_x_original_first_node_in_compound + shift_combined_node + combined_node_number*node_spacing/2.0)
+
+                    # generate x coordinates for box around combined node
+                    box_xs = (  min(combined_node_x_values)- compound_circuit_settings['spacing_between_nodes']*0.2,
+                                max(combined_node_x_values)+ compound_circuit_settings['spacing_between_nodes']*0.2
+                                )
+                    
+                    # generate y coordinates for box around combined node
+                    index_ys = []
+                    bit_index, memory = 0, 0
+                    while True:
+                        bit_value_occupied = int(((bitnumber_occupied_channels >> bit_index ) & 1) != 0)
+                        if bit_value_occupied != memory:
+                            index_ys.append(bit_index-memory)
+                        memory = bit_value_occupied
+                        if (bitnumber_occupied_channels >> bit_index ) == 0:
+                            break
+                        bit_index += 1
+                    box_ys = (  (compound_circuit_settings['line_y_values_optical']+ compound_circuit_settings['line_y_values_classical'])[::-1][min(index_ys)]- compound_circuit_settings['channel_line_spacing']*0.5,
+                                (compound_circuit_settings['line_y_values_optical']+ compound_circuit_settings['line_y_values_classical'])[::-1][max(index_ys)]+ compound_circuit_settings['channel_line_spacing']*0.5
+                                )                                                                       
+                else:
+                    start_empty_new_page = False
+
+                # determine where to write this node
+                node_x = combined_node_x_values[0]
+                del combined_node_x_values[0]
+                axis = compound_circuit_settings['plot_axs'][page_number][0]
+
+            # if this is last node in circuit update the 'active_channels_per_node_position'
+            for node_position in range(len(compound_circuit_settings['active_optical_channels_per_node']), len(compound_circuit_settings['node_positions_occupied'])):
+                compound_circuit_settings['active_optical_channels_per_node'].append(self._no_of_optical_channels)
+                compound_circuit_settings['active_classical_channels_per_node'].append(self._no_of_classical_channels)
+
+
+            # add functionality t dynamically add subplots by    fig.axes[i].change_geometry(n+1, 1, i+1)
+            # axis = fig.add_subplot(n+1, 1, n+1)
+
+            # determine how to write this node in one of four categories
+            same_page_existing_circuit = (not start_empty_new_page) and (not this_node_is_first_in_circuit)
+            new_page_existing_circuit = (start_empty_new_page) and (not this_node_is_first_in_circuit)
+            same_page_new_circuit = (not start_empty_new_page) and (this_node_is_first_in_circuit)
+            new_page_new_circuit = (start_empty_new_page) and (this_node_is_first_in_circuit)
+
+            # before drawing the node draw the page where needed
+            if same_page_existing_circuit:
+                # nothing needed, page is already prepared
+                prepare_new_page = False
+                draw_channel_lines = False
+                add_channel_labels = False
+                add_circuit_label = False
+            elif new_page_existing_circuit:
+                prepare_new_page = True
+                draw_channel_lines = True
+                add_channel_labels = True
+                add_circuit_label = True
+            elif same_page_new_circuit:
+                prepare_new_page = False
+                draw_channel_lines = True
+                add_channel_labels = False
+                add_circuit_label = True
+            elif new_page_new_circuit:
+                prepare_new_page = True
+                draw_channel_lines = True
+                add_channel_labels = True
+                add_circuit_label = True
+            
+            # determine what to do with the channels lines after the node
+            if this_node_is_last_in_circuit and this_node_is_a_bridge and new_page_existing_circuit:
+                # this is the end of a circuit on a new page
+                draw_bridge_symboles = True
+                modify_end_of_line_symbols_previous_page = True
+                add_circuit_label = False # cancel writing of circuit label on new page
+            elif this_node_is_last_in_circuit and this_node_is_a_bridge and not new_page_existing_circuit:
+                # this is the end of a circuit on existing page (so space for minimally one node left)
+                draw_bridge_symboles = True
+                modify_end_of_line_symbols_previous_page = False
+            elif this_node_is_last_in_circuit and not this_node_is_a_bridge:
+                draw_bridge_symboles = False
+                modify_end_of_line_symbols_previous_page = False
+            else:
+                draw_bridge_symboles = False
+                modify_end_of_line_symbols_previous_page = False
+
+            if prepare_new_page:
+                # make an 'invisible' curve to size the canvas from (0,0) to (..dict['canvas_width'], canvas_height )
+                axis.axis('off') #axis invisible, border invisible
+                xpoints = [0,compound_circuit_settings['canvas_width']] 
+                ypoints = [0,compound_circuit_settings['canvas_height']]            
+                axis.plot(xpoints,ypoints,'o:r', alpha=0) # alpha = 0 means invisible
+
+                # determine horizontal start and stop for lines. 
+                line_start_x = compound_circuit_settings['line_x_values'][0]
+                line_end_x = compound_circuit_settings['line_x_values'][1]
+
+            if draw_channel_lines:
+                if not this_is_first_of_a_combined_node:
+                    line_start_x =  node_x - 0.5 * compound_circuit_settings['spacing_between_nodes']
+                else:
+                    line_start_x =  node_x - 0.5 * compound_circuit_settings['spacing_between_nodes'] - shift_combined_node
+                # add an horizontal line for each optical channel
+                line_end_x = compound_circuit_settings['line_x_values'][1]
+                for line_no in range(self._no_of_optical_channels):
+                    line_y = compound_circuit_settings['line_y_values_optical'][line_no]
+                    axis.plot([ line_start_x,line_end_x],[line_y,line_y],
+                                linestyle = 'solid',
+                                marker=circuit_draw_settings_dict['optical_channel_line_marker'],
+                                markersize= circuit_draw_settings_dict['optical_channel_line_marker_size'],
+                                color = circuit_draw_settings_dict['optical_channel_line_color'],
+                                alpha=1
+                                )
+
+                # add an horizontal line for each classical channel
+                for line_no in range(self._no_of_classical_channels):
+                    line_y = compound_circuit_settings['line_y_values_classical'][line_no]
+                    axis.plot([ line_start_x,line_end_x],[line_y,line_y],
+                                linestyle = 'solid',
+                                marker=circuit_draw_settings_dict['classical_channel_line_marker'],
+                                markersize= circuit_draw_settings_dict['classical_channel_line_marker_size'],
+                                color = circuit_draw_settings_dict['classical_channel_line_color'], 
+                                alpha=1
+                                )
+                    
+            if add_channel_labels:
+                # add the labels for the channels if this is first node on the page
+                max_characters = circuit_draw_settings_dict['channel_label_string_max_length']
+                for line_no in range(min(self._no_of_optical_channels, len(compound_circuit_settings['channel_labels_optical']) )):  
+                    axis.annotate(               
+                        compound_circuit_settings['channel_labels_optical'][line_no][:max_characters], 
+                        (line_start_x-0.2*compound_circuit_settings['spacing_between_nodes'], compound_circuit_settings['line_y_values_optical'][line_no]),
+                        fontsize=circuit_draw_settings_dict['channel_label_font_size'],
+                        horizontalalignment = 'right',
+                        verticalalignment =  'center'
                         )
+                for line_no in range(min(self._no_of_classical_channels, len(compound_circuit_settings['channel_labels_classical']) )):
+                    axis.annotate(                  
+                        compound_circuit_settings['channel_labels_classical'][line_no][:max_characters], 
+                        (line_start_x-0.2*compound_circuit_settings['spacing_between_nodes'], compound_circuit_settings['line_y_values_classical'][line_no]),
+                        fontsize=circuit_draw_settings_dict['channel_label_font_size'],
+                        horizontalalignment = 'right',
+                        verticalalignment =  'center'
+                        )
+                    
+            if add_circuit_label:
+                if not this_is_first_of_a_combined_node:
+                    circuit_label_x =  node_x - 0.5 * compound_circuit_settings['spacing_between_nodes']
+                else:
+                    circuit_label_x =  node_x - 0.5 * compound_circuit_settings['spacing_between_nodes'] - shift_combined_node
+                # add a label for the circuit at the top
+                axis.annotate(               
+                    self._circuit_name, 
+                    (circuit_label_x, compound_circuit_settings['circuit_name_y_value']),
+                    fontsize=circuit_draw_settings_dict['circuit_name_font_size'],
+                    horizontalalignment = 'left',
+                    verticalalignment =  'center'
+                    )
+            
+            if modify_end_of_line_symbols_previous_page:
+                if page_number > 0:
+                    axis_prev = compound_circuit_settings['plot_axs'][page_number-1][0]
+                    line_end = compound_circuit_settings['line_x_values'][1]
+                    for index in range(self._no_of_optical_channels):                      
+                        axis_prev.plot(
+                            line_end,
+                            compound_circuit_settings['line_y_values_optical'][index],
+                            markeredgewidth = circuit_draw_settings_dict['bridge_markeredgewidth'],
+                            marker = circuit_draw_settings_dict['bridge_marker'],
+                            markersize = circuit_draw_settings_dict['bridge_marker_size'],
+                            color = circuit_draw_settings_dict['optical_channel_line_color'],
+                            markerfacecolor = 'white',
+                            fillstyle='full',
+                            alpha=1
+                            )
+                    for index in range(self._no_of_classical_channels):
+                        axis_prev.plot(
+                            line_end,
+                            compound_circuit_settings['line_y_values_classical'][index],
+                            markeredgewidth = circuit_draw_settings_dict['bridge_markeredgewidth'],
+                            marker = circuit_draw_settings_dict['bridge_marker'],
+                            markersize = circuit_draw_settings_dict['bridge_marker_size'],
+                            color = circuit_draw_settings_dict['classical_channel_line_color'],
+                            markerfacecolor = 'white',
+                            fillstyle='full',
+                            alpha=1
+                            )
+                    axis_prev.add_patch(Rectangle((line_end, 0), compound_circuit_settings['canvas_width'] - line_end, compound_circuit_settings['canvas_height'],
+                                edgecolor = 'white',
+                                facecolor = 'white',
+                                fill=True,
+                                lw=1,
+                                zorder = 2))
+
+            if draw_bridge_symboles:
+                if not this_is_first_of_a_combined_node:
+                    bridge_x = node_x - 0.5 * compound_circuit_settings['spacing_between_nodes']
+                else:
+                    bridge_x = node_x - 0.5 * compound_circuit_settings['spacing_between_nodes']+shift_combined_node
+                for index in range(self._no_of_optical_channels):                      
                     axis.plot(
-                        [node_x]*len(node_y_values),
-                        node_y_values,
-                        linestyle = 'none',
-                        markeredgewidth = 0.3,
-                        marker = current_node['market_text'][index],
-                        markersize = 10,
-                        color = 'white',
+                        bridge_x,
+                        compound_circuit_settings['line_y_values_optical'][index],
+                        markeredgewidth = circuit_draw_settings_dict['bridge_markeredgewidth'],
+                        marker = circuit_draw_settings_dict['bridge_marker'],
+                        markersize = circuit_draw_settings_dict['bridge_marker_size'],
+                        color = circuit_draw_settings_dict['optical_channel_line_color'],
                         markerfacecolor = 'white',
                         fillstyle='full',
                         alpha=1
                         )
+                for index in range(self._no_of_classical_channels):
+                    axis.plot(
+                        bridge_x,
+                        compound_circuit_settings['line_y_values_classical'][index],
+                        markeredgewidth = circuit_draw_settings_dict['bridge_markeredgewidth'],
+                        marker = circuit_draw_settings_dict['bridge_marker'],
+                        markersize = circuit_draw_settings_dict['bridge_marker_size'],
+                        color = circuit_draw_settings_dict['classical_channel_line_color'],
+                        markerfacecolor = 'white',
+                        fillstyle='full',
+                        alpha=1
+                        )
+                axis.add_patch(Rectangle((bridge_x, 0), compound_circuit_settings['canvas_width'] - bridge_x, compound_circuit_settings['canvas_height'],
+                                edgecolor = 'white',
+                                facecolor = 'white',
+                                fill=True,
+                                lw=1,
+                                zorder = 2))
+              
+            # if node affects no channels skip
+            if node_has_classical_channel or node_has_optical_channel:
+            
+                # determine y values for each node
+                node_y_values_optical = [compound_circuit_settings['line_y_values_optical'][channel] for channel in current_node_info['channels']]
+                node_y_values_classical = [compound_circuit_settings['line_y_values_classical'][channel] for channel in current_node_info['channels_classical']]
+                lowest_y_value = min(node_y_values_optical + node_y_values_classical)
+                highest_y_value = max(node_y_values_optical + node_y_values_classical)
+
+                if node_has_optical_channel:
+                    # plot a wide white vertical line
+                    axis.plot(
+                        [node_x]*len(node_y_values_optical),
+                        node_y_values_optical,
+                        linestyle = 'solid',
+                        linewidth = current_node_info['connection_linewidth'] * 2,
+                        color = 'white',
+                        alpha=1
+                        )
+                    # plot the connection line
+                    axis.plot(
+                        [node_x]*len(node_y_values_optical),
+                        node_y_values_optical,
+                        linestyle = current_node_info['connection_linestyle'],
+                        linewidth = current_node_info['connection_linewidth'],
+                        marker = 'none',
+                        color = current_node_info['connection_linecolor_optical'],
+                        alpha=1
+                        )
+
                 if node_has_classical_channel:
-                    for index in range(len(current_node['channels_classical'])):
+                    # plot a wide white vertical line
+                    axis.plot(
+                        [node_x]*len(node_y_values_classical),
+                        node_y_values_classical,
+                        linestyle = 'solid',
+                        linewidth = current_node_info['connection_linewidth'] * 2,
+                        color = 'white',
+                        alpha=1
+                        )
+                    # plot the connection line
+                    axis.plot(
+                        [node_x]*len(node_y_values_classical),
+                        node_y_values_classical,
+                        linestyle = 'solid',
+                        linewidth = current_node_info['connection_linewidth'],
+                        marker = 'none',
+                        color = current_node_info['connection_linecolor_classical'],
+                        alpha=1
+                        )
+                    
+                if node_has_classical_channel and node_has_optical_channel:
+                    # plot line connecting optical and classical channels
+                    axis.plot(
+                        [node_x]*2,
+                        [max(node_y_values_classical), min(node_y_values_optical)],
+                        linestyle = 'solid',
+                        linewidth = current_node_info['connection_linewidth'] * 2,
+                        color = 'white',
+                        alpha=1
+                        )
+                    axis.plot(
+                        [node_x]*2,
+                        [max(node_y_values_classical), min(node_y_values_optical)],
+                        linestyle = 'solid',
+                        linewidth = current_node_info['connection_linewidth'],
+                        marker = 'none',
+                        color = current_node_info['connection_linecolor_classical'],
+                        alpha=1
+                        )
+                
+                # draw box around node and plot label
+                if not this_is_a_combined_node:
+                    box_xs = (node_x - compound_circuit_settings['spacing_between_nodes']*0.4 ,
+                              node_x + compound_circuit_settings['spacing_between_nodes']*0.4
+                              )
+                    box_ys = (lowest_y_value-compound_circuit_settings['channel_line_spacing']*0.5,
+                              highest_y_value+compound_circuit_settings['channel_line_spacing']*0.5
+                              )
+                    do_print_box = True
+                elif this_is_first_of_a_combined_node:
+                    do_print_box = True
+                else:
+                    do_print_box = False
+
+                if do_print_box:
+                    x_position_node_label = min(box_xs)
+                    y_position_node_label = max(node_y_values_classical + node_y_values_optical) + 0.55*compound_circuit_settings['channel_line_spacing']
+                    axis.annotate(                  
+                        current_node_info['label'], 
+                        (x_position_node_label, y_position_node_label),
+                        fontsize=circuit_draw_settings_dict['node_label_font_size']
+                        )
+                    axis.plot(
+                        [box_xs[0],
+                            box_xs[1],
+                            box_xs[1],
+                            box_xs[0],
+                            box_xs[0]
+                        ],
+                        [box_ys[0],
+                            box_ys[0],
+                            box_ys[1],
+                            box_ys[1],
+                            box_ys[0]
+                            ],
+                            linestyle = circuit_draw_settings_dict['box_around_node_linestyle'],
+                            marker = 'none',
+                            linewidth = circuit_draw_settings_dict['box_around_node_linewidth'],
+                            color = circuit_draw_settings_dict['box_around_node_color']
+                        )
+            
+                if node_has_optical_channel:
+                    # plot a marker per channel
+                    for index in range(len(current_node_info['channels'])):
+                        # plot the node marker for optical channels
+                        axis.plot(
+                            node_x,
+                            node_y_values_optical[index],
+                            markeredgewidth = current_node_info['markeredgewidth'],
+                            marker = current_node_info['markers'][index],
+                            markersize = current_node_info['markersize'][index],
+                            color = current_node_info['markercolor'][index],
+                            markerfacecolor = current_node_info['markerfacecolor'][index],
+                            fillstyle= current_node_info['fillstyle'][index],
+                            alpha=1
+                            )
+                        # write the text in the node marker
+                        axis.plot(
+                            node_x,
+                            node_y_values_optical[index],
+                            linestyle = 'none',
+                            markeredgewidth = 0.3,
+                            marker = current_node_info['marker_text'][index],
+                            markersize = current_node_info['marker_text_fontsize'][index],
+                            color = current_node_info['marker_text_color'][index],
+                            markerfacecolor = current_node_info['marker_text_color'][index],
+                            fillstyle='full',
+                            alpha=1
+                            )
+                # plot a classical markers for the relevant channels
+                if node_has_classical_channel:
+                    for index in range(len(current_node_info['channels_classical'])):
                         axis.plot(
                             node_x,
                             node_y_values_classical[index],
                             markeredgewidth = 1,
-                            marker = 'o',
-                            markersize = 10,
-                            color = 'black',
-                            markerfacecolor = 'black',
+                            marker = current_node_info['classical_marker'][index],
+                            markersize = current_node_info['classical_marker_size'][index],
+                            color = current_node_info['classical_marker_color'][index],
+                            markerfacecolor = current_node_info['classical_marker_color'][index],
                             fillstyle='full',
                             alpha=1
                             )
-        plt.show()
+                        # write the text in the node marker
+                        axis.plot(
+                            node_x,
+                            node_y_values_classical[index],
+                            linestyle = 'none',
+                            markeredgewidth = 0.3,
+                            marker = current_node_info['classical_marker_text'][index],
+                            markersize = current_node_info['classical_marker_text_fontsize'][index],
+                            color = current_node_info['classical_marker_text_color'][index],
+                            markerfacecolor = current_node_info['classical_marker_text_color'][index],
+                            fillstyle='full',
+                            alpha=1
+                            )
+
+        # if last node of circuit was 'bridge' plot next circuit. Otherwise show the plot.
+        if this_node_is_a_bridge:
+            next_fock_state_circuit = self.node_list[-1].get('next_fock_state_circuit')
+            next_fock_state_circuit.draw(print_defaults = False, 
+                                        settings_for_drawing_circuit = settings_for_drawing_circuit,
+                                        compound_circuit_settings =compound_circuit_settings)
+        else:
+            # if this is the end of the compound circuit go through all pages and ensure 
+            # that there are no empty channel lines extending. Cut the lines right after
+            # last node on the page
+            last_node_on_page = []
+            for node_position, channels_occupied in enumerate(compound_circuit_settings['node_positions_occupied']):
+                            
+                page_number, node_number_on_page= divmod(node_position, len(compound_circuit_settings['node_x_values']))
+                if channels_occupied != 0:
+                    if page_number < len(last_node_on_page):
+                        if node_number_on_page > last_node_on_page[page_number][0]:
+                            last_node_on_page[page_number] = (node_number_on_page,node_position)
+                    else:
+                        last_node_on_page.append( (node_number_on_page,node_position) )
+            for page_number, node_indices in enumerate(last_node_on_page):
+                axis = compound_circuit_settings['plot_axs'][page_number][0]
+                last_node_x = compound_circuit_settings['node_x_values'][node_indices[0]]     
+
+                active_optical_channels = compound_circuit_settings['active_optical_channels_per_node'][node_indices[1]]      
+                active_classical_channels = compound_circuit_settings['active_classical_channels_per_node'][node_indices[1]]      
+
+                eol_x = last_node_x + 0.5 * compound_circuit_settings['spacing_between_nodes']
+                axis.add_patch(Rectangle((eol_x, 0), compound_circuit_settings['canvas_width'] - eol_x, compound_circuit_settings['canvas_height'],
+                edgecolor = 'white',
+                    facecolor = 'white',
+                    fill=True,
+                    lw=1,
+                    zorder = 2))
+                for index, y_value in enumerate(compound_circuit_settings['line_y_values_optical']):
+                    if index < active_optical_channels:
+                        axis.plot(
+                            eol_x,
+                            y_value,
+                            marker = circuit_draw_settings_dict['optical_channel_line_marker'],
+                            color = circuit_draw_settings_dict['optical_channel_line_color'],
+                            alpha=1
+                            )
+                for index, y_value in enumerate(compound_circuit_settings['line_y_values_classical']):
+                    if index < active_classical_channels:
+                        axis.plot(
+                            eol_x,
+                            y_value,
+                            marker = circuit_draw_settings_dict['classical_channel_line_marker'],
+                            color = circuit_draw_settings_dict['classical_channel_line_color'],
+                            )
+            for page_number in range(len( last_node_on_page), len(compound_circuit_settings['plot_axs'])):
+                compound_circuit_settings['figure'].delaxes(compound_circuit_settings['plot_axs'][page_number,0])                   
+            plt.show()
         return
     
+    
     # endregion
+ 
+    def basis(self) -> dict:
+        """ Function returns a dictonary with valid components names as keys and the corresponding photon numbers in 
+            the channels as values.
+        """
+
+        collection_of_states = cos.CollectionOfStates(fock_state_circuit=self, input_collection_as_a_dict=dict([]))
+        return collection_of_states._dict_of_valid_component_names
+
+    def get_fock_state_matrix(self, nodes_to_be_evaluated: list[int] = 'all') -> np.array:
+        """ Function returns the fock state matrix for a given set of nodes in the circuit
+
+            Args:
+                nodes_to_be_evaluated (list[int]): nodes to be includes in the matrix calculation (first node is node 0). 
+                    default all nodes are included (value for nodes_to_be_evaluated = 'all' )
+
+            Returns:
+                np.array: fock_state_matrix
+        """
+        if len(nodes_to_be_evaluated) == 1 and self.node_list[nodes_to_be_evaluated[0]].get('node_type') == 'custom fock matrix':
+            return  self.node_list[nodes_to_be_evaluated[0]].get('custom_fock_matrix')
+      
+        fock_matrix, list_of_state_indices_to_keep = self.__generate_fock_state_matrix(nodes_to_be_evaluated=nodes_to_be_evaluated)
+        return fock_matrix
+    
+    def _apply_time_delay(self, channel_numbers, time_delay_tau,bandwidth_omega, input_state):
+        """ BETA: This gate will model the impact of a time delay for channels that have light pulses with 
+            a finite duration. The gate mimics the 'decoherence' but does not actually add spectral or temporal 
+            information to the state.
+
+            The gate splits the state in three parts, a part representing the temporal overlap and two 
+            states represent a 'ahead' and a 'behind' part. The states will receive a label indicating to 
+            the 'plot' function that they should be grouped together.
+
+            The impact of delay is determined by the overlap percentage which follows from the formula 
+            overlap = e^(-1*(time_delay_tau*bandwidth_omega)**2). So if time_delay_tau*bandwidth_omega = 1 the 
+            overlap is 1/e which is roughly 50%.
+
+            Important note: This function creates a statistical mixture based on bandwidth and time delay. 
+            this cannot be reversed. So adding more than one of these gates in the circuit will cause unexpected 
+            behavior (e.g., adding two time delay gates one with +t and one with -t will NOT cancel out).
+
+            Args:
+                channel_numbers (list[int]): nodes to be includes in the matrix calculation (first node is node 0). 
+                time_delay_tau (float): time delay used to calculate the impact of the delay
+                bandwidth_omega (float): bandwidth used to calculate the impact of delay. 
+                input_state (cos.State): State on which to apply the time delay
+
+
+            Returns:
+                tuple: tuple of states, or tuple with single state if delay is zero
+        """
+        if time_delay_tau == 0:
+            return (input_state,)
+
+        if not isinstance(channel_numbers, list):
+            channel_numbers = [channel_numbers]
+        
+        overlap = np.exp(-1.0*np.log(2)*np.power(time_delay_tau*bandwidth_omega, 2.0))
+        separation = 1-overlap
+
+        identification_code = np.random.randint(1000000)
+        # first create state for the overlap situation
+        state_overlap = input_state.copy()
+        state_overlap .cumulative_probability = input_state.cumulative_probability * overlap
+        
+        # then add states for the non-overlap situation 'behind'
+        state_behind = input_state.copy()
+        state_behind.cumulative_probability = input_state.cumulative_probability * separation/2.0
+        state_behind.measurement_results.append({'coincidence indicator': identification_code, 'label' : 'ahead'})
+        new_optical_components = []
+        for name, amp_prob in state_behind.optical_components.items():
+            values = input_state._dict_of_valid_component_names[name].copy()
+            amplitude = amp_prob['amplitude']
+            for channel_index, value in enumerate(values):
+                if channel_index in channel_numbers:
+                    values[channel_index] = 0
+            for trial_name, trial_values in input_state._dict_of_valid_component_names.items():
+                if values == trial_values:
+                    new_name = trial_name
+                    break
+            new_optical_components.append((new_name,amplitude)) 
+        state_behind.optical_components = new_optical_components
+
+        # then add states for the non-overlap situation 'ahead'
+        state_ahead = input_state.copy()
+        state_ahead.cumulative_probability = input_state.cumulative_probability * separation/2.0
+        state_ahead.measurement_results.append({'coincidence indicator': identification_code, 'label' : 'behind'})
+        new_optical_components = []
+        for name, amp_prob in state_ahead.optical_components.items():
+            values = input_state._dict_of_valid_component_names[name].copy()
+            amplitude = amp_prob['amplitude']
+            for channel_index, value in enumerate(values):
+                if channel_index not in channel_numbers:
+                    values[channel_index] = 0
+            for trial_name, trial_values in input_state._dict_of_valid_component_names.items():
+                if values == trial_values:
+                    new_name = trial_name
+                    break    
+            new_optical_components.append((new_name,amplitude)) 
+        state_ahead.optical_components = new_optical_components
+        
+        return (state_overlap, state_behind, state_ahead)
+    
+class CompoundFockStateCircuit:
+    ''' Class for compound FockStateCircuits. The class is used to work with a list of circuits that have to be executed sequentially. 
+        When initializing the instance or calling the instance with 'refresh()' an internal list 
+        is created where 'bridges' are added between the circuits. This enables evaluation of the compound circuit with a "collection of states", 
+        or to create a schematics of the compound circuit by calling the method 'draw()'.
+
+        When a change is made to the 'list_of_circuits' attribute it is needed to call 'refresh()' before calling 'draw()' or 'evaluate_circuit()'.
+        
+        Attributes:
+            self.list_of_circuits
+            self.compound_circuit_name
+
+        Methods:
+            refresh(self
+                    ) -> None:
+                    Update the internal list of circuits connected with bridges. This method has to be called after making a change to 'list_of_circuits' before
+                    running the circuit with 'evaluate_circuit()' or draw a circuit schematics with 'draw()
+
+            clear(self
+                    ) -> None:
+
+                    Clears the internal list of circuits to release memory
+
+            draw(   self, 
+                    print_defaults: bool = False, 
+                    settings_for_drawing_circuit: dict = None
+                    ) -> None:
+
+                    Draw the compound circuit. self. settings_for_drawing_circuit is the dict with settings for circuit drawing. 
+                    Method is a shell which calls FockStateCircuit.draw() to execute the schematics.
+
+            evaluate_circuit(self, 
+                    collection_of_states_input: cos.CollectionOfStates = None
+                    ) -> cos.CollectionOfStates:
+                    
+                    Evaluate the compount circuit for a given collection of input states.
+                    Method is a shell which calls FockStateCircuit.evaluate_circuit() to evaluate the compound circuit for the given
+                    input collection of states.
+
+    '''
+    def __init__(self, 
+                 list_of_circuits: list = [],
+                 compound_circuit_name: str = None
+                ):
+        ''' Constructor for an instance of the class CompoundFockStateCircuit. The instance will be created the list_of_circuits passed as argument. 
+            As part of the initialization the method 'refresh()' is called to create an internal list where the circuits are connected via 'bridges'.
+        
+        Args:
+            list_of_circuits (list[FockStateCircuit], optional): Defaults to []
+            compound_circuit_name (str, optional): Defaults to '' 
+        '''
+
+        self.list_of_circuits = list_of_circuits
+        if compound_circuit_name is None:
+            self.compound_circuit_name = FockStateCircuit._CIRCUIT_DRAW_DEFAULT_SETTINGS.get('compound_circuit_title','Optical circuit')
+        else:
+            self.compound_circuit_name = compound_circuit_name
+        self.refresh()
+
+    def __str__(self) -> str:
+        text = "Compound FockStateCircuit: "
+        text += self.compound_circuit_name + '\n'
+        for index,circuit in enumerate(self.list_of_circuits):
+            text += str(index) + "." + '\n'
+            text += str(circuit)
+        return text
+    
+    def refresh(self) -> None:
+        ''' Update the internal list of circuits connected with bridges. This method has to be called 
+            after making a change to 'list_of_circuits' before  running the circuit with 
+            'evaluate_circuit()' or draw a circuit schematics with 'draw()'. 
+        '''
+        self._list_of_circuits_with_bridges = [0]*len(self.list_of_circuits)
+        for index, circuit in enumerate(self.list_of_circuits):
+            length_of_fock_state = circuit._length_of_fock_state
+            no_of_optical_channels= circuit._no_of_optical_channels
+            no_of_classical_channels = circuit._no_of_classical_channels
+            channel_0_left_in_state_name= circuit._channel_0_left_in_state_name
+            threshold_probability_for_setting_to_zeros = circuit._threshold_probability_for_setting_to_zero
+            use_full_fock_matrix = circuit._use_full_fock_matrix
+            circuit_name = circuit._circuit_name
+            self._list_of_circuits_with_bridges[index] = FockStateCircuit(length_of_fock_state=length_of_fock_state,
+                                                     no_of_optical_channels=no_of_optical_channels,
+                                                     no_of_classical_channels=no_of_classical_channels,
+                                                     channel_0_left_in_state_name=channel_0_left_in_state_name,
+                                                     threshold_probability_for_setting_to_zero=threshold_probability_for_setting_to_zeros,
+                                                     use_full_fock_matrix=use_full_fock_matrix,
+                                                     circuit_name=circuit_name)
+            self._list_of_circuits_with_bridges[index].node_list = list(circuit.node_list)
+        for index, circuit in enumerate(self.list_of_circuits):
+            if not index == len(self.list_of_circuits)-1:
+                self._list_of_circuits_with_bridges[index].bridge(next_fock_state_circuit=self._list_of_circuits_with_bridges[index+1])
+        return
+
+    def clear(self) -> None:
+        ''' Clears the internal list of circuits to release memory
+        '''
+        for circuit in self._list_of_circuits_with_bridges:
+            del circuit
+        del self._list_of_circuits_with_bridges
+        return
+
+    def draw(   self, 
+                print_defaults: bool = False, 
+                settings_for_drawing_circuit: dict = None) -> None:
+        ''' Draw the compound circuit. 'settings_for_drawing_circuit' is the dict with settings 
+            for circuit drawing. Method is a shell which calls FockStateCircuit.draw() to execute the schematics.
+
+            If changes to the compound circuit are made call CompoundFockStateCircuit.refresh() before 
+            calling this method.
+        '''
+        if settings_for_drawing_circuit is None:
+            settings_for_drawing_circuit = dict({'compound_circuit_title' : self.compound_circuit_name})
+        self._list_of_circuits_with_bridges[0].draw(print_defaults=print_defaults, settings_for_drawing_circuit=settings_for_drawing_circuit)
+        return
+
+    def evaluate_circuit(self, 
+                        collection_of_states_input: cos.CollectionOfStates = None) -> cos.CollectionOfStates:
+        ''' Evaluate the compount circuit for a given collection of input states. Method is a shell which 
+            calls FockStateCircuit.evaluate_circuit() to evaluate the compound circuit for the given
+            input collection of states.
+
+            If changes to the compound circuit are made call CompoundFockStateCircuit.refresh() before 
+            calling this method.
+        '''
+        return self._list_of_circuits_with_bridges[0].evaluate_circuit(collection_of_states_input=collection_of_states_input)
+        

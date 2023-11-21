@@ -5,6 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.lines
 import matplotlib.colors
+import fock_state_circuit as fsc
+
+_VERSION = '0.0.9'
 
 class State():
     """ Class for states in circuit from class FockStateCircuit which can be combined to 'collection of states'. 
@@ -106,7 +109,7 @@ class State():
         
         # create a dict with as keys the valid state names as strings and the photon number as value
         self._dict_of_valid_component_names = collection_of_states._dict_of_valid_component_names
-        self._string_format_in_state_as_word = "{:0"+str(self._digits_per_optical_channel)+ "d}"
+        self._string_format_in_state_as_word = "{:0"+str(self._digits_per_optical_channel)+ "d}" #obsolete?
 
         # probabilities below this threshold are set to zero. 
         # this means that if the probability to find an outcome is lower than this threshold the outcome is discarded.
@@ -125,8 +128,8 @@ class State():
                 if k in self._KEYS_IN_STATE:
                     self.state[k] = v     
             # check if state is valid, otherwise raise an exception
-            if not True in (self.__check_valid_state(state_to_check = self)):
-                print(self.__check_valid_state(state_to_check = self))
+            if not True in (self._check_valid_state(state_to_check = self)):
+                print(self._check_valid_state(state_to_check = self))
                 raise Exception('invalid state')
             
     @property
@@ -157,9 +160,21 @@ class State():
             for k,v in components.items():
                 if not('amplitude' in v and 'probability' in v) or not k in self._dict_of_valid_component_names:
                     raise Exception('Invalid dictionary for optical_components')
+        elif isinstance(components, list):
+            optical_components = dict([])
+            for name, amplitude in components:
+                if not name in self._dict_of_valid_component_names:
+                    raise Exception('Invalid dictionary for optical_components')
+                else:
+                    try:
+                        probability = np.abs(amplitude)**2
+                    except:
+                        raise Exception('Invalid dictionary for optical_components')
+                    optical_components.update({name:{'amplitude':amplitude,'probability': probability}}) 
+            components = optical_components           
         else:
             raise Exception('Invalid type for optical_components. Requires a dictionary')
-        self.state['optical_components'] = components   
+        self.state['optical_components'] = components  
 
     @property
     def classical_channel_values(self):
@@ -206,14 +221,20 @@ class State():
             if self._print_only_last_measurement:
                 text += 'Last measurement result:  \n'
                 result = measurement_results[-1]
-                text += '\tValue: ' + str(["{n:.2f}".format(n=val) for val in result['measurement_results']])
-                text +=  ", Probability: " + "{val:.2f}".format(val = result['probability'])  + "\n"
+                if 'measurement_results' in result.keys() and 'probability' in result.keys():
+                    text += '\tMeasurement results: ' + str(["{n:.2f}".format(n=val) for val in result['measurement_results']])
+                    text +=  ", Probability: " + "{val:.2f}".format(val = result['probability'])  + "\n"
+                else:
+                    text += str(result)+ "\n"
             else:
                 text += 'Measurement results (last result first):  \n'
                 measurement_results = measurement_results[::-1]
                 for result in measurement_results:
-                    text += '\tValue: ' +str(["{n:.2f}".format(n=val) for val in result['measurement_results']])
-                    text +=  ", Probability: " + "{val:.2f}".format(val = result['probability'] ) + "\n"
+                    if 'measurement_results' in result.keys() and 'probability' in result.keys():
+                        text += '\tValue: ' +str(["{n:.2f}".format(n=val) for val in result['measurement_results']]) 
+                        text +=  ", Probability: " + "{val:.2f}".format(val = result['probability'] ) + "\n"
+                    else:
+                        text += str(result)+ "\n"
         text += 'Optical components: \n'
         for k,v in self.state['optical_components'].items():
             amp = v['amplitude']
@@ -232,7 +253,7 @@ class State():
         Returns:
             bool:bool indicating whether state is valid
         """        
-        if True in self.__check_valid_state(state_to_check = self):
+        if True in self._check_valid_state(state_to_check = self):
             return True
         else:
             return False
@@ -261,7 +282,7 @@ class State():
         else:
             return (max(list_photon_numbers), False)
 
-    def __check_valid_state(self, state_to_check: "State") -> None:
+    def _check_valid_state(self, state_to_check: "State") -> None:
         """ Function to check validity of the state given as input.
 
         Args:
@@ -437,8 +458,53 @@ class State():
         self.state['optical_components'] = optical_components
 
         return
+    
+    def _rescale_optical_components(self) -> None:
+        """ Rescales optical components by removing the ones with (too) low probability and re-normalizing the remaining ones.
+            The limit is set by 'threshold_probability_for_setting_to_zero'
+        """  
+        oc = self.state['optical_components']
+        total_probability = 0
+        for component, amplitude_probability in oc.items():
+            if amplitude_probability['probability'] < self._threshold_probability_for_setting_to_zero:
+                amplitude_probability['probability'] = 0
+                amplitude_probability['amplitude'] = np.csingle(0)
+            else:
+                total_probability += np.abs(amplitude_probability['amplitude'])**2
 
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------
+        if np.abs(total_probability - 1.0) >= self._threshold_probability_for_setting_to_zero:
+            scale_factor = 1/math.sqrt(total_probability)
+            new_oc = dict([])
+            for component, amplitude_probability in oc.items():
+                new_amplitude = scale_factor * amplitude_probability['amplitude']
+                new_probability = np.abs(new_amplitude)**2
+                if new_probability >= self._threshold_probability_for_setting_to_zero:
+                    new_oc.update({component : {'amplitude':new_amplitude ,'probability': new_probability}})
+            self.state['optical_components'] = new_oc 
+
+        return
+    
+    def _identical_optical_components(self, other_state) -> bool:
+        """ Returns 'True' if optical components are the same, otherwise 'False'. 
+            The limit is set by 'threshold_probability_for_setting_to_zero'
+
+            Returns:
+                bool: indicates whether optical_components of the states are equal
+        """
+        optical_components_equal = True
+        oc = self.state['optical_components']
+        other_oc = other_state['optical_components']
+        for component, amplitude_probability in oc.items():
+            if component not in other_oc.keys():
+                optical_components_equal = False
+                break
+            elif np.abs(amplitude_probability['probability'] - other_oc[component]['probability']) >= self._threshold_probability_for_setting_to_zero:
+                optical_components_equal = False
+                break
+            elif np.abs(amplitude_probability['amplitude'] - other_oc[component]['amplitude'])**2 >= self._threshold_probability_for_setting_to_zero:
+                optical_components_equal = False
+                break
+        return optical_components_equal
 
 class CollectionOfStates():
     """ CollectionOfStates is a class describing collections of states as input and output to a FockStateCircuit. An instance can be generate by
@@ -480,8 +546,13 @@ class CollectionOfStates():
         __str__(self): Function to print a collection of states in a digestible format.
 
         add_state(self, state: 'State', identifier=None): Add a new state to the circuit. If identifier is given that will be used, 
-            otherwise random new identifier will be generated. Take carecwhen using existing identifier, the function will overwrite 
+            otherwise random new identifier will be generated. Take care when using existing identifier, the function will overwrite 
             the previous state with that identifier.
+
+        adjust_length_of_fock_state(self, new_length_of_fock_state: int = 0): Function adjusts the 'length of Fock state' for the collection.
+
+        clean_up(initial_state: str = ''): Function cleans up the collection_of_states. All optical components with low probability are 
+        removed and the total set of optical components is renormalized.
         
         clear(self): Function to completely clear the collection of states.
 
@@ -497,6 +568,13 @@ class CollectionOfStates():
             Either the identifier or the initial_state is used to identify to state to remove. If more states exist with the same initial_state 
             the first one will be removed. If identier or initial_states given as argument are not present in the collection the function will 
             do nothing and leave the collection as it was. 
+        
+        density_matrix(initial_state: str = '', decimal_places_for_trace: int = 2): Function to create density matrix as well as 
+            trace of the density matrix and trace of density matrix squared.
+
+        extend(extra_optical_channels: int = 0, extra_classical_channels: int = 0, statistical_distribution: list[int] = []): Function extends 
+            the original collection of states with new optical and/or classical channels. The optical channels will be filled according to the parameter 
+            'statistical_distribution'.
         
         filter_on_classical_channel(self, classical_channel_numbers: list, values_to_filter: list): Removes all states from the collection which do not 
             match the filter criterium. In this case the classical channels need to have the right values. If no state has the correct values in 
@@ -521,11 +599,12 @@ class CollectionOfStates():
 
         plot(self, classical_channels=[], initial_states=[], info_for_bar_plot={}): Function to plot a bar graph for a circuit.
         
+        reduce(optical_channels_to_keep: list[int] = [], classical_channels_to_keep: list[int] = []) : Reduces the number of optical and/or classical channels. 
+
         set_collection_as_statistical_mixture(self, list_of_tuples_state_weight: list): Sets the collection of states to a statistical mixture. All
             content in the collection is replaced
 
         state_identifiers_as_list(self): Returns a list of all state identifiers in the circuit. 
-
 
     """
    
@@ -582,7 +661,7 @@ class CollectionOfStates():
         # create a dict with as keys the valid state names as strings and the list of photon numbers as value
         self._dict_of_valid_component_names = dict([])
         for optical_state in  self._list_of_fock_states:
-            name = self.__get_state_name_from_list_of_photon_numbers(optical_state)
+            name = self._get_state_name_from_list_of_photon_numbers(optical_state)
             self._dict_of_valid_component_names.update({name : optical_state})
 
         # either load the collection with default data, or populate from the collection used in the input of __init__
@@ -671,8 +750,7 @@ class CollectionOfStates():
         """ Add a new state to the circuit. If identifier is given that will be used, otherwise random new identifier will be generated. Take care
         when using existing identifier, the function will overwrite the previous state with that identifier.
 
-        Returns:
-            str: Returns the identifier used for the newly added state
+        Returns: Nothing
         """    
     
         if identifier is None:
@@ -683,7 +761,7 @@ class CollectionOfStates():
             
         self._collection_of_states.update({identifier:state})
         
-        return identifier
+        return
 
     def get_state(self, identifier = None, initial_state = None) -> State:
         """ Function returns a state from the collection. The collection will remain unchanged (so the state is NOT removed).
@@ -863,6 +941,7 @@ class CollectionOfStates():
 
     def copy(self) -> 'CollectionOfStates':
         """ Function to create a deep copy of the collection of states. Changing the copy will not affect the original state.
+            Note: copy function will create new collection for "self._fock_state_circuit". Ensure this is set to the right circuit.
 
         Returns:
             CollectionOfStates: new collection of states with identical values and parameters as the original
@@ -875,7 +954,7 @@ class CollectionOfStates():
 
         return CollectionOfStates(self._fock_state_circuit, new_selection_of_states)
               
-    def plot(self, classical_channels = [], initial_states = [], info_for_bar_plot = dict([])):
+    def plot(self, classical_channels = [], initial_states = [], info_for_bar_plot = dict([]), histo_output_instead_of_plot = False):
         """ Function to plot a bar graph for a circuit. The bars indicate the probability to go from an initial state
             to an outcome in the classical channels. The circuit has to include measurement to the classical channels. 
             Optionally the classical channels to use can be specified as well as a selection of initial states. The 
@@ -890,37 +969,110 @@ class CollectionOfStates():
                                 initial states in 'result' are used.
             info_for_bar_plot: optional information for the bar plot. info_for_bar_plot.get['title']
                                 sets the title for the graph.
+            histo_output_instead_of_plot: if this bool is set to True the function will return a dict 
+                                as histogram instead of creating a plot
         """        
-        
         # if no classical channels given use all classical channels
         if classical_channels == []:
             classical_channels = [channel_no for channel_no in range(self._no_of_classical_channels)]
-        # if no input states given use all initial states in the result dictionary
-        if initial_states == []:
-            input_states = [state.initial_state for state in self._collection_of_states.values()]
         plt.rcParams['figure.figsize'] = [15,6]
         dict_for_plotting = dict([])
-        output_states = []
+        dict_for_tracking_coincidences = dict([])
+        # output_states = []
         # create a dictionary with the initial state as key and a list of outcomes as value. Outcomes are the values in classical channel
         # and the probability to get to that outcome from an initial state
         # dict_for_plotting is {initial_state1 : [{'output_state':'1101', 'probability': 0.5}, {'output_state':'3000', 'probability': 0.5}] }
+        map_outcome_to_classical_value = dict([])
         for state in self._collection_of_states.values():
+            if len(initial_states) > 0 and state.initial_state not in initial_states:
+                continue
             if state.initial_state not in dict_for_plotting.keys():
                 dict_for_plotting[state.initial_state] = []     
-    
-            probability = state.cumulative_probability
-            outcome = self.__get_state_name_from_list_of_photon_numbers([state.classical_channel_values[index] for index in classical_channels])
 
-            for outcomes_for_this_initial_state in dict_for_plotting[state.initial_state]:
-                # if the outcome already exists add the probability
-                if outcome == outcomes_for_this_initial_state['output_state']:
-                    outcomes_for_this_initial_state['probability'] += probability
+            probability = state.cumulative_probability
+            # to generate a string for the outcome we use the same function that is used for optical channels. Note that every classical channel value will
+            # be mapped on an integer. 
+            outcome = self._get_state_name_from_list_of_photon_numbers([state.classical_channel_values[index] for index in classical_channels])
+            map_outcome_to_classical_value.update({outcome: [state.classical_channel_values[index] for index in classical_channels]})
+
+            # run through measurement_results in reverse order and look for the last entry of ''coincidence indicator'. If non found use_coincidences will remain 'false'
+            use_coincidences = False
+            for result in state.measurement_results[::-1]:
+                if 'coincidence indicator' in result.keys():
+                    use_coincidences = True
+                    coincidence_indicator = str(result['coincidence indicator'])
+                    # the label is  typically 'ahead' or 'behind' but can be extended for when more than 2 subsets have to be combined.
+                    label = result['label']
+                    # dict_for_tracking_coincidences will group together all coincides with the same coincidence indicator
+                    # this means that the output of these stats have to be plotted together as if the detection would 
+                    # integrate over these states without the quantum interference.
+                    if coincidence_indicator  not in dict_for_tracking_coincidences.keys():
+                        dict_for_tracking_coincidences[coincidence_indicator ] = [{'output_state': outcome, 'probability': probability, 'initial_state': state.initial_state, 'label' : label}]
+                    else:
+                        dict_for_tracking_coincidences[coincidence_indicator ].append({'output_state': outcome, 'probability': probability, 'initial_state': state.initial_state, 'label' : label})
                     break
-            else:
-                # if the outcome does not exist create a new entry in the list
-                dict_for_plotting[state.initial_state].append({'output_state': outcome, 'probability': probability})
-            if outcome not in output_states:
-                output_states.append(outcome)
+
+            # if there is no 'coincidence indicator' no time delay has been applied, treat the state as one for plotting
+            if not use_coincidences:
+                for outcomes_for_this_initial_state in dict_for_plotting[state.initial_state]:
+                    # if the outcome already exists add the probability
+                    if outcome == outcomes_for_this_initial_state['output_state']:
+                        outcomes_for_this_initial_state['probability'] += probability
+                        break
+                else:
+                    # if the outcome does not exist create a new entry in the list
+                    dict_for_plotting[state.initial_state].append({'output_state': outcome, 'probability': probability})
+
+        for list_with_same_coincidences in dict_for_tracking_coincidences.values():
+            for element in list_with_same_coincidences:   
+                normalization = 0          
+                # first run through all possible combinations of state with same initial state and different label to create 
+                # a normalization parameter
+                for element_other in list_with_same_coincidences:
+                    if element['label'] == element_other['label'] or element['initial_state'] != element_other['initial_state'] :
+                        continue
+                    normalization += element_other['probability']
+
+                for element_other in list_with_same_coincidences:
+                    if element['label'] == element_other['label'] or element['initial_state'] != element_other['initial_state'] :
+                        continue
+
+                    values_this = map_outcome_to_classical_value[element['output_state']].copy()
+                    values_other = map_outcome_to_classical_value[element_other['output_state']].copy()
+                    new_values = [value_this + value_other for value_this, value_other in zip(values_this, values_other)]
+                    new_outcome = self._get_state_name_from_list_of_photon_numbers(new_values)
+
+                    new_probability = element['probability']*element_other['probability']/normalization
+
+                    for outcomes_for_this_initial_state in dict_for_plotting[element['initial_state']]:
+                        # if the outcome already exists add the probability
+                        if new_outcome == outcomes_for_this_initial_state['output_state']:
+                            outcomes_for_this_initial_state['probability'] += new_probability
+                            break
+                    else:
+                        # if the outcome does not exist create a new entry in the list
+                        dict_for_plotting[element['initial_state']].append({'output_state': new_outcome, 'probability': new_probability})
+
+        # create a list of all possible outcomes across all initial states
+        output_states = []
+        for initial_state, list_of_outcomes in dict_for_plotting.items():
+            for output_probability in list_of_outcomes:
+                outcome = output_probability['output_state']
+                if outcome not in output_states:
+                    output_states.append(outcome)
+
+        # for states who do not lead to a certain outcome add the outcome with probability zero
+        # this enables easier plotting of graphs. If the outcome is absent it will need to be corrected
+        # later, so better to add the outcome with probability zero
+        for initial_state, list_of_outcomes in dict_for_plotting.items():
+            outcomes_for_this_initial_state = []
+            for output_probability in list_of_outcomes:
+                outcomes_for_this_initial_state.append(output_probability['output_state'])
+            for outcome in list(set(output_states).difference(outcomes_for_this_initial_state)):
+                dict_for_plotting[initial_state].append({'output_state': outcome, 'probability': 0})
+
+        if histo_output_instead_of_plot:
+            return dict_for_plotting
 
         no_initial_states = len(dict_for_plotting)
         no_output_states = len(output_states)
@@ -1012,7 +1164,7 @@ class CollectionOfStates():
         
         return
     
-    def __get_state_name_from_list_of_photon_numbers(self, state: list) -> str:
+    def _get_state_name_from_list_of_photon_numbers(self, state: list) -> str:
         """ For a list of photon numbers generate a string which can serve as name for the state or a component in the state.
             Example: state [0,1,3] would become '310' with 0 representing the photon number in channel 0. If we use reversed
             state notation state [0,1,3] would become '013' (reversed or regular state notation is set in initialization of the 
@@ -1034,7 +1186,7 @@ class CollectionOfStates():
 
         return name
     
-    def group_states_together_by_photon_number(self)-> dict[str,list[str]]:
+    def _group_states_together_by_photon_number(self)-> dict[str,list[str]]:
         """ Group states together based on the total number of photons in the components of the state. The function
             returns a dictionary where the key indicates photon number and the value is a list of state identifiers. The 
             function groups states with components that all have the same photon number 
@@ -1060,3 +1212,335 @@ class CollectionOfStates():
                 # if new key create a new list and add to dictionary
                 states_grouped_by_photon_number.update({key:[identifier]})
         return states_grouped_by_photon_number
+
+    def density_matrix(self, initial_state: str = '', decimal_places_for_trace: int = 2) -> dict:
+        """ Create density matrix as well as trace of the density matrix and trace of density matrix squared. If no initial state 
+            is given in the arguments all initial states are used (function returns densitry matices and traces per initial state). For trace values 
+            the precision can be set with 'decimal_places_for_trace'.
+
+            The function returns a dictionary: 
+            {initial_state : {'density_matrix' : dm_mixed_state, 'trace' : trace_dm, 'trace_dm_squared' : trace_dm_squared}}
+
+            Args:
+                initial_state (str): initial state for which to generate density matrix. If non given all initial_states are used.
+                decimal_places_for_trace (int) : decimal places (precision) for the returned traces
+
+            Returns:
+                dict: dictionary with initial state as key. dict contains density matrix and values for the two traces
+                
+        """
+        # either take the initial_state from the arguments, or if non is given make a set of all initial_states in the collection
+        if initial_state != '':
+            set_of_initial_states = set([initial_state])
+        else:
+            set_of_initial_states = set([state['initial_state'] for state in self._collection_of_states.values()])
+
+        dictionary_with_return_values = dict([])
+        for initial_state in set_of_initial_states:
+            dm_mixed_state = np.zeros((len(self._list_of_fock_states), len(self._list_of_fock_states)), dtype=np.cdouble)
+            for state in self._collection_of_states.values():
+                if state.initial_state == initial_state:
+                    vector, basis = state.translate_state_components_to_vector()
+                    dm_single_state = np.outer(np.conjugate(vector),vector)
+                    dm_mixed_state += state.cumulative_probability * dm_single_state
+
+            trace_dm = np.round(np.abs(np.trace(dm_mixed_state)),decimals=decimal_places_for_trace)
+            trace_dm_squared = np.round(np.abs(np.trace(np.matmul(dm_mixed_state,dm_mixed_state))),decimals=decimal_places_for_trace)
+            dictionary_with_return_values.update({initial_state : {'density_matrix' : dm_mixed_state, 'trace' : trace_dm, 'trace_dm_squared' : trace_dm_squared}})
+
+        return dictionary_with_return_values
+        
+    def reduce(self, optical_channels_to_keep: list[int] = [],
+                classical_channels_to_keep: list[int] = []
+                ) -> None:
+        """ Reduces the number of optical and/or classical channels. 
+
+            Optical channels are removed by 'tracing out'. Pure states will become statistical mixtures 
+            since the channels that are traced out are effectively 'measured'. Classical channels are simply 
+            removed irrespective of data. Note that measurement_results for states is not affected.
+
+            This function will modify the current collection 'in_place'. For a new collection with different
+            settings first create a copy and then modify the copy.
+
+            Args:
+                optical_channels_to_keep (list): list of optical channel numbers that should remain
+                classical_channels_to_keep (list): list of classical channel numbers that should remain
+           
+            Returns:
+                Nothing. The 'collection of states' will be modified in-place.
+                
+        """
+        if optical_channels_to_keep == []:
+            optical_channels_to_keep  = [*range(self._no_of_optical_channels)]
+        if classical_channels_to_keep ==  []:
+            classical_channels_to_keep  = [*range(self._no_of_classical_channels)]
+
+        if not all([channel in [*range(self._no_of_optical_channels)] for channel in optical_channels_to_keep]):
+            raise Exception('error in channel selection in CollectionOfStates.reduce()')
+        if not all([channel in [*range(self._no_of_classical_channels)] for channel in classical_channels_to_keep]):
+            raise Exception('error in channel selection in CollectionOfStates.reduce()')
+        
+        # create empty collection_of_states with reduced number of channels
+        updated_circuit = fsc.FockStateCircuit(length_of_fock_state = self._length_of_fock_state, 
+                                no_of_optical_channels = len(optical_channels_to_keep), 
+                                no_of_classical_channels= len(classical_channels_to_keep),
+                                use_full_fock_matrix=self._fock_state_circuit._use_full_fock_matrix
+                                )
+        
+        new_collection_of_states = CollectionOfStates(fock_state_circuit=updated_circuit)
+        new_collection_of_states.clear()
+        new_collection_of_states._channel_0_left_in_state_name = self._channel_0_left_in_state_name
+        new_collection_of_states._threshold_probability_for_setting_to_zero = self._threshold_probability_for_setting_to_zero
+        new_collection_of_states.print_only_last_measurement = self.print_only_last_measurement
+
+        # create a lookup table from original component names to reduced component names. 
+        # for each original name there will be multiple names in the resulting collection
+        lookup_table_component_names = dict([])
+        for name, list in self._dict_of_valid_component_names.items():
+            new_list = [list[channel_number] for channel_number in optical_channels_to_keep]
+            new_name = self._get_state_name_from_list_of_photon_numbers(new_list)
+            traced_out_values = [list[number] for number in range(self._no_of_optical_channels) if number not in optical_channels_to_keep]
+            traced_out_name = self._get_state_name_from_list_of_photon_numbers(traced_out_values)
+            lookup_table_component_names.update({name: {'new_name' : new_name, 'traced_out_values': traced_out_name }})
+
+        for identifier, old_state in self._collection_of_states.items():
+            # for each state in original collection group together the optical components that lead to the same 
+            # optical component in the resulting state
+            dict_by_traced_out_values = dict([])
+            for component_name, amplitude_probability in old_state['optical_components'].items():
+                new_component_name = lookup_table_component_names[component_name]['new_name']
+                traced_out_value = lookup_table_component_names[component_name]['traced_out_values']
+                if traced_out_value in dict_by_traced_out_values.keys():
+                    dict_by_traced_out_values[traced_out_value].update({new_component_name:amplitude_probability})
+                else:
+                    dict_by_traced_out_values.update({traced_out_value : {new_component_name:amplitude_probability}})
+            
+            # calculate for the resulting optical component the amplitude and probability
+            for traced_out_value, new_optical_components in dict_by_traced_out_values.items():
+                cumulative_probability = 0
+                for amplitude_probability in new_optical_components.values():
+                    cumulative_probability += np.abs(amplitude_probability['amplitude'])**2
+                scale_factor = math.sqrt((1/cumulative_probability))
+                for component in new_optical_components.keys():
+                    new_amplitude = new_optical_components[component]['amplitude'] * scale_factor
+                    new_optical_components[component] = {'amplitude': new_amplitude, 'probability': np.abs(new_amplitude)**2}
+                
+                new_classical_values = [old_state['classical_channel_values'][index] for index in classical_channels_to_keep]
+                new_state_as_a_dict = {   'initial_state' : old_state['initial_state'],
+                    'cumulative_probability' :  old_state['cumulative_probability'] *cumulative_probability,
+                    'optical_components' : new_optical_components, 
+                    'classical_channel_values' : new_classical_values,
+                    'measurement_results' : old_state['measurement_results']
+                    }
+                new_state = State(collection_of_states=new_collection_of_states, input_state_as_a_dict=new_state_as_a_dict)
+                new_collection_of_states.add_state(state=new_state,identifier=identifier+traced_out_value)
+
+            self._collection_of_states = new_collection_of_states.collection_as_dict()
+            self._no_of_classical_channels = new_collection_of_states._no_of_classical_channels
+            self._no_of_optical_channels = new_collection_of_states._no_of_optical_channels
+            self._list_of_fock_states = new_collection_of_states._list_of_fock_states
+            self._dict_of_valid_component_names = new_collection_of_states._dict_of_valid_component_names
+
+        return 
+    
+    def adjust_length_of_fock_state(self, new_length_of_fock_state: int = 0):
+        """ Adjusts the 'length of Fock state' for the collection. This determines the maximum
+            number of photons per channel. If 'length of Fock state' is for instance 4 the allowed photon
+            numbers are 0,1,2 and 3. 
+
+        This function will modify the current collection 'in_place'. For a new collection with different
+        settings first create a copy and then modify the copy.
+
+        Args:
+            new_length_of_fock_state (int): Should be integer larger than 1. 
+       
+        Returns:
+            Nothing. The 'collection of states' will be modified in-place.
+                
+        """
+
+        if new_length_of_fock_state == 0:
+            new_length_of_fock_state = self._length_of_fock_state
+        if new_length_of_fock_state < 1:
+            raise Exception('error in setting length_of_fock_state in CollectionOfStates._adjust_length_of_fock_state()')
+        
+        # create empty collection_of_states with new length of fock states
+        updated_circuit = fsc.FockStateCircuit(length_of_fock_state = new_length_of_fock_state, 
+                                no_of_optical_channels = self._no_of_optical_channels, 
+                                no_of_classical_channels= self._no_of_classical_channels,
+                                use_full_fock_matrix=self._fock_state_circuit._use_full_fock_matrix
+                                )
+        new_collection_of_states = CollectionOfStates(fock_state_circuit= updated_circuit )
+        new_collection_of_states.clear()
+        new_collection_of_states._channel_0_left_in_state_name = self._channel_0_left_in_state_name
+        new_collection_of_states._threshold_probability_for_setting_to_zero = self._threshold_probability_for_setting_to_zero
+        new_collection_of_states.print_only_last_measurement = self.print_only_last_measurement
+        
+        for identifier, state in self._collection_of_states.items():
+            new_optical_components = dict([])
+            for name, amp_prob in state.optical_components.items():
+                values = self._dict_of_valid_component_names[name]
+                new_values = []
+                for value in values:
+                    new_values.append(value%new_length_of_fock_state)
+                    new_name = new_collection_of_states._get_state_name_from_list_of_photon_numbers(new_values)
+                new_optical_components.update({new_name:amp_prob})
+            new_state_as_a_dict = { 'initial_state' : state.initial_state,
+                                    'cumulative_probability' : state.cumulative_probability,
+                                    'optical_components' : new_optical_components,
+                                    'classical_channel_values' : state.classical_channel_values,
+                                    'measurement_results' : state.measurement_results
+                                    }
+            new_state = State(collection_of_states=new_collection_of_states,input_state_as_a_dict=new_state_as_a_dict)
+            new_collection_of_states.add_state(state = new_state, identifier=identifier)
+ 
+        self._collection_of_states = new_collection_of_states.collection_as_dict()
+        self._length_of_fock_state = new_collection_of_states._length_of_fock_state
+        self._list_of_fock_states = new_collection_of_states._list_of_fock_states
+        self._dict_of_valid_component_names = new_collection_of_states._dict_of_valid_component_names
+    
+        return
+
+    
+    def clean_up(self, initial_state: str = '') -> None:
+        """ Cleans up the collection_of_states. All optical components with low probability are removed and the total set 
+            of optical components is renormalized. Then all states with the same 'initial_state' and the same 'optical_components'
+            are grouped together (i.e., replaced by one state with as 'cumulative_probability' the sum of probabilities of the
+            identical states). Finally, states with a low 'cumulative_probability' are removed. The threshold for removing is defined 
+            by the parameter 'threshold_probability_for_setting_to_zero' which can be passed to the FockStateCircuit for which this 
+            collection of states is valid.
+            
+            Warning: Function only checks for same 'initial_state' and same 'optical_components' if any other parameter differs between 
+            the states will be discarded.
+
+            Args:
+                initial_state (str): initial state to clean_up. If none is given all initial_states will be 'cleaned' sequentially
+        
+            Returns:
+                Nothing. The 'collection of states' will be modified in-place.
+        """
+        # either take the initial_state from the arguments, or if non is given make a set of all initial_states in the collection
+        if initial_state != '':
+            set_of_initial_states = set([initial_state])
+        else:
+            set_of_initial_states = set([state['initial_state'] for state in self._collection_of_states.values()])
+
+        for initial_state in set_of_initial_states:
+            # check for any component in optical_components with too low probability and remove this component
+            group_identifiers_with_same_optical_components = dict([])
+            for identifier, state in self._collection_of_states.items():
+                if state['initial_state'] == initial_state:
+                    state._rescale_optical_components()
+
+                    for other_identifier in group_identifiers_with_same_optical_components.keys():
+                       if state._identical_optical_components(self._collection_of_states[other_identifier]):
+                            group_identifiers_with_same_optical_components[other_identifier].append(identifier)
+                            break
+                    else: # for-loop ended without break, so no state with identical opt components found.
+                        group_identifiers_with_same_optical_components.update({identifier:[]})
+
+            for identifier, list_of_same_oc in group_identifiers_with_same_optical_components.items():
+                overall_cumulative_probability = self._collection_of_states[identifier]['cumulative_probability']
+                for other_identifier in list_of_same_oc:
+                    overall_cumulative_probability = overall_cumulative_probability + self._collection_of_states[other_identifier]['cumulative_probability']
+                    del self._collection_of_states[other_identifier]
+                if overall_cumulative_probability >= self._threshold_probability_for_setting_to_zero:
+                    self._collection_of_states[identifier]['cumulative_probability'] = overall_cumulative_probability
+                else:
+                    del self._collection_of_states[identifier]
+        
+        return
+
+    def extend( self, extra_optical_channels: int = 0,
+                extra_classical_channels: int = 0,
+                statistical_distribution: list[int] = []
+                ) -> any:
+        """ Extends the original collection of states with new optical and/or classical channels. 
+            The optical channels will be filled according to the parameter 'statistical_distribution'. 
+            If the 'length_of_fock_state' for the circuit is for instance 3 the allowed photon numbers are 0,1 and 2. 
+            'statistical_distribution' should then be a list of length three. 
+            - The probability for 0 photons in the new channels will be statistical_distribution[0]
+            - The probability for 1 photon  in the new channels will be statistical_distribution[1]
+            - etc
+            So to fill new channels with value 0 photons 'statistical_distribution' should be [1,0,0, ..]
+            (which will be created as default when an empty list [] is passed as parameter )
+
+            Number of classical channels can also be extended. These will always be filled with value 0.
+
+            This function will modify the current collection 'in_place'. For a new collection with different
+            settings first create a copy and then modify the copy.
+
+            Args:
+                extra_optical_channels (int): number of optical channels to be added
+                extra_classical_channels (int): number of classical channels to be added
+                statistical_distribution (list[int]): probabilities for photon numbers in new channels. Default 
+                    new channels will be filled with 0 photons.
+           
+            Returns:
+                Nothing. The 'collection of states' will be modified in-place.
+        """
+        # create default value if statistical_distribution is empty list
+        if statistical_distribution == []:
+            statistical_distribution = [0]*self._length_of_fock_state
+            statistical_distribution[0] = 1
+        elif len(statistical_distribution) != self._length_of_fock_state:
+            raise Exception('error with channel numbers in function collection_of_states.extend')  
+    
+        # check if 'extra_optical_channels' is positive number
+        if extra_optical_channels < 0 or extra_classical_channels < 0:
+            raise Exception('error with channel numbers in function collection_of_states.extend')
+        if extra_optical_channels == 0 and extra_classical_channels == 0:
+            return self
+        
+        # create a dict with values for extra channels and their probabilities
+        extra_channel_values = dict({'initial_value' : (1,[])})
+        for _ in range(extra_optical_channels):
+            new_extra_channel_values = dict([])
+            for old_probability, values in extra_channel_values.values():
+                for index, fock_state_value in enumerate(range(self._length_of_fock_state)):
+                    new_probability = statistical_distribution[index]*old_probability
+                    new_values = values + [fock_state_value]
+                    new_label = self._get_state_name_from_list_of_photon_numbers(new_values)
+                    new_extra_channel_values.update({new_label: (new_probability,new_values)})
+            extra_channel_values = new_extra_channel_values
+
+        # create a new (still empty) collection_of_states with the extra optical channels
+        updated_circuit  = fsc.FockStateCircuit(length_of_fock_state = self._length_of_fock_state, 
+                        no_of_optical_channels = self._no_of_optical_channels+extra_optical_channels,
+                        no_of_classical_channels= self._no_of_classical_channels+extra_classical_channels,
+                        use_full_fock_matrix=self._fock_state_circuit._use_full_fock_matrix
+                        )
+        new_collection_of_states = CollectionOfStates(fock_state_circuit= updated_circuit )
+        new_collection_of_states.clear()
+        new_collection_of_states._channel_0_left_in_state_name = self._channel_0_left_in_state_name
+        new_collection_of_states._threshold_probability_for_setting_to_zero = self._threshold_probability_for_setting_to_zero
+        new_collection_of_states.print_only_last_measurement = self.print_only_last_measurement
+
+        # for each existing state create a statistical mixture for possible values in new channels
+        for probability, values in extra_channel_values.values():
+            for old_state in self._collection_of_states.values():
+                optical_components = old_state['optical_components']
+                new_optical_components = dict([])
+                for component_name, amplitude_probability in optical_components.items():
+                    list = self._dict_of_valid_component_names[component_name]
+                    new_list = list + values
+                    new_component_name = self._get_state_name_from_list_of_photon_numbers(new_list)
+                    new_optical_components.update({new_component_name:amplitude_probability})
+                new_state_as_a_dict = {   'initial_state' : old_state['initial_state'],
+                    'cumulative_probability' :  old_state['cumulative_probability']*probability,
+                    'optical_components' : new_optical_components, 
+                    'classical_channel_values' : old_state['classical_channel_values'] + [0]*extra_classical_channels,
+                    'measurement_results' : old_state['measurement_results']
+                    }
+                if new_state_as_a_dict['cumulative_probability'] >= self._threshold_probability_for_setting_to_zero:
+                    new_state = State(collection_of_states=new_collection_of_states, input_state_as_a_dict=new_state_as_a_dict)
+                    new_collection_of_states.add_state(state=new_state)
+            
+
+        self._collection_of_states = new_collection_of_states.collection_as_dict()
+        self._no_of_classical_channels = new_collection_of_states._no_of_classical_channels
+        self._no_of_optical_channels = new_collection_of_states._no_of_optical_channels
+        self._list_of_fock_states = new_collection_of_states._list_of_fock_states
+        self._dict_of_valid_component_names = new_collection_of_states._dict_of_valid_component_names
+       
+        return
