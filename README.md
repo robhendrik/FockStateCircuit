@@ -100,7 +100,7 @@ On github you will find:
                 fock_state_circuit_getting_started_tutorial.ipynb
                 fock_state_circuit_tutorial.ipynb
 
-        background on specific
+        background on specific features
                 combining_fock_state_circuits_tutorial.ipynb
                 drawing_fock_state_circuit_tutorial.ipynb
         
@@ -112,6 +112,16 @@ On github you will find:
 You can also check https://armchairquantumphysicist.com/ where a number of applications are covered in blogposts
 
 ## Version history
+### Version 1.0.0
+* Added feature or drawing stations of a circuit. If we model communication between 'alice' and 'bob' we can draw their specific 'stations' to make 
+        clear what is happening at either side. This only affects the visualization.
+* Updated functionality for time delay. We can now model successive time delays. The way the code implements time delay is closer to actual mathemathical
+        modelling of a system with (partially) distinguishable photons.
+* The code has been 'refactored' from two .py files into a structure with more classes and an individual .py file per class. This makes the code 
+        easier to maintain. 
+#### Changes
+* Backwards compatibility has been maintained EXCEPT for the fact that we can now use `import fock_state_circuit as fsc` for all code and do not have to
+        separately import `CollectionOfStates as cos`. It does mean in that in the code `cos.CollectionOfStates` and `cos.State` have to be replaced by `fsc.CollectionOfStates` and `fsc.State`
 ### Version 0.0.9
 * Added a new class CompoundFockStateCircuit
         The class is used to work with a list of circuits that have to be executed sequentially. 
