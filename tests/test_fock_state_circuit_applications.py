@@ -1,7 +1,6 @@
 import sys  
 sys.path.append("./src")
 import fock_state_circuit as fsc
-import collection_of_states as cos
 import numpy as np
 import math
 import pytest
@@ -47,7 +46,7 @@ def test_GHZ_state_curves():
                                     )
     # Start in basis $|ah>|av>|bh>|bv>|BSh>|BSv>|PBSh>|PBSv>$
     preparation.shift(target_channels=[0,1], shift_per_channel=[1,1])
-    preparation.c_shift(control_channels=[0,1],target_channels=[2,3])
+    preparation.c_shift_direct(control_channels=[0,1],target_channels=[2,3])
     preparation.time_delay_classical_control(affected_channels=[0,1], classical_channel_for_delay=0, bandwidth=1)
 
     # The polarizing beamsplitter works between channels 0,1 and 6,7 
@@ -92,16 +91,29 @@ def test_GHZ_state_curves():
     detection_3.half_wave_plate(channel_horizontal=6, channel_vertical=7, angle = +1*math.pi/8)
     detection_4.half_wave_plate(channel_horizontal=6, channel_vertical=7, angle = -1*math.pi/8)
 
+    #limit the number of projections to gain time
+    list_of_projections = [
+        k for k,v in detection_1._dict_of_valid_component_names.items() if (v[0] == 1 and v[2] ==1 and v[4] ==1 and v[6] == 1)
+        ]
+    
     # We map the optical channels on the classical channels such that the result in the classical channels in the order Th,Tv,D1h,D1,D2,D2,D3h,D3v
-    detection_1.measure_optical_to_classical(optical_channels_to_be_measured=[0,2,4,6],classical_channels_to_be_written=[0,1,2,3])
-    detection_2.measure_optical_to_classical(optical_channels_to_be_measured=[0,2,4,6],classical_channels_to_be_written=[0,1,2,3])
-    detection_3.measure_optical_to_classical(optical_channels_to_be_measured=[0,2,4,6],classical_channels_to_be_written=[0,1,2,3])
-    detection_4.measure_optical_to_classical(optical_channels_to_be_measured=[0,2,4,6],classical_channels_to_be_written=[0,1,2,3])
+    detection_1.measure_optical_to_classical(optical_channels_to_be_measured=[0,2,4,6],
+                                            classical_channels_to_be_written=[0,1,2,3],
+                                            list_of_projections=list_of_projections)
+    detection_2.measure_optical_to_classical(optical_channels_to_be_measured=[0,2,4,6],
+                                            classical_channels_to_be_written=[0,1,2,3],
+                                            list_of_projections=list_of_projections)
+    detection_3.measure_optical_to_classical(optical_channels_to_be_measured=[0,2,4,6],
+                                            classical_channels_to_be_written=[0,1,2,3],
+                                            list_of_projections=list_of_projections)
+    detection_4.measure_optical_to_classical(optical_channels_to_be_measured=[0,2,4,6],
+                                            classical_channels_to_be_written=[0,1,2,3],
+                                            list_of_projections=list_of_projections)
 
-    initial_collection_of_states_curve = cos.CollectionOfStates(fock_state_circuit=preparation, input_collection_as_a_dict=dict([]))
+    initial_collection_of_states_curve = fsc.CollectionOfStates(fock_state_circuit=preparation, input_collection_as_a_dict=dict([]))
     delays = [n/4.0 for n in range(-20,21)]
     for n in delays:
-        state1 = cos.State(collection_of_states=initial_collection_of_states_curve)
+        state1 = fsc.State(collection_of_states=initial_collection_of_states_curve)
         state1.initial_state = 'delay' + str(n)
         state1.optical_components = [('0000', 1)]
         state1.classical_channel_values = [n]
@@ -125,45 +137,65 @@ def test_GHZ_state_curves():
     result = compound_circuit.evaluate_circuit(collection_of_states_input=initial_collection_of_states_curve)
     histo = result.plot(histo_output_instead_of_plot=True)
 
-    probs_detection1 = []
-    for key,value in histo.items():
-        for datapoint in value:
-            if datapoint['output_state'] == '1111':
-                probs_detection1.append(datapoint['probability'])
-
+    probs_detection = []
+    for n in delays:
+        if 'delay' + str(n) in histo.keys():
+            value = histo['delay' + str(n)]
+            for datapoint in value:
+                if datapoint['output_state'] == '1111':
+                    probs_detection.append(datapoint['probability'])
+        else:
+            probs_detection.append(0)
+    probs_detection1 = probs_detection
 
     circuit_list = [preparation, circuit, detection_2]
     compound_circuit = fsc.CompoundFockStateCircuit(circuit_list)
     result = compound_circuit.evaluate_circuit(collection_of_states_input=initial_collection_of_states_curve)
     histo = result.plot(histo_output_instead_of_plot=True)
 
-    probs_detection2 = []
-    for key,value in histo.items():
-        for datapoint in value:
-            if datapoint['output_state'] == '1111':
-                probs_detection2.append(datapoint['probability'])
+
+    probs_detection = []
+    for n in delays:
+        if 'delay' + str(n) in histo.keys():
+            value = histo['delay' + str(n)]
+            for datapoint in value:
+                if datapoint['output_state'] == '1111':
+                    probs_detection.append(datapoint['probability'])
+        else:
+            probs_detection.append(0)
+    probs_detection2 = probs_detection
 
     circuit_list = [preparation, circuit, detection_3]
     compound_circuit = fsc.CompoundFockStateCircuit(circuit_list)
     result = compound_circuit.evaluate_circuit(collection_of_states_input=initial_collection_of_states_curve)
     histo = result.plot(histo_output_instead_of_plot=True)
 
-    probs_detection3 = []
-    for key,value in histo.items():
-        for datapoint in value:
-            if datapoint['output_state'] == '1111':
-                probs_detection3.append(datapoint['probability'])
+    probs_detection = []
+    for n in delays:
+        if 'delay' + str(n) in histo.keys():
+            value = histo['delay' + str(n)]
+            for datapoint in value:
+                if datapoint['output_state'] == '1111':
+                    probs_detection.append(datapoint['probability'])
+        else:
+            probs_detection.append(0)
+    probs_detection3 = probs_detection
 
     circuit_list = [preparation, circuit, detection_4]
     compound_circuit = fsc.CompoundFockStateCircuit(circuit_list)
     result = compound_circuit.evaluate_circuit(collection_of_states_input=initial_collection_of_states_curve)
     histo = result.plot(histo_output_instead_of_plot=True)
 
-    probs_detection4 = []
-    for key,value in histo.items():
-        for datapoint in value:
-            if datapoint['output_state'] == '1111':
-                probs_detection4.append(datapoint['probability'])
+    probs_detection = []
+    for n in delays:
+        if 'delay' + str(n) in histo.keys():
+            value = histo['delay' + str(n)]
+            for datapoint in value:
+                if datapoint['output_state'] == '1111':
+                    probs_detection.append(datapoint['probability'])
+        else:
+            probs_detection.append(0)
+    probs_detection4 = probs_detection
 
     ax1.plot(delays,probs_detection1, label = "detector D3 at +45 deg")
     ax1.plot(delays,probs_detection2, label = "detector D3 at -45 deg")
@@ -192,13 +224,13 @@ def test_HOM_with_delay_curves():
                                         classical_channels_to_be_written=[0,1,2,3]
                                         )
 
-    initial_collection_of_states = cos.CollectionOfStates(
+    initial_collection_of_states = fsc.CollectionOfStates(
                                     fock_state_circuit=circuit, 
                                     input_collection_as_a_dict=dict([])
                                     )
     delays = [ (number-50)/10.0 for number in range(100)]
     for delay in delays:
-        input_two_photons = cos.State(collection_of_states=initial_collection_of_states)
+        input_two_photons = fsc.State(collection_of_states=initial_collection_of_states)
         input_two_photons.optical_components = [('1010', 1)]
         input_two_photons.classical_channel_values = [delay,0,0,0]
         input_two_photons.initial_state = "\'1010\'\ndelay = " + str(delay)
@@ -276,18 +308,18 @@ def test_decoherence_time():
             circuit_analysis.half_wave_plate(channel_horizontal=0, channel_vertical=1, angle = 0)
  
             amp = 1/np.sqrt(2)
-            initial_collection_of_states = cos.CollectionOfStates(fock_state_circuit=circuit_preparation, input_collection_as_a_dict=dict([]))
-            state = cos.State(collection_of_states=initial_collection_of_states)
+            initial_collection_of_states = fsc.CollectionOfStates(fock_state_circuit=circuit_preparation, input_collection_as_a_dict=dict([]))
+            state = fsc.State(collection_of_states=initial_collection_of_states)
             state.initial_state = 'horizontal'
             state.optical_components= [('10',1)]
             initial_collection_of_states.add_state(state=state)
 
-            state = cos.State(collection_of_states=initial_collection_of_states)
+            state = fsc.State(collection_of_states=initial_collection_of_states)
             state.initial_state = 'diagonal'
             state.optical_components= [('10',amp), ('01',-1*amp)]
             initial_collection_of_states.add_state(state=state)
 
-            state = cos.State(collection_of_states=initial_collection_of_states)
+            state = fsc.State(collection_of_states=initial_collection_of_states)
             state.initial_state = 'circular'
             state.optical_components= [('10',np.cdouble(amp)), ('01',np.cdouble(1j*amp))]
             initial_collection_of_states.add_state(state=state)
@@ -305,7 +337,7 @@ def test_decoherence_time():
         outcomes.update({coupling:traces})
 
     plt.rcParams['figure.figsize'] = (20, 20)
-    fig, ax = plt.subplots(3,1)
+    fig, ax = plt.subplots(3,1,figsize = (16,10))
     titles = ['c-shift in circular basis', 'c-shift on diagonal basis', 'c-shift on horizontal/vertical basis']
     for index,coupling in enumerate(['circular', 'diagonal', 'horver']):
         ax[index].plot(gs,outcomes[coupling]['horver'], marker = 'o', label = 'horizontal/vertical polarization')
@@ -350,7 +382,7 @@ def test_EPR_Bell_inequality():
 
         # First create an entangles state where both photons are either both 'H' polarized or both 'V' polarized
     # The optical state is 1/sqrt(2)  ( |HH> + |VV> )
-    initial_collection_of_states = cos.CollectionOfStates(fock_state_circuit=circuit)
+    initial_collection_of_states = fsc.CollectionOfStates(fock_state_circuit=circuit)
     entangled_state = initial_collection_of_states.get_state(initial_state='0000').copy()
     initial_collection_of_states.clear()
     entangled_state.initial_state = 'entangled_state'
