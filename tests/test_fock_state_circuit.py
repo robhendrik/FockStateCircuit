@@ -1916,14 +1916,14 @@ def test_generic_function_on_collection_optical_channels():
     def generic_function(input_collection,parameters):
         control_channel = parameters[0]
         target_channel = parameters[1]
-    
+        string_format_in_state_as_word = "{:0"+str(len(str(input_collection._length_of_fock_state-1)))+ "d}"
         for state in input_collection:
             new_components = dict([])
             old_components = state.optical_components
             for name, amp_prob in old_components.items():
                 old_values = state._dict_of_valid_component_names[name].copy()
                 old_values[target_channel] = (old_values[target_channel] + old_values[control_channel])%input_collection._length_of_fock_state
-                new_name = input_collection._get_state_name_from_list_of_photon_numbers(old_values)
+                new_name =''.join([("{:0"+str(len(str(input_collection._length_of_fock_state-1)))+ "d}").format(number) for number in old_values])
                 new_components.update({new_name:amp_prob})
             state.optical_components  = new_components
         return input_collection

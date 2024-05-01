@@ -362,3 +362,55 @@ def test_no_signalling_box_application():
         # plot the resulting correlations for the no-signalling boxes
         fsc.plot_correlations_for_NS_boxes(dict_for_plotting)
         assert plt_test.compare_images(img1, img2, 0.001) is None
+
+def test_no_signalling_box_application_with_gates():
+    img1 = "./tests/test_drawings/testdrawing_no_signalling_histogram_from_gates.png"
+    img2 = img1.replace("testdrawing","reference")
+    generate_reference_images = False
+    if not generate_reference_images:
+        def save_drawing():
+            plt.savefig(img1)
+            return
+    else:
+        def save_drawing():
+            plt.savefig(img2)
+            return
+    with patch("fock_state_circuit.circuit.plt.show", wraps=save_drawing) as mock_bar:
+        N = 10
+        angles = [0]
+        circuit_is_already_drawn = False
+
+        ns_boxes = [{'channels_Ah_Av_Bh_Bv':[0,1,2,3],'quantumness_indicator':1},
+                    {'channels_Ah_Av_Bh_Bv':[4,5,6,7],'quantumness_indicator':5}]
+        for angle_first in angles:
+            dict_for_plotting = dict([])
+            for angle in [(a/N)*np.pi/2 for a in range(N)]:
+                circuit = fsc.FockStateCircuit(length_of_fock_state=3,no_of_optical_channels=8,no_of_classical_channels=8)
+                circuit.create_no_signalling_boxes(ns_boxes=ns_boxes)
+                circuit.half_wave_plate(channel_horizontal=2,channel_vertical=3,angle=angle)
+                circuit.half_wave_plate(channel_horizontal=6,channel_vertical=7,angle=angle)
+                circuit.half_wave_plate(channel_horizontal=0,channel_vertical=1,angle=angle_first)
+                circuit.half_wave_plate(channel_horizontal=4,channel_vertical=5,angle=angle_first)
+                circuit.measure_optical_to_classical(optical_channels_to_be_measured=[n for n in range(8)],classical_channels_to_be_written=[n for n in range(8)])
+
+                if not circuit_is_already_drawn:
+                    circuit.draw()
+                    circuit_is_already_drawn = True
+
+                collection = fsc.CollectionOfStates(fock_state_circuit=circuit,input_collection_as_a_dict=dict([]))
+                state = fsc.State(collection_of_states=collection)
+                collection.add_state(state)
+                output_collection = circuit.evaluate_circuit(collection_of_states_input=collection)
+
+                channel_combis_for_correlation = [(0,2),(4,6)]
+                label_for_channel_combinations = ['first pair, K = 1','second pair, K = 5']
+                
+                correlations = output_collection.plot_correlations(channel_combis_for_correlation=channel_combis_for_correlation,
+                                                                correlation_output_instead_of_plot=True)['no_signalling_boxes']
+                lst = []
+                lst.append({'output_state': 'first pair, K = 1', 'probability': correlations[0]})
+                lst.append({'output_state': 'second pair, K = 5', 'probability': correlations[1]})
+                dict_for_plotting.update({str(np.round(angle/np.pi,3)) + ' pi': lst})
+            # plot the resulting correlations for the no-signalling boxes
+            fsc.plot_correlations_from_dict(dict_for_plotting)
+            assert plt_test.compare_images(img1, img2, 0.001) is None

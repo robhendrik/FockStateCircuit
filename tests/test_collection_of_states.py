@@ -724,23 +724,23 @@ def test_reshaping_collection():
     state = initial_collection_of_states.get_state(initial_state='20202')
 
     no_failure_found = no_failure_found and all([
-        len(initial_collection_of_states._collection_of_states) == 2,
-        initial_collection_of_states._length_of_fock_state == 3,
-        initial_collection_of_states._no_of_classical_channels == 3,
-        initial_collection_of_states._no_of_optical_channels == 3,
-        len(initial_collection_of_states._list_of_fock_states) == 27,
-        len(list(initial_collection_of_states._list_of_fock_states)[0]) == 3,
-        list(initial_collection_of_states._list_of_fock_states)[-1][-1] == 2,
-        state._length_of_fock_state == 3,
-        state._no_of_optical_channels == 3,
-        state._no_of_classical_channels == 3,      
-        state._channel_0_left_in_state_name == False,
-        state._digits_per_optical_channel == 1,
-        state._dict_of_valid_component_names['000'] == [0,0,0],
-        state._threshold_probability_for_setting_to_zero == 0.1,
-        state._print_only_last_measurement == False,
-        True in state._check_valid_state(state_to_check = state),
-        state.measurement_results[0]['measurement_results'] == [1,1,1]])
+    len(initial_collection_of_states._collection_of_states) == 2,
+    initial_collection_of_states._length_of_fock_state == 3,
+    initial_collection_of_states._no_of_classical_channels == 3,
+    initial_collection_of_states._no_of_optical_channels == 3,
+    len(initial_collection_of_states._dict_of_valid_component_names) == 27,
+    len(list(initial_collection_of_states._dict_of_valid_component_names)[0]) == 3,
+    list(initial_collection_of_states._dict_of_valid_component_names.keys())[-1][-1] == '2',
+    state._length_of_fock_state == 3,
+    state._no_of_optical_channels == 3,
+    state._no_of_classical_channels == 3,      
+    state._channel_0_left_in_state_name == False,
+    state._digits_per_optical_channel == 1,
+    state._dict_of_valid_component_names['000'] == [0,0,0],
+    state._threshold_probability_for_setting_to_zero == 0.1,
+    state._print_only_last_measurement == False,
+    True in state._check_valid_state(state_to_check = state),
+    state.measurement_results[0]['measurement_results'] == [1,1,1]])
 
     assert no_failure_found
 
