@@ -1,0 +1,28 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools>=61.0", "wheel>=0.37.1"]
+
+[project]
+name = "FockStateCircuit"
+version = "1.0.2"
+dependencies = [
+  "numpy >= 1.26.4",
+  "matplotlib >= 3.8.4",
+]
+requires-python = ">=3.12"
+authors = [
+  {name = "Rob Hendriks"}
+]
+
+description = "Modelling quantum optical circuits"
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+keywords = ["quantum", "photon", "optics", "physics"]
+classifiers = [
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Homepage = "https://github.com/robhendrik/FockStateCircuit"
+Documentation = "https://github.com/robhendrik/FockStateCircuit/tree/main"
+Repository = "https://github.com/robhendrik/FockStateCircuit"

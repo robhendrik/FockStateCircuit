@@ -112,26 +112,24 @@ class NodeList():
         # name for the circuit
         self._circuit_name = circuit_name
 
-        # generate a list of all possible values in the optical channels 
-        index_list = [index for index in range(0,length_of_fock_state**self._no_of_optical_channels)]
-        self._list_of_fock_states = [[] for index in index_list]
-        for _ in range(0,self._no_of_optical_channels):
-            for index in range(len(index_list)):
-                n = int(index_list[index]%length_of_fock_state)
-                self._list_of_fock_states[index].append(n)
-                index_list[index] = int(index_list[index]/length_of_fock_state)
-
-        # create a dict with as keys the valid state names as strings and the list of photon numbers as value
-        self._dict_of_valid_component_names = dict([])
-        for optical_state in  self._list_of_fock_states:
-            name = self._get_state_name_from_list_of_photon_numbers(optical_state)
-            self._dict_of_valid_component_names.update({name : optical_state})
-
-        # create a dict with as keys the tuple of the list of photon numbers as value, 
-        # and valid state names as strings as value
-        self._dict_of_optical_values = dict([])
-        for k,v in self._dict_of_valid_component_names.items():
-            self._dict_of_optical_values.update({tuple(v):k})
+        string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
+        tuple_of_strings = tuple(string_format_in_state_as_word.format(number) for number in range(self._length_of_fock_state))
+        self._list_of_fock_states = [[(n//(self._length_of_fock_state**c))%self._length_of_fock_state for c in range(self._no_of_optical_channels)] for n in range(self._length_of_fock_state**self._no_of_optical_channels)]
+        if self._channel_0_left_in_state_name == True:
+            self._dict_of_valid_component_names = {''.join([tuple_of_strings[number] for number in optical_state]):optical_state for optical_state in self._list_of_fock_states}
+        else: #self.state_least_significant_digit_left == False:
+            self._dict_of_valid_component_names = {''.join([tuple_of_strings[number] for number in optical_state[::-1]]):optical_state for optical_state in self._list_of_fock_states}       
+        self._dict_of_optical_values = {tuple(v):k for k,v in self._dict_of_valid_component_names.items()}
+        
+        # create template state
+        name = ''.join([tuple_of_strings[0]] *self._no_of_optical_channels)
+        self._template_state_dict = {   'initial_state' : name,
+                            'cumulative_probability' : 1,
+                            'optical_components' : { name: {'amplitude':1,'probability': 1} }, 
+                            'classical_channel_values' : [0]*self._no_of_classical_channels,
+                            'measurement_results' : [],
+                            'auxiliary_information' : {}
+                            }
 
     def _update_list_of_nodes(self, node_to_be_added: dict = None) -> None:
 
@@ -203,25 +201,3 @@ class NodeList():
             raise Exception('error creating tensor list, more than two channels provided')
         
         return tensor_list
-    
-    def _get_state_name_from_list_of_photon_numbers(self, state: list) -> str:
-        """ For a list of photon numbers generate a string which can serve as name for the state or a component in the state.
-            Example: state [0,1,3] would become '310' with 0 representing the photon number in channel 0. If we use reversed
-            state notation state [0,1,3] would become '013' (reversed or regular state notation is set in initialization of the 
-            FockStateCircuit). If we allow per channel photon numbers which require more digits (e.g., 10) the format of the string will be adjusted.
-            Example [10,1,3] would become '100103'
-
-        Args:
-            state (List): state as a list of values with channel 'n' at index 'n'. e.g., [0,1,3]
-
-        Returns:
-            str: name of the state of component derived from photon number per channel. e.g., '013'
-        """        
-        string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
-
-        if self._channel_0_left_in_state_name == True:
-            name = ''.join([string_format_in_state_as_word.format(number) for number in state])              
-        else: #self.state_least_significant_digit_left == False:
-            name = ''.join([string_format_in_state_as_word.format(number) for number in state[::-1]]) 
-
-        return name

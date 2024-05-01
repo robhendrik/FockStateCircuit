@@ -18,9 +18,11 @@ from fock_state_circuit.nodes.controlled_nodes import ControlledNodes
 from fock_state_circuit.nodes.measurement_nodes import MeasurementNodes
 from fock_state_circuit.nodes.classical_nodes import ClassicalNodes
 from fock_state_circuit.nodes.spectral_nodes import SpectralNodes
+from fock_state_circuit.nodes.superquantum_nodes import SuperQuantumNodes
 from fock_state_circuit.nodes.nonlinear_optical_nodes import NonlinearOpticalNodes
 from fock_state_circuit.visualization.draw import Draw
 from fock_state_circuit.nodes.spectral_nodes import perform_measurement_photon_resolved
+from fock_state_circuit.no_signalling_boxes import perform_measurement_no_signalling_boxes
 from fock_state_circuit.temporal_and_spectral_gate_functionality.temporal_functions import _VERSION as tf_VERSION
 
 
@@ -51,7 +53,7 @@ def about():
     print("Numpy Version:               %s" % np.__version__)          
     print("Matplotlib version:          %s" % mtplt.__version__)
 
-class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNodes, ControlledNodes, CustomNodes, SpectralNodes, NonlinearOpticalNodes, Draw):
+class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNodes, ControlledNodes, CustomNodes, SpectralNodes, NonlinearOpticalNodes, SuperQuantumNodes, Draw):
     """ Class for FockStateCircuit. The class is used to model the behavior of systems consisting of optical channels which can be 
         populates with Fock states, or photon number states (https://en.wikipedia.org/wiki/Fock_state). The circuit consistes of
         multiple channels (minimally 2 channels) which interact through optical components like beamsplitters and wave plates. The
@@ -130,9 +132,9 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
                     ) -> np.array:
                     Function returns the fock state matrix for a given set of nodes in the circuit            
 
-        Last modified: April 16th, 2024              
+        Last modified: May 1st, 2024              
     """
-    _VERSION = '1.0.0'
+    _VERSION = '1.0.2'
 
     def __init__(self, length_of_fock_state: int = 2, 
                  no_of_optical_channels: int = 2, 
@@ -388,6 +390,16 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
                                                                                     classical_channels_to_write_to=classical_channels_to_be_written,
                                                                                     list_of_projections = list_of_projections)
                 return self.evaluate_circuit(collection_of_states_input = collection_of_states_output, nodes_to_be_evaluated = remaining_nodes)
+            
+            elif collection_of_states_input.has_no_signalling_boxes():
+                # get parameters from node on what channels to measure and where to write the results
+                optical_channels_to_be_read = self.node_list[current_node_index].get('optical_channels_to_be_read')
+                classical_channels_to_be_written = self.node_list[current_node_index].get('classical_channels_to_be_written')  
+                collection_of_states_output = perform_measurement_no_signalling_boxes(  collection_of_states=collection_of_states_input, 
+                                                                    optical_channels_to_measure=optical_channels_to_be_read, 
+                                                                    classical_channels_to_write_to=classical_channels_to_be_written)
+                return self.evaluate_circuit(collection_of_states_input = collection_of_states_output, nodes_to_be_evaluated = remaining_nodes)
+
             else:
                 # generate a number as a string to identify whether this is first, seconde, third etc measurement
                 measurement_identifier = self.__get_identifier_for_measurement(current_node_index)
@@ -585,7 +597,6 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
                             optical_channels_to_measure: list = [],
                             classical_channels_to_write_to: list = []
                             ) -> CollectionOfStates:
-        
         """ Perform a measurement on a single state, where the given optical channels are measured and the result is written
             to the given classical channels. The function will return a collection of states, one state for each possible
             measurement outcome. The optical states will be the 'collapsed states' for the measurement outcome. The resulting 
@@ -603,112 +614,56 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
         Returns:
             CollectionOfStates: collection of states after measurement of single input state
         """        
-
-        # outcomes will be a dictionary with as key the possible measurement outcomes and as value a list of 
-        # indices for the components that lead to that outcome. The index indicates the place of the components
-        # in the self._self._list_of_fock_states.
-        outcomes = dict([])
-        string_format_in_state_as_word = "{:0"+str(self._digits_per_optical_channel)+ "d}"
-        # deep copy existing values of the classical values
-        classical_channel_values_before_measurement = [val for val in state.classical_channel_values]
-
-        vector_in, basis = state.translate_state_components_to_vector()
-
-        for component_index, amplitude in enumerate(vector_in):
-
-            probability = np.abs(amplitude)**2
-            
-            # if amplitude of the component is zero move to next
-            if probability < self._threshold_probability_for_setting_to_zero:
-                continue
-            
-            # get the photon count in the optical component
-            values = self._list_of_fock_states[component_index]
-
-            # determine the new values in classical channels.
-            # first load with the old values, later on overwrite with new values
-            classical_channel_after_measurement = [val for val in classical_channel_values_before_measurement]
-
-            # if the number of classical channels is larger than the number of opticl channels limit the number
-            # of classical channels. 
-            if len(classical_channels_to_write_to) > len(optical_channels_to_measure):
-                classical_channels_to_write_to = classical_channels_to_write_to[:len(optical_channels_to_measure)]
-            measurement_result = ''
-            for channel_index, classical_channel in enumerate(classical_channels_to_write_to):
-                optical_channel = optical_channels_to_measure[channel_index]
-                classical_channel_after_measurement[classical_channel] = values[optical_channel]
-                measurement_result += string_format_in_state_as_word.format(values[optical_channel])
-
-            # make a list of optical components that contribute to a given measurement result
-            if measurement_result not in outcomes.keys():
-                outcomes[measurement_result] = {'probability' : probability,
-                                                'results' :classical_channel_after_measurement,
-                                                'set_of_component_indices': set([component_index])
-                                                }
-            else:
-                outcomes[measurement_result]['probability'] += probability
-                outcomes[measurement_result]['set_of_component_indices'].add(component_index) 
-        
-        # for each measurement result from this state, for this specific measurement there is a key-value pair in the dictionary 'outcomes'
-        # the values are the probability to get that results (so these should ideally add up to 1 when adding up all possible measurement outcomes)
-        # and the list of indices indicated the components, or basis states leading to that outcome.
-
-        # Next we need to make the 'collapsed state' for each measurement outcome. All components contributing to that outcome should be in 
-        # that collapsed state, the components giving a different outcome should get amplitude zero. The result is a collection of states where 
-        # there is one state in the collection for each measurement outcome. 
-        # The cumulative_weight is the likelihood to get to a measurement result, the optical components all contribute to that result and the 
-        # probabilities for the components in each state again add up to one.
-
-        # create an empty collection of states with for same circuit
+        # create empty collection which will be populated with the collapsed states and returned at end of the function
         collection_of_states_after_measurement = CollectionOfStates(fock_state_circuit = self, input_collection_as_a_dict=dict([]))
 
-        # loop over all measurement results and create a new, collapsed state for each result.
-        for measurement_result, components_with_that_result in outcomes.items():
-            
-            # make a collapsed state for each outcome
-            collapsed_state = state.create_initialized_state()
+        # if the number of classical channels is larger than the number of opticl channels limit the number
+        # of classical channels. 
+        if len(classical_channels_to_write_to) > len(optical_channels_to_measure):
+            classical_channels_to_write_to = classical_channels_to_write_to[:len(optical_channels_to_measure)]
 
-            # prepare the output 'vector' to generate the optical state. First set all to zero.
-            vector_out = [np.cdouble(0)] * len(vector_in)
-            
-            # loop over all components contributing to a particular outcomes
-            for component_index in components_with_that_result['set_of_component_indices']:
-                               
-                # the cumulative probability for this state in the collection is equal to the likelihood of getting to a 
-                # measurement result
-                cumulative_probability = components_with_that_result['probability']
-                if cumulative_probability != 0:
-                    # load amplitudes for remaining components in the output vector for optical state
-                    scale_factor = math.sqrt((1/cumulative_probability))
-                    vector_out[component_index] = vector_in[component_index] * scale_factor
-                
-            # the classical channels contain the measurement result
-            new_classical_channel_values = [i for i in components_with_that_result['results']]
+        # create a list of tuples with a first tuple element the optical values and second the amplitude (as numpy complex number)
+        val_amp_list = [(self._dict_of_valid_component_names[name], amp_prob['amplitude']) for name, amp_prob in state.optical_components.items()]
+ 
+        # create a dictionary where the list of tuples is split for different measurement outcomes. The measurement outcome is the key
+        dict_of_outcomes = dict([])
+        for item in val_amp_list:
+            dict_of_outcomes.setdefault(tuple(item[0][n] for n in optical_channels_to_measure),[]).append(item)
 
-            # prepare the attribute 'measurement_results' for the collapsed state. If there are already
-            # measurement results in the input state copy these to the new collapsed state
-            if state.measurement_results and state.measurement_results is not None:
-                measurement_results = [previous_values for previous_values in state.measurement_results]   
-                measurement_results.append({'measurement_results':new_classical_channel_values, 'probability': cumulative_probability})   
-            else:
-                measurement_results = [{'measurement_results':new_classical_channel_values, 'probability': cumulative_probability}]
-
-            if state.cumulative_probability is not None:
-                cumulative_probability = state.cumulative_probability * cumulative_probability
-            else:
-                cumulative_probability = cumulative_probability
-            
-
-            collapsed_state.initial_state = state.initial_state
-            collapsed_state.cumulative_probability = cumulative_probability
-            # use the vector to populate the attribute 'optical_components' from the collapsed state
-            collapsed_state.set_state_components_from_vector(vector_out)
-            collapsed_state.classical_channel_values = new_classical_channel_values
-            collapsed_state.measurement_results = measurement_results
-
-            collection_of_states_after_measurement.add_state(state=collapsed_state, identifier=measurement_result)
-
+        # create for each measurement outcome a new 'collapsed' state and add this state to the collection as return value
+        # outcome is a tuple of measured values (like (0,1,2) if you measured three channels). List of outcomes is a list
+        # of tuples with values of all optical channels and the amplitudes
+        # [((0,2,3,1), 0.71), ((0,2,3,2), 0.71)]. For measured optical channels the values should be the same in all items in the list.
+        for outcome, list_of_outcomes in dict_of_outcomes.items():
+            # create a list or amplitudes and take sum and sum squared for normalization
+            old_amplitudes = np.array([item[1] for item in list_of_outcomes])
+            old_probabilities = old_amplitudes.real**2 + old_amplitudes.imag**2
+            tot_amp = np.sum(old_amplitudes )
+            tot_prob = np.sum(old_probabilities )
+            # renormalized to create new amplitudes and probabilities
+            new_amps = old_amplitudes/np.sqrt(tot_prob)
+            new_probs = new_amps.real**2 + new_amps.imag**2
+            # create a new state as collapsed state for a specific measurement result
+            new_state= state.copy()
+            # 1. the new state has a cumulative probability that is multiplied with the probability to detect this specific outcome
+            try:
+                new_state.cumulative_probability *= tot_prob
+            except:
+                new_state.cumulative_probability = np.round(new_state.cumulative_probability*tot_prob,3)
+            # 2. the new state should have classical channel values modified representing the measurement result
+            for i,n in enumerate(classical_channels_to_write_to):
+                new_state.classical_channel_values[n] = outcome[i]
+            # 3. the new state's measurement results need to be updated with 
+            try:
+                new_state.measurement_results.append({'measurement_results':new_state.classical_channel_values, 'probability': tot_prob})   
+            except:
+                new_state.measurement_results = [{'measurement_results':new_state.classical_channel_values, 'probability': tot_prob}]
+            new_state.optical_components = {self._dict_of_optical_values[tuple(name[0])]:{'amplitude':new_amplitude,'probability': new_probability} for name, new_amplitude, new_probability in zip(list_of_outcomes,new_amps, new_probs)}
+            # 4. Other aspects like initial_state and auxiliary_information remain unchanged
+            # add the new state to the collection
+            collection_of_states_after_measurement.add_state(new_state)
         return collection_of_states_after_measurement
+
     
     def __apply_node_or_nodes_to_collection(self,
                                           collection_of_states: CollectionOfStates = None,

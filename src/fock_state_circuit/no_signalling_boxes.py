@@ -300,7 +300,7 @@ def _group_configurations_per_outcome(collection_of_states) -> dict:
     
     return configurations_and_amplitudes_grouped_per_outcome
 
-def create_collection_with_NS_boxes(state, ns_boxes) -> fsc.CollectionOfStates:
+def create_collection_with_NS_boxes(state, ns_boxes) -> any:
     """ Create a CollectionOfStates which can be processed in a FockStateCircuit. This collection
         represents  set of 'No signalling boxes' which can have 'superquantum' correlations.
 
@@ -392,7 +392,7 @@ def create_collection_with_NS_boxes(state, ns_boxes) -> fsc.CollectionOfStates:
                 values_in_channels = channel_values_for_config[int(configuration_for_this_box)]
                 for index,channel in enumerate(channels_Ah_Av_Bh_Bv):
                     values[channel] = values_in_channels[index]
-            new_name = new_collection._get_state_name_from_list_of_photon_numbers(values)
+            new_name = new_collection._dict_of_optical_values[tuple(values)]
             new_optical_components.append((new_name, amp_prob['amplitude']))
         new_state.optical_components = new_optical_components
         superentanglement_info = {  'superentanglement': identifier,
@@ -519,12 +519,54 @@ def measure_collection_with_NS_boxes(collection) -> list:
 
         histogram.append({ 'output_state' : outcome, 'probability' : probability})
 
-
     return histogram
+
+
+def perform_measurement_no_signalling_boxes(collection_of_states, optical_channels_to_measure,classical_channels_to_write_to):
+    """ Performs a FULL measurement (i.e., measures all optical channels) where the detection probability is determined
+        from the 'no-signalling boxes'. The collection of states needs to be build by using the gate 'create_no_signalling_boxes'.
+
+    Args:
+        collection_of_states (fsc.CollectionOfStates): Collection of states to be measured
+        optical_channels_to_be_measured (list[int]): list of of optical channel numbers to be measured
+        classical_channels_to_be_written (list[int]): list of classical channel numbers to write the measurement result to
+
+    Returns:
+        fsc.CollectionOfStates: Collection with 'collapsed' states and classical channels written
+
+    """
+    output_collection = collection_of_states.copy()
+    output_collection.clear()
+
+    histo = measure_collection_with_NS_boxes(collection_of_states)
+    for state in collection_of_states:
+        reference_state = state
+        break
+    del reference_state.auxiliary_information['no_signalling_box']
+    reference_state.initial_state = 'no_signalling_boxes'
+    for outcome in histo:
+        new_state = reference_state.copy()
+        new_state.cumulative_probability = outcome['probability']
+        new_state.optical_components = [(outcome['output_state'],1)]
+        new_classical_channel_values = [val for val in new_state.classical_channel_values]
+        optical_channel_values = new_state._dict_of_valid_component_names[outcome['output_state']]
+        for classical_channel, optical_channel in zip(classical_channels_to_write_to, optical_channels_to_measure):
+            new_classical_channel_values[classical_channel] = optical_channel_values[optical_channel]
+        new_state.classical_channel_values = new_classical_channel_values
+        # prepare the attribute 'measurement_results' for the collapsed state. If there are already
+        # measurement results in the input state copy these to the new collapsed state
+        if state.measurement_results and state.measurement_results is not None:
+            measurement_results = [previous_values for previous_values in state.measurement_results]   
+            measurement_results.append({'measurement_results':new_state.classical_channel_values.copy(), 'probability': outcome['probability']})   
+        else:
+            measurement_results = [{'measurement_results':new_state.classical_channel_values.copy(), 'probability': outcome['probability']}]
+        new_state.measurement_results = measurement_results
+        output_collection.add_state(state = new_state)
+    return output_collection
 
 def correlations_from_measured_collection_with_NS_boxes(list_of_outcomes: list, 
                                                         channel_combis_for_correlation: list,
-                                                        state: fsc.State) -> list:
+                                                        state: any) -> list:
     """ This function will return a list of correlations for the provided 'list_of_outcomes'. 
 
         list_of_outcomes is of the form       

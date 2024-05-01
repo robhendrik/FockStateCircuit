@@ -157,13 +157,6 @@ class CollectionOfStates(Plot):
                 
                 Warning: Function only checks for same 'initial_state' and same 'optical_components' if any other parameter differs between 
                 the states will be discarded.
-
-        _get_state_name_from_list_of_photon_numbers(self, state: list) -> str:
-                For a list of photon numbers generate a string which can serve as name for the state or a component in the state.
-                Example: state [0,1,3] would become '310' with 0 representing the photon number in channel 0. If we use reversed
-                state notation state [0,1,3] would become '013' (reversed or regular state notation is set in initialization of the 
-                FockStateCircuit). If we allow per channel photon numbers which require more digits (e.g., 10) the format of the string will be adjusted.
-                Example [10,1,3] would become '100103' 
         
         _group_states_together_by_photon_number(self)-> dict[str,list[str]]:
                 Group states together based on the total number of photons in the components of the state. The function
@@ -220,8 +213,12 @@ class CollectionOfStates(Plot):
                 settings first create a copy and then modify the copy. 
         
         is_photon_resolved(self):
-                Return False if not all states have data on 'photon_resolution' in their state.auxiliary_information>
-                If this function returns True ALL states 'photon_resolution' have this information.
+                Return False if not all states have data on 'photon_resolution' in their state.auxiliary_information.
+                If this function returns True ALL states have this information.
+
+        has_no_signalling_boxes(self):
+                Return False if not all states have data on 'no_signalling_box' in their state.auxiliary_information.
+                If this function returns True ALL states have this information.
 
         Last modified: April 16th, 2024
         
@@ -269,14 +266,8 @@ class CollectionOfStates(Plot):
         # complete history is printed.
         self.print_only_last_measurement = True
 
-        # generate a list of all possible values in the optical channels       
-        index_list = [index for index in range(0,self._length_of_fock_state**self._no_of_optical_channels)]
-        self._list_of_fock_states = [[] for index in index_list]
-        for _ in range(0,self._no_of_optical_channels):
-            for index in range(len(index_list)):
-                n = int(index_list[index]%self._length_of_fock_state)
-                self._list_of_fock_states[index].append(n)
-                index_list[index] = int(index_list[index]/self._length_of_fock_state)
+        # # generate a list of all possible values in the optical channels       
+        self._list_of_fock_states = fock_state_circuit._list_of_fock_states
         
         # create a dict with as keys the valid state names as strings and the list of photon numbers as value
         self._dict_of_valid_component_names = fock_state_circuit._dict_of_valid_component_names
@@ -631,29 +622,6 @@ class CollectionOfStates(Plot):
         
         return
     
-    def _get_state_name_from_list_of_photon_numbers(self, state: list) -> str:
-        """ For a list of photon numbers generate a string which can serve as name for the state or a component in the state.
-            Example: state [0,1,3] would become '310' with 0 representing the photon number in channel 0. If we use reversed
-            state notation state [0,1,3] would become '013' (reversed or regular state notation is set in initialization of the 
-            FockStateCircuit). If we allow per channel photon numbers which require more digits (e.g., 10) the format of the string will be adjusted.
-            Example [10,1,3] would become '100103'
-
-        Args:
-            state (List): state as a list of values with channel 'n' at index 'n'. e.g., [0,1,3]
-
-        Returns:
-            str: name of the state of component derived from photon number per channel. e.g., '013'
-        """        
-        # string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
-
-        # if self._channel_0_left_in_state_name == True:
-        #     name = ''.join([string_format_in_state_as_word.format(number) for number in state])              
-        # else: #self.state_least_significant_digit_left == False:
-        #     name = ''.join([string_format_in_state_as_word.format(number) for number in state[::-1]]) 
-
-
-        return self._fock_state_circuit._dict_of_optical_values[tuple(state)]
-    
     def _group_states_together_by_photon_number(self)-> dict[str,list[str]]:
         """ Group states together based on the total number of photons in the components of the state. The function
             returns a dictionary where the key indicates photon number and the value is a list of state identifiers. The 
@@ -705,7 +673,8 @@ class CollectionOfStates(Plot):
 
         dictionary_with_return_values = dict([])
         for initial_state in set_of_initial_states:
-            dm_mixed_state = np.zeros((len(self._list_of_fock_states), len(self._list_of_fock_states)), dtype=np.cdouble)
+            len_of_basis = len(self._dict_of_valid_component_names)
+            dm_mixed_state = np.zeros((len_of_basis, len_of_basis), dtype=np.cdouble)
             for state in self._collection_of_states.values():
                 if state.initial_state == initial_state:
                     vector, basis = state.translate_state_components_to_vector()
@@ -738,6 +707,15 @@ class CollectionOfStates(Plot):
                 Nothing. The 'collection of states' will be modified in-place.
                 
         """
+        def new_component_name_from_list(values):
+            """ function to create string label from list of values"""
+            string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
+            tuple_of_strings = tuple(string_format_in_state_as_word.format(number) for number in range(self._length_of_fock_state))
+            if self._channel_0_left_in_state_name:
+                new_label = ''.join([tuple_of_strings[number] for number in values])
+            else:
+                new_label = ''.join([tuple_of_strings[number] for number in values[::-1]])
+            return new_label
         if optical_channels_to_keep == []:
             optical_channels_to_keep  = [*range(self._no_of_optical_channels)]
         if classical_channels_to_keep ==  []:
@@ -767,7 +745,7 @@ class CollectionOfStates(Plot):
         string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
         for name, list in self._dict_of_valid_component_names.items():
             new_list = [list[channel_number] for channel_number in optical_channels_to_keep]
-            new_name = updated_circuit._get_state_name_from_list_of_photon_numbers(new_list)
+            new_name = new_component_name_from_list(new_list)
             traced_out_values = [list[number] for number in range(self._no_of_optical_channels) if number not in optical_channels_to_keep]
             traced_out_name = ''.join([string_format_in_state_as_word.format(number) for number in traced_out_values])
             lookup_table_component_names.update({name: {'new_name' : new_name, 'traced_out_values': traced_out_name }})
@@ -808,8 +786,8 @@ class CollectionOfStates(Plot):
             self._collection_of_states = new_collection_of_states.collection_as_dict()
             self._no_of_classical_channels = new_collection_of_states._no_of_classical_channels
             self._no_of_optical_channels = new_collection_of_states._no_of_optical_channels
-            self._list_of_fock_states = new_collection_of_states._list_of_fock_states
             self._dict_of_valid_component_names = new_collection_of_states._dict_of_valid_component_names
+            self._dict_of_optical_values = new_collection_of_states._dict_of_optical_values
 
         return 
     
@@ -867,8 +845,8 @@ class CollectionOfStates(Plot):
  
         self._collection_of_states = new_collection_of_states.collection_as_dict()
         self._length_of_fock_state = new_collection_of_states._length_of_fock_state
-        self._list_of_fock_states = new_collection_of_states._list_of_fock_states
         self._dict_of_valid_component_names = new_collection_of_states._dict_of_valid_component_names
+        self._dict_of_optical_values = new_collection_of_states._dict_of_optical_values
     
         return
 
@@ -950,6 +928,16 @@ class CollectionOfStates(Plot):
             Returns:
                 Nothing. The 'collection of states' will be modified in-place.
         """
+        def new_component_name_from_list(values):
+            """ function to create string label from list of values"""
+            string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
+            tuple_of_strings = tuple(string_format_in_state_as_word.format(number) for number in range(self._length_of_fock_state))
+            if self._channel_0_left_in_state_name:
+                new_label = ''.join([tuple_of_strings[number] for number in values])
+            else:
+                new_label = ''.join([tuple_of_strings[number] for number in values[::-1]])
+            return new_label
+        
         # create default value if statistical_distribution is empty list
         if statistical_distribution == []:
             statistical_distribution = [0]*self._length_of_fock_state
@@ -976,6 +964,7 @@ class CollectionOfStates(Plot):
         new_collection_of_states.print_only_last_measurement = self.print_only_last_measurement
 
         # create a dict with values for extra channels and their probabilities
+
         extra_channel_values = dict({'initial_value' : (1,[])})
         for _ in range(extra_optical_channels):
             new_extra_channel_values = dict([])
@@ -983,7 +972,7 @@ class CollectionOfStates(Plot):
                 for index, fock_state_value in enumerate(range(self._length_of_fock_state)):
                     new_probability = statistical_distribution[index]*old_probability
                     new_values = values + [fock_state_value]
-                    new_label = updated_circuit._get_state_name_from_list_of_photon_numbers(new_values)
+                    new_label = new_component_name_from_list(new_values)
                     new_extra_channel_values.update({new_label: (new_probability,new_values)})
             extra_channel_values = new_extra_channel_values
 
@@ -995,7 +984,7 @@ class CollectionOfStates(Plot):
                 for component_name, amplitude_probability in optical_components.items():
                     list = self._dict_of_valid_component_names[component_name]
                     new_list = list + values
-                    new_component_name = updated_circuit._get_state_name_from_list_of_photon_numbers(new_list)
+                    new_component_name = new_component_name_from_list(new_list)
                     new_optical_components.update({new_component_name:amplitude_probability})
                 new_state_as_a_dict = {   'initial_state' : old_state['initial_state'],
                     'cumulative_probability' :  old_state['cumulative_probability']*probability,
@@ -1012,16 +1001,25 @@ class CollectionOfStates(Plot):
         self._collection_of_states = new_collection_of_states.collection_as_dict()
         self._no_of_classical_channels = new_collection_of_states._no_of_classical_channels
         self._no_of_optical_channels = new_collection_of_states._no_of_optical_channels
-        self._list_of_fock_states = new_collection_of_states._list_of_fock_states
         self._dict_of_valid_component_names = new_collection_of_states._dict_of_valid_component_names
+        self._dict_of_optical_values = new_collection_of_states._dict_of_optical_values
        
         return
     
     def is_photon_resolved(self):
-        """ Return False if not all states have data on 'photon_resolution' in their state.auxiliary_information>
-            If this function returns True ALL states 'photon_resolution' have this information.
+        """ Return False if not all states have data on 'photon_resolution' in their state.auxiliary_information.
+            If this function returns True ALL states have this information.
         """
         for state in self:
             if not 'photon_resolution' in state.auxiliary_information.keys():
+                return False
+        return True
+    
+    def has_no_signalling_boxes(self):
+        """ Return False if not all states have data on 'no_signalling_box' in their state.auxiliary_information.
+            If this function returns True ALL states have this information.
+        """
+        for state in self:
+            if not 'no_signalling_box' in state.auxiliary_information.keys():
                 return False
         return True

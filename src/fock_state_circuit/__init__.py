@@ -8,6 +8,7 @@ from fock_state_circuit.nodes.controlled_nodes import ControlledNodes
 from fock_state_circuit.nodes.measurement_nodes import MeasurementNodes
 from fock_state_circuit.nodes.classical_nodes import ClassicalNodes
 from fock_state_circuit.nodes.spectral_nodes import SpectralNodes
+from fock_state_circuit.nodes.superquantum_nodes import SuperQuantumNodes
 from fock_state_circuit.nodes.nonlinear_optical_nodes import NonlinearOpticalNodes
 from fock_state_circuit.visualization.draw import Draw
 from fock_state_circuit.collection_of_states import CollectionOfStates

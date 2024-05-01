@@ -101,9 +101,9 @@ class State():
                     - 'state' can be a list of tuples: 
                                 new_components =  state1.tensor([('100',np.sqrt(1/2)),('110',1/2),('111',1/2)])
 
-        Last modified: April 16th, 2024
+        Last modified: May 1st, 2024
     """
-    _VERSION = '1.0.0'
+    _VERSION = '1.0.1'
     
     _KEYS_IN_STATE = ['initial_state', 'cumulative_probability', 'optical_components', 'measurement_results', 'classical_channel_values', 'auxiliary_information']
 
@@ -159,14 +159,14 @@ class State():
         self.initialize_this_state()
 
         # if a dictionary with values is given as argument use those values to populate the state
-        if input_state_as_a_dict is not None and isinstance(input_state_as_a_dict, dict):
+        if input_state_as_a_dict:
             for k,v in input_state_as_a_dict.items():
                 if k in self._KEYS_IN_STATE:
                     self.state[k] = v     
-            # check if state is valid, otherwise raise an exception
-            if not True in (self._check_valid_state(state_to_check = self)):
-                print(self._check_valid_state(state_to_check = self))
-                raise Exception('invalid state')
+        #check if state is valid, otherwise raise an exception
+        if not True in (self._check_valid_state(state_to_check = self)):
+            print(self._check_valid_state(state_to_check = self))
+            raise Exception('invalid state')
             
     @property
     def initial_state(self):
@@ -413,40 +413,57 @@ class State():
         Returns:
             State: Deep copy of the current state
         """        
-        new_initial_state = "{:s}".format(self.state['initial_state'])
 
-        new_cumulative_probability = self.state['cumulative_probability']
-        
-        new_optical_components = dict([])
-        for oc_name, oc_comp in self.state['optical_components'].items():
-            new_comp_name = "{:s}".format(oc_name)
-            new_comp_values = dict([])
-            for k,v in oc_comp.items():
-                new_comp_values.update({k:v})
-            new_optical_components.update({new_comp_name :  new_comp_values})
-        
-        new_classical_channel_values = self.state['classical_channel_values'].copy()
-        
-        new_measurement_results = []
-        for m_result in self.state['measurement_results']:
-            new_m_result = dict([])
-            for k,v in m_result.items():
-                new_m_result.update({k:v})
-            new_measurement_results.append(new_m_result)
-        
-        new_state_as_a_dict = {   'initial_state' : new_initial_state,
-                            'cumulative_probability' : new_cumulative_probability,
-                            'optical_components' : new_optical_components, 
-                            'classical_channel_values' : new_classical_channel_values,
-                            'measurement_results' : new_measurement_results
+            
+        new_state_as_a_dict = {   'initial_state' : self.state['initial_state'],
+                            'cumulative_probability' : self.state['cumulative_probability'],
+                            'optical_components' : { name:amp_prob.copy() for name, amp_prob in self.state['optical_components'].items() }, 
+                            'classical_channel_values' : self.state['classical_channel_values'].copy(),
+                            'measurement_results' : [{k:v for k,v in m_result.items()} for m_result in self.state['measurement_results']]
                             }
-        
         auxiliary_information = self.state.get('auxiliary_information', None)
-        if auxiliary_information is not None and len(auxiliary_information) > 0:
-            new_auxiliary_information = copy.deepcopy(self.state['auxiliary_information'])
-            new_state_as_a_dict.update({'auxiliary_information' : new_auxiliary_information})
+
+        auxiliary_information = self.state.get('auxiliary_information', {})
+        if auxiliary_information:
+            new_state_as_a_dict.update({'auxiliary_information' : copy.deepcopy(self.state['auxiliary_information'])})
 
         return State(self._collection_of_states, new_state_as_a_dict )
+    
+        # This is an earlier implementation which looks slower but we measure very marginal performance differences.
+        # new_initial_state = "{:s}".format(self.state['initial_state'])
+
+        # new_cumulative_probability = self.state['cumulative_probability']
+        
+        # new_optical_components = dict([])
+        # for oc_name, oc_comp in self.state['optical_components'].items():
+        #     new_comp_name = "{:s}".format(oc_name)
+        #     new_comp_values = dict([])
+        #     for k,v in oc_comp.items():
+        #         new_comp_values.update({k:v})
+        #     new_optical_components.update({new_comp_name :  new_comp_values})
+        
+        # new_classical_channel_values = self.state['classical_channel_values'].copy()
+        
+        # new_measurement_results = []
+        # for m_result in self.state['measurement_results']:
+        #     new_m_result = dict([])
+        #     for k,v in m_result.items():
+        #         new_m_result.update({k:v})
+        #     new_measurement_results.append(new_m_result)
+        
+        # new_state_as_a_dict = {   'initial_state' : new_initial_state,
+        #                     'cumulative_probability' : new_cumulative_probability,
+        #                     'optical_components' : new_optical_components, 
+        #                     'classical_channel_values' : new_classical_channel_values,
+        #                     'measurement_results' : new_measurement_results
+        #                     }
+        
+        # auxiliary_information = self.state.get('auxiliary_information', None)
+        # if auxiliary_information is not None and len(auxiliary_information) > 0:
+        #     new_auxiliary_information = copy.deepcopy(self.state['auxiliary_information'])
+        #     new_state_as_a_dict.update({'auxiliary_information' : new_auxiliary_information})
+
+        # return State(self._collection_of_states, new_state_as_a_dict )
 
     def initialize_this_state(self) -> None:
         """ Initializes the current state to valid default values. The initial state will be '000' (with the right amount of digits) 
@@ -533,11 +550,11 @@ class State():
             # if value is below threshold set to zero
             if np.abs(value)**2 < self._threshold_probability_for_setting_to_zero:
                 state_vector[index] = 0
+                continue
             amplitude = state_vector[index]
             component = list_of_states[index]
             probability = np.abs(amplitude)**2
-            if probability != 0:
-                optical_components.update({component: {'amplitude': amplitude, 'probability': probability}})
+            optical_components.update({component: {'amplitude': amplitude, 'probability': probability}})
         self.state['optical_components'] = optical_components
 
         return
