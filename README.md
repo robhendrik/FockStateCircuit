@@ -7,7 +7,7 @@ The states in the collections are instances of the class 'State'. The states des
 
 ## Installing
 * Install via pip install FockStateCircuit
-* Copy the modules fock_state_circuit.py and collection_of_states.py from the src folder on Github.
+* Copy the modules from the src folder on Github.
 
 Dependencies are Numpy and Matplotlib. We tested with 
 
@@ -117,7 +117,6 @@ On github you will find:
                 GHZ simulation with FockStateCircuit.ipynb
                 Quantum Teleportation with FockStateCircuit.ipynb
 
-    * Pydoc documentation generated from the docstrings in the modules
 You can also check https://armchairquantumphysicist.com/ where a number of applications are covered in blogposts
 
 ## Version history
