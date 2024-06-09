@@ -1,3 +1,4 @@
+from __future__ import annotations
 from fock_state_circuit.nodes.nodelist.node_list import NodeList
 import numpy as np
 from fock_state_circuit.temporal_and_spectral_gate_functionality.column_of_states import ColumnOfStates
@@ -281,35 +282,40 @@ class SpectralNodes(NodeList):
                                    affected_classical_channels = [], 
                                    parameters = [affected_channels,pulse_width],
                                    node_info= node_info) 
-        
-# This function does not belong to class SpectralNodes
-def perform_measurement_photon_resolved(collection_of_states, 
-                            optical_channels_to_measure, 
-                            classical_channels_to_write_to, 
-                            list_of_projections: list = None):
-    """ This function performs a measurement on a collection of states with 'spectral information'. This means
-        the states should have state.auxiliary_information['photon_resolution']. Before calling this function
-        check if 'collection_of_states.is_photon_resolved()' returns 'True'.
+            
 
-        list_of_projections can be provided in form ['1011','2134'] to limit the 'search'. Only outcomes in 
-        list_of_projections will be considered as valid outcomes.
+    def perform_measurement_photon_resolved(self,
+                                            collection_of_states, 
+                                            optical_channels_to_measure, 
+                                            classical_channels_to_write_to, 
+                                            list_of_projections: list = None):
+        """ There is no need to include this function as a separate gate in a FockStateCircuit. This function will
+            be called from a general measurement node if the for the input CollectionOfStates the function
+            collection_of_states.is_photon_resolved() returns 'True'.
 
-    Args:
-        collection_of_states (CollectionOfStates): (photon resolved) collection of states
-        optical_channels_to_measure (list): list of of optical channel numbers to be measured
-        classical_channels_to_write_to (list): list of classical channel numbers to write the measurement result to
-        list_of_projections (list, optional): List of projections to limit the 'search' and speed up measurement. Defaults to None.
+            This function 'perform_measurement_photon_resolved' performs a measurement on a collection of states with
+            'spectral information'. This means the states should have state.auxiliary_information['photon_resolution']. 
 
-    Returns:
-        CollectionOfStates: CollectionOfStates after measurement
-    """
+            To increase time efficiency list_of_projections can be provided in form ['1011','2134'] to limit the 'search'. 
+            Only outcomes in list_of_projections will be considered as valid outcomes.
 
-    coll_of_cols = CollectionOfStateColumns(collection_of_states=collection_of_states)
-    coll_of_cols.split()
-    coll_of_cols.single_photon_states()
-    coll_of_cols.photon_probability_function = photon_probability_function
-    return coll_of_cols.perform_measurement(    optical_channels_to_measure,
-                                                classical_channels_to_write_to,
-                                                list_of_projections
-                                                )
- 
+        Args:
+            collection_of_states (CollectionOfStates): (photon resolved) collection of states
+            optical_channels_to_measure (list): list of of optical channel numbers to be measured
+            classical_channels_to_write_to (list): list of classical channel numbers to write the measurement result to
+            list_of_projections (list, optional): List of projections to limit the 'search' and speed up measurement. Defaults to None.
+
+        Returns:
+            CollectionOfStates: CollectionOfStates after measurement with collapsed wave function for optical channels and classical channels
+                        written with the measurement results.
+        """
+
+        coll_of_cols = CollectionOfStateColumns(collection_of_states=collection_of_states)
+        coll_of_cols.split()
+        coll_of_cols.single_photon_states()
+        coll_of_cols.photon_probability_function = photon_probability_function
+        return coll_of_cols.perform_measurement(    optical_channels_to_measure,
+                                                    classical_channels_to_write_to,
+                                                    list_of_projections
+                                                    )
+    

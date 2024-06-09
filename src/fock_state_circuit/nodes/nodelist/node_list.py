@@ -1,4 +1,6 @@
 
+from __future__ import annotations
+from fock_state_circuit.nodes.nodelist.optical_values_component_names import OpticalValues,ComponentNames
 
 class NodeList():    
     """
@@ -112,17 +114,24 @@ class NodeList():
         # name for the circuit
         self._circuit_name = circuit_name
 
-        string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
-        tuple_of_strings = tuple(string_format_in_state_as_word.format(number) for number in range(self._length_of_fock_state))
-        self._list_of_fock_states = [[(n//(self._length_of_fock_state**c))%self._length_of_fock_state for c in range(self._no_of_optical_channels)] for n in range(self._length_of_fock_state**self._no_of_optical_channels)]
-        if self._channel_0_left_in_state_name == True:
-            self._dict_of_valid_component_names = {''.join([tuple_of_strings[number] for number in optical_state]):optical_state for optical_state in self._list_of_fock_states}
-        else: #self.state_least_significant_digit_left == False:
-            self._dict_of_valid_component_names = {''.join([tuple_of_strings[number] for number in optical_state[::-1]]):optical_state for optical_state in self._list_of_fock_states}       
-        self._dict_of_optical_values = {tuple(v):k for k,v in self._dict_of_valid_component_names.items()}
+        if False:
+            string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
+            tuple_of_strings = tuple(string_format_in_state_as_word.format(number) for number in range(self._length_of_fock_state))
+            self._list_of_fock_states = [[(n//(self._length_of_fock_state**c))%self._length_of_fock_state for c in range(self._no_of_optical_channels)] for n in range(self._length_of_fock_state**self._no_of_optical_channels)]
+            if self._channel_0_left_in_state_name == True:
+                self._dict_of_valid_component_names = {''.join([tuple_of_strings[number] for number in optical_state]):optical_state for optical_state in self._list_of_fock_states}
+            else: #self.state_least_significant_digit_left == False:
+                self._dict_of_valid_component_names = {''.join([tuple_of_strings[number] for number in optical_state[::-1]]):optical_state for optical_state in self._list_of_fock_states}       
+            self._dict_of_optical_values = {tuple(v):k for k,v in self._dict_of_valid_component_names.items()}
+        else:
+            self._dict_of_valid_component_names = ComponentNames(length_of_fock_state=self._length_of_fock_state,
+                                             no_of_optical_channels=self._no_of_optical_channels,
+                                             channel_0_left_in_state_name = self._channel_0_left_in_state_name)
+            self._dict_of_optical_values = OpticalValues(self._dict_of_valid_component_names)
         
         # create template state
-        name = ''.join([tuple_of_strings[0]] *self._no_of_optical_channels)
+        #name = ''.join([tuple_of_strings[0]] *self._no_of_optical_channels)
+        name = self._dict_of_optical_values[tuple(0 for n in range(self._no_of_optical_channels))]
         self._template_state_dict = {   'initial_state' : name,
                             'cumulative_probability' : 1,
                             'optical_components' : { name: {'amplitude':1,'probability': 1} }, 

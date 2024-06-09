@@ -199,7 +199,7 @@ class InterferenceGroup():
 
             Probability =  pre-factor * overlap
             with:
-            pre-factor = amplitude-bra * amplitude-ket / (boson-bra * boson-ket * boson_projection * boson-projection)
+            pre-factor = conjugate of amplitude-bra * amplitude-ket / (boson-bra * boson-ket * boson_projection * boson-projection)
             overlap = SUM(overlap pair-0 * overlap pair-1 * overlap pair-2 * ..) 
                 Here SUM is over all possible pairs of one bra and one ket photon that matches with the projection state.
 
@@ -791,12 +791,18 @@ class InterferenceGroup():
 
             Probability =  pre-factor * overlap
             with:
-            pre-factor = amplitude-bra * amplitude-ket / (boson-bra * boson-ket * boson_projection * boson-projection)
+            pre-factor = (conjugate of amplitude-bra) * amplitude-ket / (boson-bra * boson-ket * boson_projection * boson-projection)
             overlap = SUM(overlap pair-0 * overlap pair-1 * overlap pair-2 * ..) 
                 Here SUM is over all possible pairs of one bra and one ket photon that matches with the projection state.
 
             If detection is not possible (for instance because photon state in bra, ket and measurement_projection do not match)
             the function returns None.
+
+            NOTE: This is a 'pseudo' probability. In interference terms this is added with other 'pseudo probabilities' to come to real probability.
+            So this 'pseudo probability' can also be negative in case of destructive interference. With 'pseudo' probability we mean a cross-term
+            when multiplying amplitudes (A+B)* x (A+B) = |A|2 + |B|2 + (A*B + B*A). The term A*B is a pseudo probability which can interfere with 
+            the term B*A.
+
 
         Args:
             measurement projection (list of integers): List of channels for the photons in the projection
@@ -818,7 +824,7 @@ class InterferenceGroup():
         # The pre factor consists of amplitude and 'boson factor' for projection
         # Any boson factor for the state has to be incorporated in the amplitude
         # The overall state has to be normalized
-        pre_factor = state_column_ket_side.column_amplitude * state_column_bra_side.column_amplitude
+        pre_factor = np.conj(state_column_ket_side.column_amplitude) * state_column_bra_side.column_amplitude
         pre_factor = pre_factor/ (projection_boson_factor * projection_boson_factor)
         pre_factor = pre_factor/(state_column_ket_side.column_boson_factor * state_column_bra_side.column_boson_factor)
 
@@ -829,8 +835,8 @@ class InterferenceGroup():
             probability += overlap_probability
 
         probability = pre_factor * probability
-
-        return np.real(probability)
+        
+        return probability
     
     def total_probability_for_group_all_outcomes(self, list_of_projections: list = None) -> dict:
         """ Calculate all possible outcomes for a total measurement (all optical channels) and the probability to reach that outcome.
@@ -876,7 +882,7 @@ class InterferenceGroup():
                     if probability is not None:
                         list_of_probabilities_for_this_outcome.append(probability)
 
-            total_probability.append(sum(list_of_probabilities_for_this_outcome))
+            total_probability.append(np.abs(sum(list_of_probabilities_for_this_outcome)))
             outcomes_and_their_probabilities.update({outcome:sum(total_probability)})
         return outcomes_and_their_probabilities
     
@@ -894,7 +900,7 @@ class InterferenceGroup():
                                                                         state_column_ket_side)               
                 if probability is not None:
                     total_probability += probability
-        return total_probability
+        return np.abs(total_probability)
     
 
     def measure_interference_group_alternative(self, 
@@ -923,6 +929,9 @@ class InterferenceGroup():
             optical_component = column.generate_optical_component_corresponding_to_column(
                                                                     return_values_instead_of_component_name_as_string=False,
                                                                     use_stored_values = False)
+        
+            # list_of_projects is a selection of outcomes. If this is provided skip all outcomes that are not in this list 
+            # to speed up execution
             if list_of_projections is not None and not optical_component in list_of_projections:
                 continue
             values = column._column_as_tuple_of_values
@@ -931,7 +940,7 @@ class InterferenceGroup():
                 columns_with_this_partial_outcome[partial_outcome].append(column)
             except:
                 columns_with_this_partial_outcome.update({partial_outcome:[column]})
-
+    
         for partial_outcome, column_list in columns_with_this_partial_outcome.items():
             
             columns_with_this_full_outcome = dict([])
@@ -942,6 +951,7 @@ class InterferenceGroup():
                 except:
                     columns_with_this_full_outcome.update({full_outcome:[column]})
             probability_for_partial_outcome = sum([self._probability_column_list(list_full_outcome) for list_full_outcome in columns_with_this_full_outcome.values()])
+  
             new_group = InterferenceGroup(list_of_state_columns=column_list)
             new_group.photon_probability_function = self.photon_probability_function
             
@@ -951,7 +961,7 @@ class InterferenceGroup():
             # renormalize column_amplitudes and boson factors
             new_group.rescale_column_amplitudes()
             new_group.rescale_boson_factors()
-
+           
             # write classical channels per outcome
             values_to_measure = [column_list[0]._column_as_tuple_of_values[channel] for channel in optical_channels_to_measure]
             for state in new_group.by_state():

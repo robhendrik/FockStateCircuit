@@ -1,3 +1,4 @@
+from __future__ import annotations
 from fock_state_circuit.nodes.nodelist.node_list import NodeList
 
 class ClassicalNodes(NodeList):  

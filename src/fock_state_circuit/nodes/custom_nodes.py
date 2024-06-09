@@ -1,3 +1,4 @@
+from __future__ import annotations
 from fock_state_circuit.nodes.nodelist.node_list import NodeList
 import numpy as np
 
@@ -200,9 +201,9 @@ class CustomNodes(NodeList):
         # multiply the matrices to get to the final overall matrix
         for shift, channel_to_shift in zip(shift_per_channel,target_channels):
             # create an identity matrix for the given combination of one target and one control channel
-            coupling_matrix_one_target_control_combination = np.zeros((len(self._list_of_fock_states),len(self._list_of_fock_states)), dtype = np.ubyte)
-            for input_index, input in enumerate(self._list_of_fock_states):
-                for output_index, output in enumerate(self._list_of_fock_states):
+            coupling_matrix_one_target_control_combination = np.zeros((len(self._dict_of_optical_values),len(self._dict_of_optical_values)), dtype = np.ubyte)
+            for input_index, input in enumerate(self._dict_of_optical_values.keys()):
+                for output_index, output in enumerate(self._dict_of_optical_values.keys()):
                     # except for target channel values should be equal
                     if all([input[channel] == output[channel] for channel in range(len(output)) if channel != channel_to_shift]):
                     # for target channel the value has to be (shift + original target value) % length. So shift with control value modulus length
@@ -427,9 +428,9 @@ class CustomNodes(NodeList):
         # multiply the matrices to get to the final overall matrix
         for control,target in zip(control_channels,target_channels):
             # create an identity matrix for the given combination of one target and one control channel
-            coupling_matrix_one_target_control_combination = np.zeros((len(self._list_of_fock_states),len(self._list_of_fock_states)), dtype = np.ubyte)
-            for input_index, input in enumerate(self._list_of_fock_states):
-                for output_index, output in enumerate(self._list_of_fock_states):
+            coupling_matrix_one_target_control_combination = np.zeros((len(self._dict_of_optical_values),len(self._dict_of_optical_values)), dtype = np.ubyte)
+            for input_index, input in enumerate(self._dict_of_optical_values.keys()):
+                for output_index, output in enumerate(self._dict_of_optical_values.keys()):
                     # except for target channel values should be equal
                     if all([input[channel] == output[channel] for channel in range(self._no_of_optical_channels) if channel != target]):
                     # for target channel the value has to be (control + original target value) % length. So shift with control value modulus length
@@ -501,16 +502,16 @@ class CustomNodes(NodeList):
             
         
         # the coupling matrix is pre-filled as identity matrix
-        coupling_matrix = np.identity(len(self._list_of_fock_states), dtype = np.csingle)
+        coupling_matrix = np.identity(len(self._dict_of_optical_values), dtype = np.csingle)
         
         # run through the combinations of control and target 
         # for each combination create a transition matrix
         # multiply the matrices to get to the final overall matrix
         for control,target in zip(control_channels,target_channels):
             # create an identity matrix for the given combination of one target and one control channel
-            coupling_matrix_one_target_control_combintation = np.identity(len(self._list_of_fock_states), dtype = np.csingle)
-            for input_index, input in enumerate(self._list_of_fock_states):
-                for output_index, output in enumerate(self._list_of_fock_states):
+            coupling_matrix_one_target_control_combintation = np.identity(len(self._dict_of_optical_values), dtype = np.csingle)
+            for input_index, input in enumerate(self._dict_of_optical_values.keys()):
+                for output_index, output in enumerate(self._dict_of_optical_values.keys()):
                     # except for target channel values should be equal
                     valid_transition = all([input[channel] == output[channel] for channel in range(self._no_of_optical_channels) if channel != target])
                     # for target channel the value has to be (control + original target value) % length. So shift with control value modulus length

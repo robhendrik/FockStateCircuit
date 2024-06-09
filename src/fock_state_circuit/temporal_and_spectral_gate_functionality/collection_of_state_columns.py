@@ -116,7 +116,11 @@ class CollectionOfStateColumns():
     
     @property
     def photon_probability_function(self):
-        return self.collection['photon_probability_function']
+        if self.collection['photon_probability_function'] is not None:
+            return self.collection['photon_probability_function']
+        else:
+            raise Exception('photon_probability_function has to be set for this CollectionOfStateColumns')
+        
        
     @photon_probability_function.setter
     def photon_probability_function(self,function):

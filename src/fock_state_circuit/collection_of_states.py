@@ -5,15 +5,31 @@ import numpy as np
 from fock_state_circuit.state import State
 from fock_state_circuit.visualization.plot import Plot
 from fock_state_circuit.nodes.nodelist.node_list import NodeList
+from fock_state_circuit.nodes.nodelist.optical_values_component_names import ComponentNames,OpticalValues
 
 class CollectionOfStates(Plot):
-    """ CollectionOfStates is a class describing collections of states as input and output to a FockStateCircuit. An instance can be generate by
-        by passing a FockStateCircuit from which the collection of states takes parameters like the number of optical channels and the number of classical
-        channels in the circuit. 
+    """ CollectionOfStates is a class containing a collection of instances of the class State. A State describes the values in the optical
+        and classical channels of an instance of class FockStateCircuit. The collection of states is evaluated by a circuit to model and 
+        describe the evolution of the states through the circuit. 
+        
+        An instance of CollectionOfStates can be generate by passing a FockStateCircuit as argument to the class constructor. The resulting
+        instance then takes parameters (like the number of optical channels, the number of classical channels, maximum number of photons) from 
+        the FockStateCircuit. 
+
+        The CollectionOfStates can be default populated with all pure photon numbers states for the circuit, or can be created with specific states
+        by also passing a input_collection_as_a_dict as an argument to the constructor. If this argument is an empty dictionary (dict([])) the collection
+        will be created without state (so an empty collection).
+
+        After evaluation the FockStateCircuit will return a Collection of States. 
 
         The collection_of_states is an iterable. We can run though all states with 'for state in collection_of_states'.
 
-        States are stored in a dictionary. The key is an 'identifier'. Data structure (including the structure of the underlying class State) is given below.
+        We can evaluate the CollectionOfStates by reviewing the states in the collection, but can also directly visualize the collection by calling
+        CollectionOfStates.plot() or CollectionOfStates.plot_correlations(). These methods are described in the class 
+        fock_state_circuit.visualization.plot.Plot
+
+        States are stored in a dictionary. The key is an 'identifier'. Data structure (including the structure of the underlying class State) 
+        is given below.
 
         {'identifier_1': {
                     'initial_state': 'state_name1',
@@ -112,9 +128,11 @@ class CollectionOfStates(Plot):
                 if classical_channel_numbers = [0,3] and values_to_filter = [9,10] only states with classical channel [0] value 9 and channel[3] value
                 10 wil remain in the collection. If no state has the correct values in the classical channels an empty collection will result.
 
-        copy(self) -> 'CollectionOfStates':
+        copy(self, empty_template: bool = False) -> 'CollectionOfStates':
                 Function to create a deep copy of the collection of states. Changing the copy will not affect the original state.
-                Note: copy function will create new collection for "self._fock_state_circuit". Ensure this is set to the right circuit.              
+                Note 1: copy function will create new collection for "self._fock_state_circuit". Ensure this is set to the right circuit.
+                Note 2: setting the bool 'empty_template' to true will return a collection with zero states. All supporting arguments will 
+                    be set to the same value as the original.            
         
         generate_allowed_components_names_as_list_of_strings(self) -> list:
                 Function to return a list of all allowed names for optical components for the given fock state circuit.
@@ -220,10 +238,38 @@ class CollectionOfStates(Plot):
                 Return False if not all states have data on 'no_signalling_box' in their state.auxiliary_information.
                 If this function returns True ALL states have this information.
 
-        Last modified: April 16th, 2024
+
+        plot(self, classical_channels = [], initial_states = [], info_for_bar_plot = dict([]), histo_output_instead_of_plot = False):
+                Function to plot a bar graph for a collection of states. The bars indicate the probability to go from an initial state
+                to an outcome in the classical channels. The circuit has to include measurement to the classical channels. 
+                Optionally the classical channels to use can be specified as well as a selection of initial states. The 
+
+                The histogram returned will be of the form {'initial_state1': [  {'output_state': '1010', 'probability': 1.0},
+                                                                                {'output_state': '0101', 'probability': 0.5}
+                                                                                ]}
+
+                If classical_channels is the empty list all channels will be used (this is the default value)
+                If initial_states is the empty list all initial states will be used (this is the default value)
+
+        plot_correlations(self, 
+                          channel_combis_for_correlation : list, 
+                          info_for_bar_plot = dict([]), 
+                          correlation_output_instead_of_plot = False,
+                          initial_states_to_assess = []):    
+                Determine correlations between channels. If correlation is 1, the outcomes in the channels are always the same,
+                if correlation is -1 the outcome is always different.
+
+                Format for channel combinations is like: [(2,3),(4,5),(2,4),(3,5)]
+
+                If correlation_output_instead_of_plot is set to True function will return correlation values instead of 
+                creating a plot. Format for returned correlations is:
+                Results in format: {'initial_state1': [0.7,1.0,0.7,-0.7], 
+                                    'initial_state2': [0.5,0.5,0.5,-0.5]}
+
+        Last modified: June 3rd, 2024
         
     """
-    _VERSION = '1.0.0'
+    _VERSION = '1.0.1'
    
     def __init__(self, fock_state_circuit: any, input_collection_as_a_dict: dict[str,"State"] = None):
         """ Constructor for an instance of the class CollectionOfStates. The instance takes its parameters from the FockStateCircuit in 
@@ -265,9 +311,6 @@ class CollectionOfStates(Plot):
         # parameter use for __str__. With print_only_last_measurement set to True only last measurement is printed. With False the
         # complete history is printed.
         self.print_only_last_measurement = True
-
-        # # generate a list of all possible values in the optical channels       
-        self._list_of_fock_states = fock_state_circuit._list_of_fock_states
         
         # create a dict with as keys the valid state names as strings and the list of photon numbers as value
         self._dict_of_valid_component_names = fock_state_circuit._dict_of_valid_component_names
@@ -487,7 +530,6 @@ class CollectionOfStates(Plot):
         for identifier, state in collection_of_states_as_dictionary.items():
             if not type(identifier) == type('name') and isinstance(state, State) and bool(state):
                 return False
-                raise Exception('Invalid collection of states')
         return True
     
     def filter_on_initial_state(self, initial_state_to_filter) -> None:
@@ -551,20 +593,25 @@ class CollectionOfStates(Plot):
         self._collection_of_states = new_selection_of_states
         return 
 
-    def copy(self) -> 'CollectionOfStates':
+    def copy(self, empty_template: bool = False) -> 'CollectionOfStates':
         """ Function to create a deep copy of the collection of states. Changing the copy will not affect the original state.
-            Note: copy function will create new collection for "self._fock_state_circuit". Ensure this is set to the right circuit.
+            Note 1: copy function will create new collection for "self._fock_state_circuit". Ensure this is set to the right circuit.
+            Note 2: setting the bool 'empty_template' to true will return a collection with zero states. All supporting arguments will 
+                be set to the same value as the original.
 
         Returns:
             CollectionOfStates: new collection of states with identical values and parameters as the original
         """        
-        new_selection_of_states = dict([])
-        for identifier,state in self._collection_of_states.items():
-            new_state_identifier = "{:s}".format(identifier)
-            new_state = state.copy()
-            new_selection_of_states.update({new_state_identifier : new_state})
+        if empty_template:
+            return CollectionOfStates(self._fock_state_circuit, dict([]))
+        else:
+            new_selection_of_states = dict([])
+            for identifier,state in self._collection_of_states.items():
+                new_state_identifier = "{:s}".format(identifier)
+                new_state = state.copy()
+                new_selection_of_states.update({new_state_identifier : new_state})
 
-        return CollectionOfStates(self._fock_state_circuit, new_selection_of_states)
+            return CollectionOfStates(self._fock_state_circuit, new_selection_of_states)
               
     
     def generate_allowed_components_names_as_list_of_strings(self) -> list:
@@ -706,16 +753,16 @@ class CollectionOfStates(Plot):
             Returns:
                 Nothing. The 'collection of states' will be modified in-place.
                 
-        """
+        """        
         def new_component_name_from_list(values):
             """ function to create string label from list of values"""
-            string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
-            tuple_of_strings = tuple(string_format_in_state_as_word.format(number) for number in range(self._length_of_fock_state))
-            if self._channel_0_left_in_state_name:
-                new_label = ''.join([tuple_of_strings[number] for number in values])
-            else:
-                new_label = ''.join([tuple_of_strings[number] for number in values[::-1]])
-            return new_label
+            new_component_names = ComponentNames(length_of_fock_state=self._length_of_fock_state,
+                                                 no_of_optical_channels=len(values),
+                                                 channel_0_left_in_state_name=self._channel_0_left_in_state_name)
+            new_optical_values = OpticalValues(new_component_names)
+        
+            return new_optical_values[tuple(values)]
+        
         if optical_channels_to_keep == []:
             optical_channels_to_keep  = [*range(self._no_of_optical_channels)]
         if classical_channels_to_keep ==  []:
@@ -783,6 +830,9 @@ class CollectionOfStates(Plot):
                 new_state = State(collection_of_states=new_collection_of_states, input_state_as_a_dict=new_state_as_a_dict)
                 new_collection_of_states.add_state(state=new_state,identifier=identifier+traced_out_value)
 
+
+            #self = new_collection_of_states.copy()
+            self._fock_state_circuit = new_collection_of_states._fock_state_circuit
             self._collection_of_states = new_collection_of_states.collection_as_dict()
             self._no_of_classical_channels = new_collection_of_states._no_of_classical_channels
             self._no_of_optical_channels = new_collection_of_states._no_of_optical_channels
@@ -842,7 +892,9 @@ class CollectionOfStates(Plot):
                                     }
             new_state = State(collection_of_states=new_collection_of_states,input_state_as_a_dict=new_state_as_a_dict)
             new_collection_of_states.add_state(state = new_state, identifier=identifier)
- 
+        
+        # self = new_collection_of_states.copy()
+        self._fock_state_circuit = new_collection_of_states._fock_state_circuit
         self._collection_of_states = new_collection_of_states.collection_as_dict()
         self._length_of_fock_state = new_collection_of_states._length_of_fock_state
         self._dict_of_valid_component_names = new_collection_of_states._dict_of_valid_component_names
@@ -930,13 +982,12 @@ class CollectionOfStates(Plot):
         """
         def new_component_name_from_list(values):
             """ function to create string label from list of values"""
-            string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
-            tuple_of_strings = tuple(string_format_in_state_as_word.format(number) for number in range(self._length_of_fock_state))
-            if self._channel_0_left_in_state_name:
-                new_label = ''.join([tuple_of_strings[number] for number in values])
-            else:
-                new_label = ''.join([tuple_of_strings[number] for number in values[::-1]])
-            return new_label
+            new_component_names = ComponentNames(length_of_fock_state=self._length_of_fock_state,
+                                                 no_of_optical_channels=len(values),
+                                                 channel_0_left_in_state_name=self._channel_0_left_in_state_name)
+            new_optical_values = OpticalValues(new_component_names)
+        
+            return new_optical_values[tuple(values)]
         
         # create default value if statistical_distribution is empty list
         if statistical_distribution == []:
@@ -982,10 +1033,14 @@ class CollectionOfStates(Plot):
                 optical_components = old_state['optical_components']
                 new_optical_components = dict([])
                 for component_name, amplitude_probability in optical_components.items():
-                    list = self._dict_of_valid_component_names[component_name]
-                    new_list = list + values
+   
+                    old_values = list(self._dict_of_valid_component_names[component_name])
+                    new_list = old_values + values
+   
                     new_component_name = new_component_name_from_list(new_list)
+       
                     new_optical_components.update({new_component_name:amplitude_probability})
+
                 new_state_as_a_dict = {   'initial_state' : old_state['initial_state'],
                     'cumulative_probability' :  old_state['cumulative_probability']*probability,
                     'optical_components' : new_optical_components, 
@@ -997,7 +1052,8 @@ class CollectionOfStates(Plot):
                     new_state = State(collection_of_states=new_collection_of_states, input_state_as_a_dict=new_state_as_a_dict)
                     new_collection_of_states.add_state(state=new_state)
             
-
+        # self = new_collection_of_states.copy()
+        self._fock_state_circuit = new_collection_of_states._fock_state_circuit
         self._collection_of_states = new_collection_of_states.collection_as_dict()
         self._no_of_classical_channels = new_collection_of_states._no_of_classical_channels
         self._no_of_optical_channels = new_collection_of_states._no_of_optical_channels
@@ -1015,11 +1071,11 @@ class CollectionOfStates(Plot):
                 return False
         return True
     
-    def has_no_signalling_boxes(self):
-        """ Return False if not all states have data on 'no_signalling_box' in their state.auxiliary_information.
+    def has_pr_correlations(self):
+        """ Return False if not all states have data on 'popescu_rohrlich_correlation' in their state.auxiliary_information.
             If this function returns True ALL states have this information.
         """
         for state in self:
-            if not 'no_signalling_box' in state.auxiliary_information.keys():
+            if not 'popescu_rohrlich_correlation' in state.auxiliary_information.keys():
                 return False
         return True

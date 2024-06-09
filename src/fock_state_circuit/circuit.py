@@ -1,3 +1,4 @@
+
 import numpy as np
 import math
 import string
@@ -19,10 +20,8 @@ from fock_state_circuit.nodes.measurement_nodes import MeasurementNodes
 from fock_state_circuit.nodes.classical_nodes import ClassicalNodes
 from fock_state_circuit.nodes.spectral_nodes import SpectralNodes
 from fock_state_circuit.nodes.superquantum_nodes import SuperQuantumNodes
-from fock_state_circuit.nodes.nonlinear_optical_nodes import NonlinearOpticalNodes
+from fock_state_circuit.nodes.quantum_operator_nodes import QuantumOperatorNodes
 from fock_state_circuit.visualization.draw import Draw
-from fock_state_circuit.nodes.spectral_nodes import perform_measurement_photon_resolved
-from fock_state_circuit.no_signalling_boxes import perform_measurement_no_signalling_boxes
 from fock_state_circuit.temporal_and_spectral_gate_functionality.temporal_functions import _VERSION as tf_VERSION
 
 
@@ -49,11 +48,12 @@ def about():
     print("MeasurementNodes:            %s" % MeasurementNodes._VERSION)   
     print("ClassicalNodes:              %s" % ClassicalNodes._VERSION)
     print("SpectralNodes:               %s" % SpectralNodes._VERSION)
+    print("QuantumOperatorNodes:        %s" % QuantumOperatorNodes._VERSION)
     print("temporal_functions:          %s" % tf_VERSION)
     print("Numpy Version:               %s" % np.__version__)          
     print("Matplotlib version:          %s" % mtplt.__version__)
 
-class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNodes, ControlledNodes, CustomNodes, SpectralNodes, NonlinearOpticalNodes, SuperQuantumNodes, Draw):
+class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNodes, ControlledNodes, CustomNodes, SpectralNodes, QuantumOperatorNodes, SuperQuantumNodes, Draw):
     """ Class for FockStateCircuit. The class is used to model the behavior of systems consisting of optical channels which can be 
         populates with Fock states, or photon number states (https://en.wikipedia.org/wiki/Fock_state). The circuit consistes of
         multiple channels (minimally 2 channels) which interact through optical components like beamsplitters and wave plates. The
@@ -61,7 +61,7 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
         have the option to make the exact function of the optical components depending on the value in a classical channel. We can 
         for instance let the orientation of a wave plate depend on the value of the classical channels. 
 
-        A FockStateCircuit takes a CollectionOfStates (a separate classs) as input and produces a CollectionOfStates as output. The 
+        A FockStateCircuit takes a CollectionOfStates (a separate class) as input and produces a CollectionOfStates as output. The 
         circuit models the evolution of optical and classical channels from initial state to final state.
 
         A CollectionOfStates consists of States (a separate class). States hold the values for classical and optical channels as well as
@@ -69,6 +69,9 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
 
         The FockStateCircuit consists of 'nodes'. Each node performs a function, like interacting two optical channels, measuring a set of
         of channels, modifying the values in the classical channels. 
+
+        We can visualize a circuit by calling FockStateCircuit.draw(), the draw() method in inherited from the class 
+        fock_state_circuit.visualization.draw.Draw
 
         Methods:
 
@@ -130,11 +133,42 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
             get_fock_state_matrix(self, 
                     nodes_to_be_evaluated: list[int] = 'all'
                     ) -> np.array:
-                    Function returns the fock state matrix for a given set of nodes in the circuit            
+                    Function returns the fock state matrix for a given set of nodes in the circuit       
 
-        Last modified: May 1st, 2024              
+        Method(s) to visualize the circuit (see fock_state_circuit.visualization.draw.Draw)
+                draw(self, 
+                    print_defaults: bool = False, 
+                    settings_for_drawing_circuit: dict = None
+                    ) -> None
+
+                    Draw the optical circuit. self.settings_for_drawing_circuit is the dict with settings for circuit drawing. 
+                    If this dict is not defined default values will be taken. If the boolean print_defaults is set to True the 
+                    function will print out the default values to console. The parameter compound_circuit_settings is used when 
+                    drawing a circuit with bridges to other circuits (a.k.a. compound circuit).
+
+
+                draw_station(self, 
+                    stations, 
+                    settings_for_drawing_circuit: dict = None) -> None
+
+                    Draw the circuit by station. A station is a set of channels locally present (for instance 
+                    channels for 'Alice', 'Bob' and 'Charlie). The parameter 'stations' passes the information on the stations,
+                    including which station(s) is/are to be drawn.
+                    
+                    The format for the parameter 'stations' is:
+                    stations = {'station_to_draw' : 'alice',
+                                'station_channels': { 'bob': {'optical_channels': [0,1], 'classical_channels': [0,1]}, 
+                                                        'alice': {'optical_channels': [2,3], 'classical_channels': [2,3]}
+                                                        }}
+                    If 'stations_to_draw' is omitted all stations are drawn. 'stations_to_draw' can be a single station ('Bob'),
+                    or can be a list (['Bob','Alice']
+                
+                conventions(self) 
+                    Function to print return the conventions used in this class as a string     
+
+        Last modified: June 8th, 2024              
     """
-    _VERSION = '1.0.2'
+    _VERSION = '1.0.4'
 
     def __init__(self, length_of_fock_state: int = 2, 
                  no_of_optical_channels: int = 2, 
@@ -222,15 +256,6 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
         
         # name for the circuit
         self._circuit_name = circuit_name
-
-        # generate a list of all possible values in the optical channels 
-        index_list = [index for index in range(0,length_of_fock_state**self._no_of_optical_channels)]
-        self._list_of_fock_states = [[] for index in index_list]
-        for _ in range(0,self._no_of_optical_channels):
-            for index in range(len(index_list)):
-                n = int(index_list[index]%length_of_fock_state)
-                self._list_of_fock_states[index].append(n)
-                index_list[index] = int(index_list[index]/length_of_fock_state)
 
         return
     def __str__(self) -> str:
@@ -385,17 +410,19 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
                 classical_channels_to_be_written = self.node_list[current_node_index].get('classical_channels_to_be_written')  
 
                 # perform the measurement
-                collection_of_states_output = perform_measurement_photon_resolved(  collection_of_states=collection_of_states_input, 
+                # the function perform_measurement_photon_resolved is part of the module 'spectral_nodes.py'
+                collection_of_states_output = self.perform_measurement_photon_resolved(  collection_of_states=collection_of_states_input, 
                                                                                     optical_channels_to_measure=optical_channels_to_be_read, 
                                                                                     classical_channels_to_write_to=classical_channels_to_be_written,
                                                                                     list_of_projections = list_of_projections)
                 return self.evaluate_circuit(collection_of_states_input = collection_of_states_output, nodes_to_be_evaluated = remaining_nodes)
             
-            elif collection_of_states_input.has_no_signalling_boxes():
+            elif collection_of_states_input.has_pr_correlations():
                 # get parameters from node on what channels to measure and where to write the results
                 optical_channels_to_be_read = self.node_list[current_node_index].get('optical_channels_to_be_read')
                 classical_channels_to_be_written = self.node_list[current_node_index].get('classical_channels_to_be_written')  
-                collection_of_states_output = perform_measurement_no_signalling_boxes(  collection_of_states=collection_of_states_input, 
+                # The function perform_measurement_pr_correlation is part of the module superquantum_nodes.py
+                collection_of_states_output = self.perform_measurement_pr_correlation(  collection_of_states=collection_of_states_input, 
                                                                     optical_channels_to_measure=optical_channels_to_be_read, 
                                                                     classical_channels_to_write_to=classical_channels_to_be_written)
                 return self.evaluate_circuit(collection_of_states_input = collection_of_states_output, nodes_to_be_evaluated = remaining_nodes)
@@ -893,27 +920,20 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
                 elif self._length_of_fock_state**n > len(fock_matrix):
                     fock_matrix_scaled = np.kron(np.identity(self._length_of_fock_state), fock_matrix_scaled)
 
-            # generate the right order for the base states to re-arrange the matrix to ensure it acts on the right channels
-            # tensor list contains the new order for the channels
-            new_state_list = [] # this will be the list of the new states with order of channels adjusted
-            
-            for state in self._list_of_fock_states: # iterate to all states in standard order
-                new_state = [state[index] for index in tensor_list] # re-order the channels as per 'tensor_list'
-                new_state_list.append(new_state) 
             
             # generate the new order
-            new_order = np.array([self._list_of_fock_states.index(new_state_list[i]) for i in range(len(new_state_list))])
+            new_order = np.array([self._dict_of_optical_values.reorder(values,tensor_list) for values in self._dict_of_optical_values.keys()])
 
             # filter out only states with right photon number:
             if photon_number_selection == 'all':
-                states_indices_to_keep = np.array([i for i in range(len(self._list_of_fock_states))])
+                states_indices_to_keep = np.array(range(len(self._dict_of_valid_component_names)))
             else:
                 if photon_number_selection[0] == '=':
                     number = int(photon_number_selection[1:])
-                    states_indices_to_keep = np.array([i for i, state in enumerate(self._list_of_fock_states) if sum(state) == number])
+                    states_indices_to_keep = np.array([self._dict_of_optical_values.index_of(values) for values in self._dict_of_optical_values.keys() if sum(values) == number])
                 elif photon_number_selection[0] == '<':
                     number = int(photon_number_selection[2:])
-                    states_indices_to_keep = np.array([i for i, state in enumerate(self._list_of_fock_states) if sum(state) <= number])
+                    states_indices_to_keep = np.array([self._dict_of_optical_values.index_of(values) for values in self._dict_of_optical_values.keys() if sum(values) <= number])
                 else:
                     raise Exception("error with 'photon_number_selection' parameter in '__generate_single_node_fock_matrix_from_optical_matrix'")
             

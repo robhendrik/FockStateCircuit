@@ -4,14 +4,32 @@ from matplotlib.patches  import Rectangle
 from copy import deepcopy
 
 class Draw(): 
-    """ draw(self, 
+    """ draw(       self, 
                     print_defaults: bool = False, 
                     settings_for_drawing_circuit: dict = None
                     ) -> None
 
-                    Draw the optical circuit. self. settings_for_drawing_circuit is the dict with settings for circuit drawing. 
-                    If this dict is not defined default values will be taken. If the boolean print_defaults is set to True the function 
-                    will print out the default values to console
+                    Draw the optical circuit. self.settings_for_drawing_circuit is the dict with settings for circuit drawing. 
+                    If this dict is not defined default values will be taken. If the boolean print_defaults is set to True the 
+                    function will print out the default values to console. The parameter compound_circuit_settings is used when 
+                    drawing a circuit with bridges to other circuits (a.k.a. compound circuit).
+
+
+        draw_station(self, 
+                    stations, 
+                    settings_for_drawing_circuit: dict = None) -> None
+
+                    Draw the circuit by station. A station is a set of channels locally present (for instance 
+                    channels for 'Alice', 'Bob' and 'Charlie). The parameter 'stations' passes the information on the stations,
+                    including which station(s) is/are to be drawn.
+                    
+                    The format for the parameter 'stations' is:
+                    stations = {'station_to_draw' : 'alice',
+                                'station_channels': { 'bob': {'optical_channels': [0,1], 'classical_channels': [0,1]}, 
+                                                        'alice': {'optical_channels': [2,3], 'classical_channels': [2,3]}
+                                                        }}
+                    If 'stations_to_draw' is omitted all stations are drawn. 'stations_to_draw' can be a single station ('Bob'),
+                    or can be a list (['Bob','Alice']
         
         conventions(self) 
                     Function to print return the conventions used in this class as a string
@@ -95,7 +113,7 @@ class Draw():
             nothing
         """
 
-        if print_defaults: self._print_default_setting() 
+        if print_defaults: self._print_default_settings() 
 
         circuit_draw_settings_dict = self._create_circuit_draw_settings_dict(settings_for_drawing_circuit)
 
@@ -942,8 +960,10 @@ class Draw():
         # determine the vertical positions for the lines and circuit names
         circuit_name_y_value = canvas_height
         line_y_values_optical = [canvas_height - (line_no+2)*channel_line_spacing for line_no in range(number_of_optical_channels_compound_circuit)]
-        line_y_values_classical = [min(line_y_values_optical) - (line_no+1)*channel_line_spacing for line_no in range(number_of_classical_channels_compound_circuit)]
-        
+        if len(line_y_values_optical) > 0:
+            line_y_values_classical = [min(line_y_values_optical) - (line_no+1)*channel_line_spacing for line_no in range(number_of_classical_channels_compound_circuit)]
+        else:
+             line_y_values_classical = [canvas_height - channel_line_spacing - (line_no+1)*channel_line_spacing for line_no in range(number_of_classical_channels_compound_circuit)]
         # make default labels for the channels
         if 'channel_labels_optical' not in circuit_draw_settings_dict.keys():
             optical_channel_labels = ['optical '+ str(index) for index in range(number_of_optical_channels_compound_circuit)]

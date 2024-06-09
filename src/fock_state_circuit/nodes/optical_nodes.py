@@ -1,3 +1,4 @@
+from __future__ import annotations
 from fock_state_circuit.nodes.nodelist.node_list import NodeList
 import math
 import numpy as np
@@ -197,6 +198,45 @@ class OpticalNodes(NodeList):
         matrix_optical = self._generate_generic_optical_matrix(theta, phi)
         self._update_list_of_nodes({'matrix_optical': matrix_optical, 'tensor_list':tensor_list, 'node_type': node_type, 'node_info': node_info})
 
+        return
+    
+    def wave_plate(self,
+                    channel_horizontal: int = 0,
+                    channel_vertical: int = 1,
+                    theta: float = 0, 
+                    phi: float = 0,
+                    node_type: str = 'optical',
+                    node_info: dict = None
+                    ) -> None:  
+        """ Apply a wave plate with phase delay between fast and slow axis of Phi, and a rotation of the axis over Theta to the two channels. 
+            If Phi is equal to pi this will be a half wave plate, if Phi is equal to pi/2 this is a quarter wave plate.
+
+        Args:
+            channel_horizontal: channel number for horizontal polarization
+            channel_vertical: channel number for vertical polarization
+            theta: rotation of the axis in radians
+            phi: phase difference between fast and slow axis in radians
+        
+        Returns:
+            nothing
+        
+        Raises:
+            nothing
+        """
+        if node_info == None: node_info = {}
+
+        node_info = {
+                    'label' : "half-wave plate",
+                    'channels_optical' : [channel_horizontal, channel_vertical],
+                    'markers' : ['s'],
+                    'markercolor' : ['purple'],
+                    'markerfacecolor' : ['grey'],
+                    'marker_text' : [r"$\theta\phi$"],
+                    'markersize' : 20,
+                    'fillstyle' : 'full'
+                }|node_info
+
+        self.__apply_generic_rotation_2_channels(channel_horizontal, channel_vertical, theta = theta, phi = phi, node_info = node_info)
         return
 
     def non_polarizing_beamsplitter(self, 

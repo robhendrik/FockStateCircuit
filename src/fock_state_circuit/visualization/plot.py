@@ -124,7 +124,7 @@ class Plot():
 
             no_initial_states = len(dict_for_plotting)
             no_output_states = len(output_states)
-            width = 0.8/no_output_states # spread the bars over 80% of the distance between ticks on x -axis
+            width = 0.8/max(no_output_states,1) # spread the bars over 80% of the distance between ticks on x -axis
             mid = no_output_states//2
             # cycle through standard color list 
             cycle = info_for_bar_plot.get('colors', list(matplotlib.colors.TABLEAU_COLORS))

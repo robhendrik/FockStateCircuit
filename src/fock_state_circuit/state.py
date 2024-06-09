@@ -4,25 +4,34 @@ import copy
 from fock_state_circuit.nodes.nodelist.node_list import NodeList
 
 class State():
-    """ Class for states in circuit from class FockStateCircuit which can be combined to 'collection of states'. 
+    """ Class for 'states' that can be used in circuits from class FockStateCircuit. The instances of State can be combined to 'collection of states'. 
 
         Attributes:
             initial_state (str) : 
-                Typically the state from which the current state has evolved in the circuit, but user can customize for other purposes. Also 
-                used to group together states in a statistical mixture.
+                Identifier to track a state during its evolution in the circuit. Typically this identifier indicates the state from which the 
+                current state has evolved in the circuit, but user can customize for other purposes. This identified is also used to group together 
+                states in a statistical mixture. If we for instance start with a single state and in the circuit the state evolves in to a mixture of
+                states then all states in that mixture will have the same 'initial_state'
 
             cumulative_probability (float) :
-                Probability to evolve from initial state to current state (as consequence of measurement or decoherence). Alternatively used
-                to give the weight of this state in a statistical mixture of states indicated with the same initial_state
+                Probability (or weight) of the state in a mixture of states. All states in the mixture typically have the same 'initial_state' value. 
+                If we start with a single state with 'cumulative_probability' of 1.0 then the cumulative_probability of the current state indicates the
+                probability to evolve from the original state to current state (as consequence of measurement or decoherence).
 
             optical_components (dict[str,dict]) : 
-                Optical components of the state described as number states per channel (i.e., '1001' can mean one photon in channel 0 and channel 3). 
-                Each component has an amplitude (complex number type np.cdouble) and a probability (float). The probability is always the square
+                Optical components of the state. This describes the (quantum) state of the photons. The optical state is described as the number of 
+                photons optical per channel (i.e., '1001' can mean one photon in channel 0 and channel 3, and no photons in channel 1 and 2). If the 
+                optical state is a pure photon-number-state (or Fock state) the optical components will consist of a single optical component. If the 
+                state is superposition of photon-number-states then 'optical_components' will contain multiple components. Each component has an 
+                amplitude (complex number type np.cdouble) and a probability (float). The probability is always the square
                 of the absolute value of the amplitude (so effectively redundant information). The format for optical_components is for example:
                 { '1011': {'amplitude': 0.71 + 0j, 'probability': 0.5}, '1110': {'amplitude': 0.71 + 0j, 'probability': 0.5}}
 
             classical_channel_values (list[float]) :
-                A list holding the values for classical channels in the fock state circuit.
+                A list holding the values for classical channels in the fock state circuit. These values can be floats, integeres, complex numbers, ...
+                We can use the classical channels to store measurement results, but we can also use classical channels to set the properties of optical
+                gates in the circuit (i.e., we can create a classically controlled wave plate where the orientation and phase delay are determined
+                from the values in the classical channels).
 
             measurement_results (list[dict]) :
                 Measurement_results holds the outcomes of all measurements. New measurements should appended to the end of the list.
@@ -32,7 +41,7 @@ class State():
 
             auxiliary_information (dict) :
                 Information tracked in the state during execution of a circuit. This can relate to spectral information (bandwidth and timing),
-                no-signalling boxes or any other purpose. auxiliary information is absent when state is generated but will be preserved by copying
+                superquantum correlations or any other purpose. auxiliary information is absent when state is generated but will be preserved by copying
                 a state.
         
         Methods:
@@ -166,7 +175,7 @@ class State():
         #check if state is valid, otherwise raise an exception
         if not True in (self._check_valid_state(state_to_check = self)):
             print(self._check_valid_state(state_to_check = self))
-            raise Exception('invalid state')
+            raise Exception('invalid state',self._check_valid_state(state_to_check = self), str(self) )
             
     @property
     def initial_state(self):
@@ -183,6 +192,7 @@ class State():
     @cumulative_probability.setter
     def cumulative_probability(self, probability: float):
         if not 0 <= probability <= 1:
+            print(probability)
             raise Exception('Invalid value for probability')
         self.state['cumulative_probability'] = probability  
 
@@ -470,7 +480,7 @@ class State():
             and the classical channels will be [0,0] (again with right amount of digits). Measurement history is empty. The state will not 
             contain any 'auxiliary_information'
         """        
-        new_initial_state = list(self._dict_of_valid_component_names)[0]
+        new_initial_state = self._dict_of_valid_component_names.at_index(0)
 
         new_cumulative_probability = 1.0
         
@@ -501,7 +511,7 @@ class State():
             State: new initialized state for same circuit as current state
 
         """        
-        new_initial_state = list(self._dict_of_valid_component_names)[0]
+        new_initial_state = self._dict_of_valid_component_names.at_index(0)
 
         new_cumulative_probability = 1.0
         
@@ -527,14 +537,13 @@ class State():
         """        
 
         input_optical_components = self.state['optical_components']
-        list_of_states = list(self._dict_of_valid_component_names.keys())
         # create an input state vector (numpy array)
-        state_vector = np.array([0+0j]*len(list_of_states), dtype=np.cdouble)
+        state_vector = np.array([0+0j]*len(self._dict_of_valid_component_names), dtype=np.cdouble)
         for component in input_optical_components.keys():
-            index_component = list_of_states.index(component)
+            index_component = self._dict_of_valid_component_names.index_of(component)
             state_vector[index_component] = input_optical_components[component]['amplitude']
 
-        return (state_vector, list_of_states)
+        return (state_vector, list(self._dict_of_valid_component_names.keys()))
     
     def set_state_components_from_vector(self, state_vector: list ) -> None: 
         """ Set the optical components for the state from the vector which is given as argument. The function assumes the basis is the same 
@@ -543,8 +552,6 @@ class State():
         Args:
             state_vector (list): list of amplitudes for the given basis
         """        
-
-        list_of_states = list(self._dict_of_valid_component_names.keys())
         optical_components = dict([])
         for index, value in enumerate(state_vector):
             # if value is below threshold set to zero
@@ -552,7 +559,7 @@ class State():
                 state_vector[index] = 0
                 continue
             amplitude = state_vector[index]
-            component = list_of_states[index]
+            component = self._dict_of_valid_component_names.at_index(index)
             probability = np.abs(amplitude)**2
             optical_components.update({component: {'amplitude': amplitude, 'probability': probability}})
         self.state['optical_components'] = optical_components
