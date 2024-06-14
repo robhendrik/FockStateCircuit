@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module fock_state_circuit.state</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="fock_state_circuit.html" class="white">fock_state_circuit</a>.state</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cnly99857%5Conedrive%20-%20philips%5Csw%20projects%5Cgithubclones-newpc%5Cfockstatecircuit100%5Csrc%5Cfock_state_circuit%5Cstate.py">c:\users\nly99857\onedrive - philips\sw projects\githubclones-newpc\fockstatecircuit100\src\fock_state_circuit\state.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="copy.html">copy</a><br>
+</td><td class="multicolumn"><a href="math.html">math</a><br>
+</td><td class="multicolumn"><a href="numpy.html">numpy</a><br>
+</td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.state.html#State">State</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="State">class <strong>State</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#State">State</a>(collection_of_states:&nbsp;&amp;lt;built-in&nbsp;function&nbsp;any&amp;gt;,&nbsp;input_state_as_a_dict:&nbsp;dict&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+Class&nbsp;for&nbsp;states&nbsp;in&nbsp;circuit&nbsp;from&nbsp;class&nbsp;FockStateCircuit&nbsp;which&nbsp;can&nbsp;be&nbsp;combined&nbsp;to&nbsp;'collection&nbsp;of&nbsp;states'.&nbsp;<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;initial_state&nbsp;(str)&nbsp;:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Typically&nbsp;the&nbsp;state&nbsp;from&nbsp;which&nbsp;the&nbsp;current&nbsp;state&nbsp;has&nbsp;evolved&nbsp;in&nbsp;the&nbsp;circuit,&nbsp;but&nbsp;user&nbsp;can&nbsp;customize&nbsp;for&nbsp;other&nbsp;purposes.&nbsp;Also&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;used&nbsp;to&nbsp;group&nbsp;together&nbsp;states&nbsp;in&nbsp;a&nbsp;statistical&nbsp;mixture.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cumulative_probability&nbsp;(float)&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Probability&nbsp;to&nbsp;evolve&nbsp;from&nbsp;initial&nbsp;state&nbsp;to&nbsp;current&nbsp;state&nbsp;(as&nbsp;consequence&nbsp;of&nbsp;measurement&nbsp;or&nbsp;decoherence).&nbsp;Alternatively&nbsp;used<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;give&nbsp;the&nbsp;weight&nbsp;of&nbsp;this&nbsp;state&nbsp;in&nbsp;a&nbsp;statistical&nbsp;mixture&nbsp;of&nbsp;states&nbsp;indicated&nbsp;with&nbsp;the&nbsp;same&nbsp;initial_state<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;optical_components&nbsp;(dict[str,dict])&nbsp;:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Optical&nbsp;components&nbsp;of&nbsp;the&nbsp;state&nbsp;described&nbsp;as&nbsp;number&nbsp;states&nbsp;per&nbsp;channel&nbsp;(i.e.,&nbsp;'1001'&nbsp;can&nbsp;mean&nbsp;one&nbsp;photon&nbsp;in&nbsp;channel&nbsp;0&nbsp;and&nbsp;channel&nbsp;3).&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each&nbsp;component&nbsp;has&nbsp;an&nbsp;amplitude&nbsp;(complex&nbsp;number&nbsp;type&nbsp;np.cdouble)&nbsp;and&nbsp;a&nbsp;probability&nbsp;(float).&nbsp;The&nbsp;probability&nbsp;is&nbsp;always&nbsp;the&nbsp;square<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;of&nbsp;the&nbsp;absolute&nbsp;value&nbsp;of&nbsp;the&nbsp;amplitude&nbsp;(so&nbsp;effectively&nbsp;redundant&nbsp;information).&nbsp;The&nbsp;format&nbsp;for&nbsp;optical_components&nbsp;is&nbsp;for&nbsp;example:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;'1011':&nbsp;{'amplitude':&nbsp;0.71&nbsp;+&nbsp;0j,&nbsp;'probability':&nbsp;0.5},&nbsp;'1110':&nbsp;{'amplitude':&nbsp;0.71&nbsp;+&nbsp;0j,&nbsp;'probability':&nbsp;0.5}}<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_values&nbsp;(list[float])&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;list&nbsp;holding&nbsp;the&nbsp;values&nbsp;for&nbsp;classical&nbsp;channels&nbsp;in&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;measurement_results&nbsp;(list[dict])&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Measurement_results&nbsp;holds&nbsp;the&nbsp;outcomes&nbsp;of&nbsp;all&nbsp;measurements.&nbsp;New&nbsp;measurements&nbsp;should&nbsp;appended&nbsp;to&nbsp;the&nbsp;end&nbsp;of&nbsp;the&nbsp;list.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;At&nbsp;each&nbsp;measurement&nbsp;the&nbsp;classical&nbsp;channel&nbsp;values&nbsp;after&nbsp;the&nbsp;measurement&nbsp;are&nbsp;store&nbsp;together&nbsp;with&nbsp;the&nbsp;probability&nbsp;to&nbsp;get&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;that&nbsp;measurement&nbsp;result.&nbsp;The&nbsp;format&nbsp;for&nbsp;measurement&nbsp;results&nbsp;is&nbsp;for&nbsp;example:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[{'measurement_results':&nbsp;[1,&nbsp;3,&nbsp;3.14],&nbsp;'probability':&nbsp;0.5},&nbsp;{'measurement_results':&nbsp;[0,&nbsp;0,&nbsp;3.14],&nbsp;'probability':&nbsp;0.25}]<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;auxiliary_information&nbsp;(dict)&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Information&nbsp;tracked&nbsp;in&nbsp;the&nbsp;state&nbsp;during&nbsp;execution&nbsp;of&nbsp;a&nbsp;circuit.&nbsp;This&nbsp;can&nbsp;relate&nbsp;to&nbsp;spectral&nbsp;information&nbsp;(bandwidth&nbsp;and&nbsp;timing),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no-signalling&nbsp;boxes&nbsp;or&nbsp;any&nbsp;other&nbsp;purpose.&nbsp;auxiliary&nbsp;information&nbsp;is&nbsp;absent&nbsp;when&nbsp;state&nbsp;is&nbsp;generated&nbsp;but&nbsp;will&nbsp;be&nbsp;preserved&nbsp;by&nbsp;copying<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a&nbsp;state.<br>
+&nbsp;<br>
+Methods:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-__bool__">__bool__</a>(self):&nbsp;bool(state)&nbsp;returns&nbsp;True&nbsp;or&nbsp;False&nbsp;depending&nbsp;on&nbsp;whether&nbsp;state&nbsp;is&nbsp;valid<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-__eq__">__eq__</a>(self,&nbsp;number:&nbsp;int)&nbsp;:&nbsp;state&nbsp;==&nbsp;number&nbsp;returns&nbsp;True&nbsp;is&nbsp;the&nbsp;photon&nbsp;number&nbsp;in&nbsp;the&nbsp;optical&nbsp;component&nbsp;with&nbsp;most&nbsp;photons&nbsp;is&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;equal&nbsp;to&nbsp;the&nbsp;argument&nbsp;number<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-__getitem__">__getitem__</a>(self,&nbsp;key)&nbsp;:&nbsp;attributes&nbsp;can&nbsp;be&nbsp;accessed&nbsp;trough&nbsp;state['initial_state'],&nbsp;state['optical_components']&nbsp;etc<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-__int__">__int__</a>(self):&nbsp;int(state)&nbsp;returns&nbsp;the&nbsp;photon&nbsp;number&nbsp;in&nbsp;the&nbsp;optical&nbsp;component&nbsp;with&nbsp;most&nbsp;photons<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-__str__">__str__</a>(self):&nbsp;Return&nbsp;the&nbsp;string&nbsp;for&nbsp;'pretty&nbsp;printing'&nbsp;the&nbsp;state.&nbsp;Used&nbsp;as&nbsp;print(state)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-copy">copy</a>(self)&nbsp;-&gt;&nbsp;"<a href="#State">State</a>"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;a&nbsp;deep&nbsp;copy&nbsp;of&nbsp;a&nbsp;state&nbsp;with&nbsp;same&nbsp;parameters&nbsp;(i.e.,&nbsp;suitable&nbsp;for&nbsp;same&nbsp;fock&nbsp;state&nbsp;circuit)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-create_initialized_state">create_initialized_state</a>(self)&nbsp;-&gt;&nbsp;"<a href="#State">State</a>"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;a&nbsp;new&nbsp;state&nbsp;with&nbsp;valid&nbsp;default&nbsp;values&nbsp;for&nbsp;the&nbsp;same&nbsp;circuit&nbsp;paramaters&nbsp;as&nbsp;the&nbsp;current&nbsp;state.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;new&nbsp;state&nbsp;will&nbsp;have&nbsp;'initial_state'&nbsp;equal&nbsp;to&nbsp;'000'&nbsp;(with&nbsp;the&nbsp;right&nbsp;amount&nbsp;of&nbsp;digits)&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;the&nbsp;classical&nbsp;channels&nbsp;will&nbsp;be&nbsp;[0,0]&nbsp;(again&nbsp;with&nbsp;right&nbsp;amount&nbsp;of&nbsp;digits).&nbsp;Measurememt&nbsp;history&nbsp;is&nbsp;empty.&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-initialize_this_state">initialize_this_state</a>(self)-&gt;&nbsp;None<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Initializes&nbsp;the&nbsp;current&nbsp;state&nbsp;to&nbsp;valid&nbsp;default&nbsp;values.&nbsp;The&nbsp;initial&nbsp;state&nbsp;will&nbsp;be&nbsp;'000'&nbsp;(with&nbsp;the&nbsp;right&nbsp;amount&nbsp;of&nbsp;digits)&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;the&nbsp;classical&nbsp;channels&nbsp;will&nbsp;be&nbsp;[0,0]&nbsp;(again&nbsp;with&nbsp;right&nbsp;amount&nbsp;of&nbsp;digits).&nbsp;Measurement&nbsp;history&nbsp;is&nbsp;empty.&nbsp;The&nbsp;state&nbsp;will&nbsp;not&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contain&nbsp;any&nbsp;'auxiliary_information'<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-photon_number">photon_number</a>(self)&nbsp;-&gt;&nbsp;tuple[int,bool]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;photon&nbsp;number&nbsp;in&nbsp;the&nbsp;optical&nbsp;component&nbsp;with&nbsp;most&nbsp;photons&nbsp;and&nbsp;a&nbsp;boolean&nbsp;stating&nbsp;whether&nbsp;all&nbsp;components&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;have&nbsp;the&nbsp;same&nbsp;photon&nbsp;number.&nbsp;If&nbsp;the&nbsp;bool&nbsp;is&nbsp;True&nbsp;all&nbsp;components&nbsp;have&nbsp;the&nbsp;same&nbsp;number&nbsp;of&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;photons&nbsp;in&nbsp;the&nbsp;optical&nbsp;channels,&nbsp;otherwise&nbsp;the&nbsp;number&nbsp;returned&nbsp;by&nbsp;the&nbsp;function&nbsp;is&nbsp;the&nbsp;highest&nbsp;over&nbsp;all&nbsp;optical&nbsp;components<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-set_state_components_from_vector">set_state_components_from_vector</a>(self,&nbsp;state_vector:&nbsp;list)&nbsp;-&gt;&nbsp;None<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets&nbsp;the&nbsp;optical&nbsp;components&nbsp;for&nbsp;the&nbsp;state&nbsp;from&nbsp;the&nbsp;vector&nbsp;which&nbsp;is&nbsp;given&nbsp;as&nbsp;argument.&nbsp;The&nbsp;function&nbsp;assumes&nbsp;the&nbsp;basis&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;the&nbsp;same&nbsp;as&nbsp;used&nbsp;by&nbsp;function&nbsp;'translate_state_components_to_vector'.&nbsp;For&nbsp;that&nbsp;function&nbsp;the&nbsp;basis&nbsp;is&nbsp;generated&nbsp;as&nbsp;output.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-translate_state_components_to_vector">translate_state_components_to_vector</a>(self)&nbsp;-&gt;&nbsp;tuple&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;returns&nbsp;a&nbsp;tuple&nbsp;with&nbsp;a&nbsp;first&nbsp;element&nbsp;a&nbsp;vector&nbsp;and&nbsp;as&nbsp;second&nbsp;element&nbsp;the&nbsp;basis.&nbsp;The&nbsp;vector&nbsp;represents&nbsp;the&nbsp;state&nbsp;in&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;given&nbsp;basis<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-inner">inner</a>(self,&nbsp;state)&nbsp;-&gt;&nbsp;float:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns&nbsp;the&nbsp;inner&nbsp;product&nbsp;between&nbsp;this&nbsp;state&nbsp;and&nbsp;the&nbsp;state&nbsp;passed&nbsp;as&nbsp;parameter.&nbsp;If&nbsp;states&nbsp;are&nbsp;orthogonal&nbsp;function&nbsp;returns&nbsp;0,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;states&nbsp;are&nbsp;identical&nbsp;function&nbsp;returns&nbsp;1.&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-outer">outer</a>(self,&nbsp;state)&nbsp;-&gt;&nbsp;np.array<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return&nbsp;the&nbsp;outer&nbsp;product&nbsp;between&nbsp;this&nbsp;state&nbsp;and&nbsp;the&nbsp;state&nbsp;passed&nbsp;as&nbsp;parameter.&nbsp;Function&nbsp;returns&nbsp;a&nbsp;numpy&nbsp;array.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State-tensor">tensor</a>(self,&nbsp;state)&nbsp;-&gt;&nbsp;dict<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generates&nbsp;optical&nbsp;components&nbsp;for&nbsp;an&nbsp;extended&nbsp;state&nbsp;as&nbsp;a&nbsp;tensor&nbsp;product&nbsp;of&nbsp;the&nbsp;current&nbsp;state&nbsp;and&nbsp;the&nbsp;state<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;passed&nbsp;as&nbsp;parameter.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;argument&nbsp;'state'&nbsp;can&nbsp;be&nbsp;used&nbsp;in&nbsp;three&nbsp;ways:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'state'&nbsp;can&nbsp;be&nbsp;of&nbsp;type:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_components&nbsp;=&nbsp;state1.<a href="#State-tensor">tensor</a>(state&nbsp;=&nbsp;state2)&nbsp;with&nbsp;state2&nbsp;of&nbsp;type&nbsp;fsc.<a href="#State">State</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'state'&nbsp;can&nbsp;be&nbsp;the&nbsp;optical&nbsp;components:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_components&nbsp;=&nbsp;state1.<a href="#State-tensor">tensor</a>(state&nbsp;=&nbsp;{'100':{'amplitude':&nbsp;1.0,'probability':&nbsp;1.0}})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'state'&nbsp;can&nbsp;be&nbsp;a&nbsp;list&nbsp;of&nbsp;tuples:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_components&nbsp;=&nbsp;&nbsp;state1.<a href="#State-tensor">tensor</a>([('100',np.sqrt(1/2)),('110',1/2),('111',1/2)])<br>
+&nbsp;<br>
+Last&nbsp;modified:&nbsp;May&nbsp;1st,&nbsp;2024<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="State-__bool__"><strong>__bool__</strong></a>(self) -&gt; bool</dt><dd><span class="code">Returns&nbsp;True&nbsp;or&nbsp;False&nbsp;depending&nbsp;on&nbsp;whether&nbsp;state&nbsp;is&nbsp;valid<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bool:bool&nbsp;indicating&nbsp;whether&nbsp;state&nbsp;is&nbsp;valid</span></dd></dl>
+
+<dl><dt><a name="State-__eq__"><strong>__eq__</strong></a>(self, number: int) -&gt; bool</dt><dd><span class="code">Returns&nbsp;True&nbsp;is&nbsp;the&nbsp;photon&nbsp;number&nbsp;in&nbsp;the&nbsp;optical&nbsp;component&nbsp;with&nbsp;most&nbsp;photons&nbsp;is&nbsp;equal&nbsp;to&nbsp;the&nbsp;argument&nbsp;number</span></dd></dl>
+
+<dl><dt><a name="State-__getitem__"><strong>__getitem__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="State-__init__"><strong>__init__</strong></a>(self, collection_of_states: &lt;built-in function any&gt;, input_state_as_a_dict: dict = None)</dt><dd><span class="code">Constructor&nbsp;for&nbsp;in&nbsp;instance&nbsp;of&nbsp;class&nbsp;"<a href="#State">State</a>".&nbsp;The&nbsp;state&nbsp;instance&nbsp;will&nbsp;be&nbsp;created&nbsp;in&nbsp;initialized&nbsp;form.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;collection_of_states&nbsp;('CollectionOfStates'):&nbsp;collection&nbsp;of&nbsp;states&nbsp;for&nbsp;which&nbsp;this&nbsp;state&nbsp;is&nbsp;valid.&nbsp;The&nbsp;state&nbsp;instance&nbsp;takes&nbsp;information<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;on&nbsp;the&nbsp;number&nbsp;of&nbsp;optical&nbsp;channels,&nbsp;number&nbsp;of&nbsp;classical&nbsp;channels,&nbsp;maximum&nbsp;photon&nbsp;number&nbsp;in&nbsp;the&nbsp;fock&nbsp;state&nbsp;from&nbsp;the&nbsp;collection_of_states.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_state_as_a_dict&nbsp;(dict,&nbsp;optional):&nbsp;Content&nbsp;to&nbsp;populate&nbsp;the&nbsp;state.&nbsp;Dicationary&nbsp;needs&nbsp;to&nbsp;be&nbsp;in&nbsp;right&nbsp;format.&nbsp;Defaults&nbsp;to&nbsp;None.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;If&nbsp;paramaters&nbsp;for&nbsp;the&nbsp;state&nbsp;do&nbsp;not&nbsp;result&nbsp;in&nbsp;a&nbsp;valid&nbsp;state.</span></dd></dl>
+
+<dl><dt><a name="State-__int__"><strong>__int__</strong></a>(self) -&gt; int</dt><dd><span class="code">Returns&nbsp;the&nbsp;photon&nbsp;number&nbsp;in&nbsp;the&nbsp;optical&nbsp;component&nbsp;with&nbsp;most&nbsp;photons</span></dd></dl>
+
+<dl><dt><a name="State-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt></dl>
+
+<dl><dt><a name="State-__str__"><strong>__str__</strong></a>(self) -&gt; str</dt><dd><span class="code">Return&nbsp;the&nbsp;string&nbsp;for&nbsp;'pretty&nbsp;printing'&nbsp;the&nbsp;state.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;string&nbsp;describing&nbsp;the&nbsp;state</span></dd></dl>
+
+<dl><dt><a name="State-copy"><strong>copy</strong></a>(self) -&gt; 'State'</dt><dd><span class="code">Return&nbsp;a&nbsp;deep&nbsp;copy&nbsp;of&nbsp;a&nbsp;state&nbsp;with&nbsp;same&nbsp;parameters&nbsp;(i.e.,&nbsp;suitable&nbsp;for&nbsp;same&nbsp;fock&nbsp;state&nbsp;circuit)<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State">State</a>:&nbsp;Deep&nbsp;copy&nbsp;of&nbsp;the&nbsp;current&nbsp;state</span></dd></dl>
+
+<dl><dt><a name="State-create_initialized_state"><strong>create_initialized_state</strong></a>(self) -&gt; 'State'</dt><dd><span class="code">Returns&nbsp;a&nbsp;new&nbsp;state&nbsp;with&nbsp;valid&nbsp;default&nbsp;values&nbsp;for&nbsp;the&nbsp;same&nbsp;circuit&nbsp;paramaters&nbsp;as&nbsp;the&nbsp;current&nbsp;state.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;new&nbsp;state&nbsp;will&nbsp;have&nbsp;'initial_state'&nbsp;equal&nbsp;to&nbsp;'000'&nbsp;(with&nbsp;the&nbsp;right&nbsp;amount&nbsp;of&nbsp;digits)&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;the&nbsp;classical&nbsp;channels&nbsp;will&nbsp;be&nbsp;[0,0]&nbsp;(again&nbsp;with&nbsp;right&nbsp;amount&nbsp;of&nbsp;digits).&nbsp;Measurememt&nbsp;history&nbsp;is&nbsp;empty.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;current&nbsp;state&nbsp;is&nbsp;unchanged,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;a&nbsp;new&nbsp;state<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Args:&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#State">State</a>:&nbsp;new&nbsp;initialized&nbsp;state&nbsp;for&nbsp;same&nbsp;circuit&nbsp;as&nbsp;current&nbsp;state</span></dd></dl>
+
+<dl><dt><a name="State-initialize_this_state"><strong>initialize_this_state</strong></a>(self) -&gt; None</dt><dd><span class="code">Initializes&nbsp;the&nbsp;current&nbsp;state&nbsp;to&nbsp;valid&nbsp;default&nbsp;values.&nbsp;The&nbsp;initial&nbsp;state&nbsp;will&nbsp;be&nbsp;'000'&nbsp;(with&nbsp;the&nbsp;right&nbsp;amount&nbsp;of&nbsp;digits)&nbsp;<br>
+and&nbsp;the&nbsp;classical&nbsp;channels&nbsp;will&nbsp;be&nbsp;[0,0]&nbsp;(again&nbsp;with&nbsp;right&nbsp;amount&nbsp;of&nbsp;digits).&nbsp;Measurement&nbsp;history&nbsp;is&nbsp;empty.&nbsp;The&nbsp;state&nbsp;will&nbsp;not&nbsp;<br>
+contain&nbsp;any&nbsp;'auxiliary_information'</span></dd></dl>
+
+<dl><dt><a name="State-inner"><strong>inner</strong></a>(self, state) -&gt; float</dt><dd><span class="code">Return&nbsp;the&nbsp;inner&nbsp;product&nbsp;between&nbsp;this&nbsp;state&nbsp;and&nbsp;the&nbsp;state&nbsp;passed&nbsp;as&nbsp;parameter.&nbsp;If&nbsp;states&nbsp;are&nbsp;orthogonal&nbsp;function&nbsp;returns&nbsp;0,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;states&nbsp;are&nbsp;identical&nbsp;function&nbsp;returns&nbsp;1.&nbsp;<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;state&nbsp;(<a href="#State">State</a>):&nbsp;state<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;float:&nbsp;inner&nbsp;product</span></dd></dl>
+
+<dl><dt><a name="State-outer"><strong>outer</strong></a>(self, state) -&gt; &lt;built-in function array&gt;</dt><dd><span class="code">Return&nbsp;the&nbsp;outer&nbsp;product&nbsp;between&nbsp;this&nbsp;state&nbsp;and&nbsp;the&nbsp;state&nbsp;passed&nbsp;as&nbsp;parameter.&nbsp;Function&nbsp;returns&nbsp;a&nbsp;numpy&nbsp;array.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;state&nbsp;(<a href="#State">State</a>):&nbsp;state<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;np.array:&nbsp;outer&nbsp;product</span></dd></dl>
+
+<dl><dt><a name="State-photon_number"><strong>photon_number</strong></a>(self) -&gt; tuple[int, bool]</dt><dd><span class="code">Returns&nbsp;the&nbsp;the&nbsp;photon&nbsp;number&nbsp;in&nbsp;the&nbsp;optical&nbsp;component&nbsp;with&nbsp;most&nbsp;photons&nbsp;and&nbsp;a&nbsp;boolean&nbsp;stating&nbsp;whether&nbsp;all&nbsp;components&nbsp;have<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;same&nbsp;photon&nbsp;number.&nbsp;If&nbsp;the&nbsp;bool&nbsp;is&nbsp;True&nbsp;all&nbsp;components&nbsp;have&nbsp;the&nbsp;same&nbsp;number&nbsp;of&nbsp;photons&nbsp;in&nbsp;the&nbsp;optical&nbsp;channels,&nbsp;otherwise<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;number&nbsp;returned&nbsp;by&nbsp;the&nbsp;function&nbsp;is&nbsp;the&nbsp;highest&nbsp;over&nbsp;all&nbsp;optical&nbsp;components<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;First&nbsp;element&nbsp;in&nbsp;the&nbsp;tuple&nbsp;is&nbsp;the&nbsp;photon&nbsp;number,&nbsp;the&nbsp;second&nbsp;is&nbsp;True&nbsp;if&nbsp;all&nbsp;components&nbsp;have&nbsp;the&nbsp;same&nbsp;photon&nbsp;number.</span></dd></dl>
+
+<dl><dt><a name="State-print_optical_components"><strong>print_optical_components</strong></a>(self) -&gt; str</dt><dd><span class="code">Interim&nbsp;solution&nbsp;for&nbsp;pretty&nbsp;printing&nbsp;optical&nbsp;components.&nbsp;Future&nbsp;is&nbsp;to&nbsp;turn&nbsp;optical&nbsp;components&nbsp;in&nbsp;separate&nbsp;class</span></dd></dl>
+
+<dl><dt><a name="State-set_state_components_from_vector"><strong>set_state_components_from_vector</strong></a>(self, state_vector: list) -&gt; None</dt><dd><span class="code">Set&nbsp;the&nbsp;optical&nbsp;components&nbsp;for&nbsp;the&nbsp;state&nbsp;from&nbsp;the&nbsp;vector&nbsp;which&nbsp;is&nbsp;given&nbsp;as&nbsp;argument.&nbsp;The&nbsp;function&nbsp;assumes&nbsp;the&nbsp;basis&nbsp;is&nbsp;the&nbsp;same&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;used&nbsp;by&nbsp;function&nbsp;'translate_state_components_to_vector'.&nbsp;For&nbsp;that&nbsp;function&nbsp;the&nbsp;basis&nbsp;is&nbsp;generated&nbsp;as&nbsp;output.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;state_vector&nbsp;(list):&nbsp;list&nbsp;of&nbsp;amplitudes&nbsp;for&nbsp;the&nbsp;given&nbsp;basis</span></dd></dl>
+
+<dl><dt><a name="State-tensor"><strong>tensor</strong></a>(self, state) -&gt; dict</dt><dd><span class="code">Generates&nbsp;optical&nbsp;components&nbsp;for&nbsp;an&nbsp;extended&nbsp;state&nbsp;as&nbsp;a&nbsp;tensor&nbsp;product&nbsp;of&nbsp;the&nbsp;current&nbsp;state&nbsp;and&nbsp;the&nbsp;state<br>
+&nbsp;&nbsp;&nbsp;&nbsp;passed&nbsp;as&nbsp;parameter.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;argument&nbsp;state&nbsp;can&nbsp;be&nbsp;used&nbsp;in&nbsp;three&nbsp;ways:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'state'&nbsp;can&nbsp;be&nbsp;of&nbsp;type:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_components&nbsp;=&nbsp;state1.<a href="#State-tensor">tensor</a>(state&nbsp;=&nbsp;state2)&nbsp;with&nbsp;state2&nbsp;of&nbsp;type&nbsp;fsc.<a href="#State">State</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'state'&nbsp;can&nbsp;be&nbsp;the&nbsp;optical&nbsp;components:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_components&nbsp;=&nbsp;state1.<a href="#State-tensor">tensor</a>(state&nbsp;=&nbsp;{'100':{'amplitude':&nbsp;1.0,'probability':&nbsp;1.0}})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;'state'&nbsp;can&nbsp;be&nbsp;a&nbsp;list&nbsp;of&nbsp;tuples:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_components&nbsp;=&nbsp;&nbsp;state1.<a href="#State-tensor">tensor</a>([('100',np.sqrt(1/2)),('110',1/2),('111',1/2)])<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;state&nbsp;(<a href="#State">State</a>,&nbsp;list,&nbsp;dict):&nbsp;<a href="#State">State</a><br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict:&nbsp;optical&nbsp;components&nbsp;in&nbsp;the&nbsp;form&nbsp;{component_name&nbsp;(str)&nbsp;:&nbsp;{'amplitude':&nbsp;np.double,&nbsp;'probability':&nbsp;float}}</span></dd></dl>
+
+<dl><dt><a name="State-translate_state_components_to_vector"><strong>translate_state_components_to_vector</strong></a>(self) -&gt; tuple</dt><dd><span class="code">Return&nbsp;a&nbsp;tuple&nbsp;with&nbsp;a&nbsp;first&nbsp;element&nbsp;a&nbsp;vector&nbsp;and&nbsp;as&nbsp;second&nbsp;element&nbsp;the&nbsp;basis.&nbsp;The&nbsp;vector&nbsp;represents&nbsp;the&nbsp;state&nbsp;in&nbsp;the&nbsp;given&nbsp;basis<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple:&nbsp;Tuple&nbsp;contains&nbsp;two&nbsp;lists.&nbsp;First&nbsp;one&nbsp;is&nbsp;the&nbsp;vector&nbsp;and&nbsp;second&nbsp;one&nbsp;the&nbsp;basis</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+<dl><dt><strong>auxiliary_information</strong></dt>
+</dl>
+<dl><dt><strong>classical_channel_values</strong></dt>
+</dl>
+<dl><dt><strong>cumulative_probability</strong></dt>
+</dl>
+<dl><dt><strong>initial_state</strong></dt>
+</dl>
+<dl><dt><strong>measurement_results</strong></dt>
+</dl>
+<dl><dt><strong>optical_components</strong></dt>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__hash__</strong> = None</dl>
+
+</td></tr></table></td></tr></table>
+</body></html>

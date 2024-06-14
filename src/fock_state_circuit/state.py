@@ -397,7 +397,7 @@ class State():
             float(cumulative_probability)
         except:
             return (False,'Invalid state: invalid type for cumulative probability')
-        if cumulative_probability < 0 or cumulative_probability > 1:
+        if cumulative_probability < -self._threshold_probability_for_setting_to_zero or cumulative_probability -1 > self._threshold_probability_for_setting_to_zero:
             return (False,'Invalid state: invalid value for cumulative probability')
         if type(optical_components) != type(dict([])):
             return (False,'Invalid state"optical components is not a dictionary')

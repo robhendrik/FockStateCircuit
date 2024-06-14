@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module fock_state_circuit.compound_circuit</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="fock_state_circuit.html" class="white">fock_state_circuit</a>.compound_circuit</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cnly99857%5Conedrive%20-%20philips%5Csw%20projects%5Cgithubclones-newpc%5Cfockstatecircuit100%5Csrc%5Cfock_state_circuit%5Ccompound_circuit.py">c:\users\nly99857\onedrive - philips\sw projects\githubclones-newpc\fockstatecircuit100\src\fock_state_circuit\compound_circuit.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.compound_circuit.html#CompoundFockStateCircuit">CompoundFockStateCircuit</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="CompoundFockStateCircuit">class <strong>CompoundFockStateCircuit</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#CompoundFockStateCircuit">CompoundFockStateCircuit</a>(list_of_circuits:&nbsp;list&nbsp;=&nbsp;[],&nbsp;compound_circuit_name:&nbsp;str&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+Class&nbsp;for&nbsp;compound&nbsp;FockStateCircuits.&nbsp;The&nbsp;class&nbsp;is&nbsp;used&nbsp;to&nbsp;work&nbsp;with&nbsp;a&nbsp;list&nbsp;of&nbsp;circuits&nbsp;that&nbsp;have&nbsp;to&nbsp;be&nbsp;executed&nbsp;sequentially.&nbsp;<br>
+When&nbsp;initializing&nbsp;the&nbsp;instance&nbsp;or&nbsp;calling&nbsp;the&nbsp;instance&nbsp;with&nbsp;'<a href="#CompoundFockStateCircuit-refresh">refresh</a>()'&nbsp;an&nbsp;internal&nbsp;list&nbsp;<br>
+is&nbsp;created&nbsp;where&nbsp;'bridges'&nbsp;are&nbsp;added&nbsp;between&nbsp;the&nbsp;circuits.&nbsp;This&nbsp;enables&nbsp;evaluation&nbsp;of&nbsp;the&nbsp;compound&nbsp;circuit&nbsp;with&nbsp;a&nbsp;"collection&nbsp;of&nbsp;states",&nbsp;<br>
+or&nbsp;to&nbsp;create&nbsp;a&nbsp;schematics&nbsp;of&nbsp;the&nbsp;compound&nbsp;circuit&nbsp;by&nbsp;calling&nbsp;the&nbsp;method&nbsp;'<a href="#CompoundFockStateCircuit-draw">draw</a>()'.<br>
+&nbsp;<br>
+When&nbsp;a&nbsp;change&nbsp;is&nbsp;made&nbsp;to&nbsp;the&nbsp;'list_of_circuits'&nbsp;attribute&nbsp;it&nbsp;is&nbsp;needed&nbsp;to&nbsp;call&nbsp;'<a href="#CompoundFockStateCircuit-refresh">refresh</a>()'&nbsp;before&nbsp;calling&nbsp;'<a href="#CompoundFockStateCircuit-draw">draw</a>()'&nbsp;or&nbsp;'<a href="#CompoundFockStateCircuit-evaluate_circuit">evaluate_circuit</a>()'.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>list_of_circuits</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;self.<strong>compound_circuit_name</strong><br>
+&nbsp;<br>
+Methods:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CompoundFockStateCircuit-refresh">refresh</a>(self<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;-&gt;&nbsp;None:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update&nbsp;the&nbsp;internal&nbsp;list&nbsp;of&nbsp;circuits&nbsp;connected&nbsp;with&nbsp;bridges.&nbsp;This&nbsp;method&nbsp;has&nbsp;to&nbsp;be&nbsp;called&nbsp;after&nbsp;making&nbsp;a&nbsp;change&nbsp;to&nbsp;'list_of_circuits'&nbsp;before<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;running&nbsp;the&nbsp;circuit&nbsp;with&nbsp;'<a href="#CompoundFockStateCircuit-evaluate_circuit">evaluate_circuit</a>()'&nbsp;or&nbsp;draw&nbsp;a&nbsp;circuit&nbsp;schematics&nbsp;with&nbsp;'<a href="#CompoundFockStateCircuit-draw">draw</a>()<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CompoundFockStateCircuit-clear">clear</a>(self<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;-&gt;&nbsp;None:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clears&nbsp;the&nbsp;internal&nbsp;list&nbsp;of&nbsp;circuits&nbsp;to&nbsp;release&nbsp;memory<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CompoundFockStateCircuit-draw">draw</a>(&nbsp;&nbsp;&nbsp;self,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print_defaults:&nbsp;bool&nbsp;=&nbsp;False,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;settings_for_drawing_circuit:&nbsp;dict&nbsp;=&nbsp;None<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;-&gt;&nbsp;None:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Draw&nbsp;the&nbsp;compound&nbsp;circuit.&nbsp;self.&nbsp;settings_for_drawing_circuit&nbsp;is&nbsp;the&nbsp;dict&nbsp;with&nbsp;settings&nbsp;for&nbsp;circuit&nbsp;drawing.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;is&nbsp;a&nbsp;shell&nbsp;which&nbsp;calls&nbsp;FockStateCircuit.<a href="#CompoundFockStateCircuit-draw">draw</a>()&nbsp;to&nbsp;execute&nbsp;the&nbsp;schematics.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#CompoundFockStateCircuit-evaluate_circuit">evaluate_circuit</a>(self,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collection_of_states_input:&nbsp;CollectionOfStates&nbsp;=&nbsp;None<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;-&gt;&nbsp;CollectionOfStates:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Evaluate&nbsp;the&nbsp;compount&nbsp;circuit&nbsp;for&nbsp;a&nbsp;given&nbsp;collection&nbsp;of&nbsp;input&nbsp;states.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Method&nbsp;is&nbsp;a&nbsp;shell&nbsp;which&nbsp;calls&nbsp;FockStateCircuit.<a href="#CompoundFockStateCircuit-evaluate_circuit">evaluate_circuit</a>()&nbsp;to&nbsp;evaluate&nbsp;the&nbsp;compound&nbsp;circuit&nbsp;for&nbsp;the&nbsp;given<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;collection&nbsp;of&nbsp;states.<br>
+&nbsp;<br>
+Last&nbsp;modified:&nbsp;April&nbsp;16th,&nbsp;2024<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="CompoundFockStateCircuit-__init__"><strong>__init__</strong></a>(self, list_of_circuits: list = [], compound_circuit_name: str = None)</dt><dd><span class="code">Constructor&nbsp;for&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;class&nbsp;<a href="#CompoundFockStateCircuit">CompoundFockStateCircuit</a>.&nbsp;The&nbsp;instance&nbsp;will&nbsp;be&nbsp;created&nbsp;the&nbsp;list_of_circuits&nbsp;passed&nbsp;as&nbsp;argument.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;As&nbsp;part&nbsp;of&nbsp;the&nbsp;initialization&nbsp;the&nbsp;method&nbsp;'<a href="#CompoundFockStateCircuit-refresh">refresh</a>()'&nbsp;is&nbsp;called&nbsp;to&nbsp;create&nbsp;an&nbsp;internal&nbsp;list&nbsp;where&nbsp;the&nbsp;circuits&nbsp;are&nbsp;connected&nbsp;via&nbsp;'bridges'.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list_of_circuits&nbsp;(list[FockStateCircuit],&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;[]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;compound_circuit_name&nbsp;(str,&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;''</span></dd></dl>
+
+<dl><dt><a name="CompoundFockStateCircuit-__str__"><strong>__str__</strong></a>(self) -&gt; str</dt><dd><span class="code">Return&nbsp;str(self).</span></dd></dl>
+
+<dl><dt><a name="CompoundFockStateCircuit-clear"><strong>clear</strong></a>(self) -&gt; None</dt><dd><span class="code">Clears&nbsp;the&nbsp;internal&nbsp;list&nbsp;of&nbsp;circuits&nbsp;to&nbsp;release&nbsp;memory</span></dd></dl>
+
+<dl><dt><a name="CompoundFockStateCircuit-draw"><strong>draw</strong></a>(self, print_defaults: bool = False, settings_for_drawing_circuit: dict = None) -&gt; None</dt><dd><span class="code">Draw&nbsp;the&nbsp;compound&nbsp;circuit.&nbsp;self.&nbsp;settings_for_drawing_circuit&nbsp;is&nbsp;the&nbsp;dict&nbsp;with&nbsp;settings&nbsp;for&nbsp;circuit&nbsp;drawing.&nbsp;<br>
+Method&nbsp;is&nbsp;a&nbsp;shell&nbsp;which&nbsp;calls&nbsp;FockStateCircuit.<a href="#CompoundFockStateCircuit-draw">draw</a>()&nbsp;to&nbsp;execute&nbsp;the&nbsp;schematics.<br>
+&nbsp;<br>
+If&nbsp;changes&nbsp;to&nbsp;the&nbsp;compound&nbsp;circuit&nbsp;are&nbsp;made&nbsp;call&nbsp;<a href="#CompoundFockStateCircuit">CompoundFockStateCircuit</a>.<a href="#CompoundFockStateCircuit-refresh">refresh</a>()&nbsp;before&nbsp;calling&nbsp;this&nbsp;method.</span></dd></dl>
+
+<dl><dt><a name="CompoundFockStateCircuit-draw_station"><strong>draw_station</strong></a>(self, stations: dict = None, settings_for_drawing_circuit: dict = None) -&gt; None</dt><dd><span class="code">Draw&nbsp;the&nbsp;compound&nbsp;circuit&nbsp;for&nbsp;a&nbsp;single&nbsp;station.&nbsp;<br>
+self.&nbsp;settings_for_drawing_circuit&nbsp;is&nbsp;the&nbsp;dict&nbsp;with&nbsp;settings&nbsp;for&nbsp;circuit&nbsp;drawing.&nbsp;<br>
+&nbsp;<br>
+Method&nbsp;is&nbsp;a&nbsp;shell&nbsp;which&nbsp;calls&nbsp;FockStateCircuit.<a href="#CompoundFockStateCircuit-draw_station">draw_station</a>()&nbsp;to&nbsp;execute&nbsp;the&nbsp;schematics.<br>
+&nbsp;<br>
+If&nbsp;changes&nbsp;to&nbsp;the&nbsp;compound&nbsp;circuit&nbsp;are&nbsp;made&nbsp;call&nbsp;<a href="#CompoundFockStateCircuit">CompoundFockStateCircuit</a>.<a href="#CompoundFockStateCircuit-refresh">refresh</a>()&nbsp;before&nbsp;calling&nbsp;this&nbsp;method.</span></dd></dl>
+
+<dl><dt><a name="CompoundFockStateCircuit-evaluate_circuit"><strong>evaluate_circuit</strong></a>(self, collection_of_states_input: fock_state_circuit.collection_of_states.CollectionOfStates = None) -&gt; fock_state_circuit.collection_of_states.CollectionOfStates</dt><dd><span class="code">Evaluate&nbsp;the&nbsp;compount&nbsp;circuit&nbsp;for&nbsp;a&nbsp;given&nbsp;collection&nbsp;of&nbsp;input&nbsp;states.<br>
+Method&nbsp;is&nbsp;a&nbsp;shell&nbsp;which&nbsp;calls&nbsp;FockStateCircuit.<a href="#CompoundFockStateCircuit-evaluate_circuit">evaluate_circuit</a>()&nbsp;to&nbsp;evaluate&nbsp;the&nbsp;compound&nbsp;circuit&nbsp;for&nbsp;the&nbsp;given<br>
+input&nbsp;collection&nbsp;of&nbsp;states.<br>
+&nbsp;<br>
+If&nbsp;changes&nbsp;to&nbsp;the&nbsp;compound&nbsp;circuit&nbsp;are&nbsp;made&nbsp;call&nbsp;<a href="#CompoundFockStateCircuit">CompoundFockStateCircuit</a>.<a href="#CompoundFockStateCircuit-refresh">refresh</a>()&nbsp;before&nbsp;calling&nbsp;this&nbsp;method.</span></dd></dl>
+
+<dl><dt><a name="CompoundFockStateCircuit-refresh"><strong>refresh</strong></a>(self) -&gt; None</dt><dd><span class="code">Update&nbsp;the&nbsp;internal&nbsp;list&nbsp;of&nbsp;circuits&nbsp;connected&nbsp;with&nbsp;bridges.&nbsp;This&nbsp;method&nbsp;has&nbsp;to&nbsp;be&nbsp;called&nbsp;after&nbsp;making&nbsp;a&nbsp;change&nbsp;to&nbsp;'list_of_circuits'&nbsp;before<br>
+running&nbsp;the&nbsp;circuit&nbsp;with&nbsp;'<a href="#CompoundFockStateCircuit-evaluate_circuit">evaluate_circuit</a>()'&nbsp;or&nbsp;draw&nbsp;a&nbsp;circuit&nbsp;schematics&nbsp;with&nbsp;'<a href="#CompoundFockStateCircuit-draw">draw</a>()</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

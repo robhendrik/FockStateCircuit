@@ -185,6 +185,9 @@ class Plot():
             FockStateCircuit). If we allow per channel photon numbers which require more digits (e.g., 10) the format of the string will be adjusted.
             Example [10,1,3] would become '100103'
 
+            NOTE: We take the input state (in list format) as photon numbers, so we use abs(int(value)) for each item in the list to ensure it is a
+            positive integer
+
         Args:
             state (List): state as a list of values with channel 'n' at index 'n'. e.g., [0,1,3]
 
@@ -192,16 +195,16 @@ class Plot():
             str: name of the state of component derived from photon number per channel. e.g., '013'
         """        
         string_format_in_state_as_word = "{:0"+str(len(str(self._length_of_fock_state-1)))+ "d}"
-
-        if self._channel_0_left_in_state_name == True:
-            name = ''.join([string_format_in_state_as_word.format(int(number)) for number in state])              
-        else: #self.state_least_significant_digit_left == False:
-            name = ''.join([string_format_in_state_as_word.format(int(number)) for number in state[::-1]]) 
-
+        name = ''.join([string_format_in_state_as_word.format(abs(int(number)%self._length_of_fock_state)) for number in state])              
+        if self._channel_0_left_in_state_name == False:
+            name = name[::-1]
         return name
     
     def _create_list_of_values_from_name(self, name: str) -> list:
-        """ Create a list of values from a name string"""
+        """ Create a list of values from a name string. The input name has to be a 'string of positive integers', where each integer takes
+            a fixed number of digital. If the string contains letters, negative numbers, floats, ... this will lead to error.
+            
+            The input string 'name' should be created with function _create_state_name_from_list_of_photon_numbers"""
         values = []
         start, end = 0, 0
         while end < len(name):

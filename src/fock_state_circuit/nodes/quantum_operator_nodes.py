@@ -40,7 +40,6 @@ class QuantumOperatorNodes(NodeList):
             hamiltonian_operator  = QuantumOperator(operators, 
                                                     length_of_fock_state=collection._length_of_fock_state,
                                                     power_for_exponent_taylor_expansion=25)
-       
             return hamiltonian_operator.apply_operator_to_collection(collection,optical_channels=channels)
 
         node_to_be_added = {
@@ -108,7 +107,6 @@ class QuantumOperatorNodes(NodeList):
 
             operator_generic_wave_plate = QuantumOperator(operator_generic_wave_plate_list,
                                                           length_of_fock_state=collection._length_of_fock_state)
-       
             return operator_generic_wave_plate.apply_operator_to_collection(collection,optical_channels=channels)
 
         node_to_be_added = {

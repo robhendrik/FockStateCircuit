@@ -171,8 +171,7 @@ class QuantumOperator:
                             new_values[channel] -= 1
                 else:
                     if max(new_values) >= length_of_fock_state:
-                        coefficient = 1
-                        new_index = index
+                        continue
                     else:
                         new_index = self._lim_basis_to_index[tuple(new_values)]
                     matrix[index,new_index] += coefficient
@@ -240,5 +239,12 @@ class QuantumOperator:
                         full_output_values[channel] = value
                     new_component = state._dict_of_optical_values[tuple(full_output_values)]
                     new_components.append((new_component, coeff*amplitude))
-        new_state.optical_components = new_components
-        return new_state
+                    if new_component not in state._dict_of_valid_component_names:
+                        break
+        else:
+            # if loop finished without break all components are valid for the circuit
+            new_state.optical_components = new_components
+            return new_state    
+        # if the for loop ended with break statement return the original state
+        return state                                                    
+        

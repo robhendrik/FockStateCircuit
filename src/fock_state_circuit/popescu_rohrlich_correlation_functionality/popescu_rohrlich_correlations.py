@@ -76,11 +76,11 @@
                     fsc.CollectionOfStates: CollectionOfStates which can be executed on FockStateCircuit.
     
 
-    Last modified: June 1st, 2024
+    Last modified: June 12th, 2024
 """
 from __future__ import annotations
 import fock_state_circuit as fsc
-import importlib
+from fock_state_circuit.popescu_rohrlich_correlation_functionality.popescu_rohrlich_photon_pair_amplitude_functionality import PopescuRohrlichPhotonPairAmplitudes
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -88,187 +88,7 @@ import matplotlib.lines
 import matplotlib.colors
 import random
 
-_VERSION = '1.0.1'
-
-def _stokes_vector_from_amplitudes(amplitude_north_pole: complex, amplitude_south_pole: complex) -> tuple:
-    """ Calculates the Stokes vector from amplitudes. The function returns a tuple containing
-        a list with 3 floats representing x,y and z coordinates of the vector, and a float
-        representing the normalization factor (the length of the vector before normalization). The vector
-        represented by the list has length 1. The north-south pole is the z-axis (3rd coordinate). 
-        If the phase difference between the amplitudes is zero the vector in the xy-plane is 
-        pointing to the y-coordinate.
-
-        As example: if northpole represents horizontal polarization and south pole vertical polarization 
-        then the 'y-pole' represents diagonal polarization and the 'x-pole' circular polarization.
-
-    Args:
-        amplitude_north_pole (numpy complex): amplitude of a component of the wave functio
-        amplitude_south_pole (numpy complex): amplitude of a component of the wave functio
-
-    Returns:
-        tuple: tuple (vector, normalization). vector is a list of 3 floats representing x,y and x coordinates 
-        of the Stokes vector.
-
-    Raises:
-        Exception when both amplitudes have length zero
-    """
-    normalization_factor = np.abs(amplitude_north_pole)**2 + np.abs(amplitude_south_pole)**2
-    if normalization_factor == 0:
-        raise Exception("Stokes vector cannot have length zero")
-    z_coordinate = (np.abs(amplitude_north_pole)**2 -np.abs(amplitude_south_pole)**2)/normalization_factor
-
-    xy_length = np.sqrt(1-z_coordinate**2)
-    if np.abs(amplitude_north_pole) == 0 or np.abs(amplitude_south_pole) == 0:
-        phase_between_amplitudes = 0
-    else:
-        phase_between_amplitudes = np.angle(amplitude_north_pole/amplitude_south_pole)
-    y_coordinate = np.cos(phase_between_amplitudes) * xy_length
-    x_coordinate = np.sin(phase_between_amplitudes) * xy_length
-
-    return ([x_coordinate,y_coordinate,z_coordinate] , np.sqrt(normalization_factor))
-
-def _repair_amplitudes_for_photon_pair(amplitudes) -> tuple:
-    """ This function is used to create a tuple for 4 amplitudes for the HH, HV, VH and VV polarization for a photon
-        pair. Here HH is the product of amplitudes for the horizontal polarization components etc. 
-        The resulting set of amplitudes should lead to a state where the polarizations for both photons are
-        well defined, so the photons are not entangled. If the function makes a correction a warning will be printed.
-
-        As examples: 
-            - if all amplitudes are zero, or just one amplitude is non-zero the function will return original amplitudes
-            - If two amplitudes are zero and the non-zero components are for instance (HH, HV) or (HH,VH) the function will
-                return orginal
-            - If two amplitudes are zero and the non-zero components are (HH, VV) or (HV,VH) we have an entangled state which
-                cannot be factored in well-defined polarization angles for each photon in the pair. The function will try to get to 
-                a close match but this might lead to erroneous results when using results.
-    Args:
-        amplitudes (tuple): Original amplitudes
-
-    Returns:
-        tuple: Amplitudes after correction
-    """
-
-    r = 8
-    hh, hv, vh, vv = amplitudes
-    
-    non_zero_count = np.count_nonzero(np.round(np.abs(amplitudes),r) != 0)
-
-    if non_zero_count == 0:
-        # amplitudes are all zero
-        return (0,0,0,0)
-    if non_zero_count == 1:
-        return amplitudes
-    if non_zero_count == 2:
-        valid_combinations = [(0,1),(2,3),(0,2),(1,3)]
-        for combi in valid_combinations:
-            two_elements = [amplitudes[combi[0]],amplitudes[combi[1]]]
-            if np.count_nonzero(np.round(np.abs(two_elements),r) != 0) == 2:
-                return amplitudes
-        # if not returned from function we have an exception that needs to be corrected
-        print('Warning: correction done on amplitudes. Values before: ', np.round(np.abs(amplitudes),r))
-        for i in range(4):
-            if np.round(np.abs(amplitudes[i]),r) == max(np.round(np.abs(amplitudes),r)):
-                new_values = [0]*4
-                new_values[i] = amplitudes[i]
-                print('new_values: ', np.round(np.abs(new_values),r))
-                return tuple(new_values)
-    if non_zero_count == 3:
-                mid_value = 1
-                for i in range(4):
-                    if np.round(np.abs(amplitudes[i]),r) == max(np.round(np.abs(amplitudes),r)):
-                        max_value = amplitudes[i]
-                    elif np.round(np.abs(amplitudes[i]),r) == 0:
-                        zero_value = amplitudes[i]
-                        zero_index = i
-                    else:
-                        mid_value = mid_value * amplitudes[i]
-                smallest_value = mid_value/max_value
-                if np.round(np.abs(smallest_value)) != 0:
-                    print('Warning: correction done on amplitudes. Values before: ', np.round(np.abs(amplitudes),r))
-                    new_values = amplitudes.copy()
-                    new_values[zero_index] = smallest_value
-                    print('new_values: ', np.round(np.abs(new_values),r))
-                    return tuple(new_values)
-                else:
-                    return amplitudes
-    else:
-        return amplitudes
-    
-def _stokes_vector_for_pair_from_amplitudes_hh_hv_vh_vv(amplitudes) -> tuple:
-    """ Calculate the Stokes vector for each photon in a photon pair based on the amplitudes
-        of the HH, HV, VH and VV polarization amplitudes (Here HH is the product of amplitudes 
-        for the horizontal polarization components etc.).
-
-        The function will return a tuple with the two vectors in format [x_coordinate,y_coordinate,z_coordinate],
-        so return is (vector_1, vector_2,length_of_amplitudes). length_of_amplitudes is the length of the vector
-        [HH, HV, VH, VV].
-
-    Args:
-        amplitudes (tuple): Amplitudes for photon pair in form (HH, HV, VH, VV)
-
-    Raises:
-        Exception: 'No-signalling input cannot be factored in two independent polarizations'
-
-    Returns:
-        tuple: (vector_1, vector_2,length_of_amplitudes)
-    """
-    
-    amplitudes = _repair_amplitudes_for_photon_pair(amplitudes)
-    
-    #rounding paramater
-    r = 8
-    hh, hv, vh, vv = amplitudes
-    
-    h,v = [0,0,1],[0,0,-1]
-    non_zero_count = np.count_nonzero(np.round(np.abs(amplitudes),r) != 0)
-
-    if non_zero_count == 0:
-        print("amplitudes given as input: ", amplitudes)
-        print(np.round(np.abs(amplitudes),r))
-        raise Exception('No-signalling input cannot be factored in two independent polarizations, all amps zero')
-    elif non_zero_count == 1:
-        if np.round(np.abs(hh),r) != 0:
-            return (h,h,np.abs(hh))
-        elif np.round(np.abs(hv),r) != 0:
-            return (h,v,np.abs(hv))
-        elif np.round(np.abs(vh),r) != 0:
-            return (v,h,np.abs(vh))
-        else: #np.round(np.abs(vv),r) != 0
-            return (v,v,np.abs(vv))
-    elif non_zero_count == 2:
-        if np.round(np.abs(hh),r) != 0 and np.round(np.abs(vv),r) != 0:
-            raise Exception('No-signalling input cannot be factored in two independent polarizations')
-        elif np.round(np.abs(hv),r) != 0 and np.round(np.abs(vh),r) != 0:
-            raise Exception('No-signalling input cannot be factored in two independent polarizations')
-        elif np.round(np.abs(hh),r) != 0 and np.round(np.abs(vh),r) != 0:
-            vector_1, length_of_amplitudes = _stokes_vector_from_amplitudes(hh,vh)
-            vector_2 = h
-            return (vector_1, vector_2, length_of_amplitudes)
-        elif np.round(np.abs(hv),r) != 0 and np.round(np.abs(vv),r) != 0:
-            vector_1, length_of_amplitudes = _stokes_vector_from_amplitudes(hv,vv)
-            vector_2 = v
-            return (vector_1, vector_2, length_of_amplitudes)
-        elif np.round(np.abs(hh),r) != 0 and np.round(np.abs(hv),r) != 0:
-            vector_1 = h
-            vector_2, length_of_amplitudes = _stokes_vector_from_amplitudes(hh,hv)
-            return (vector_1, vector_2, length_of_amplitudes)
-        elif np.round(np.abs(vh),r) != 0 and np.round(np.abs(vv),r) != 0:
-            vector_1 = v
-            vector_2, length_of_amplitudes = _stokes_vector_from_amplitudes(vh,vv)
-            return (vector_1, vector_2, length_of_amplitudes)
-    else: # all 4 components are non zero
-        length_of_amplitudes = np.sqrt(sum([np.abs(a)**2 for a in amplitudes]))
-        if np.abs(hv)**2 + np.abs(vv)**2 > np.abs(hh)**2 + np.abs(vh)**2:
-            vector_1, l1 = _stokes_vector_from_amplitudes(hv,vv)
-        else:
-            vector_1, l1 = _stokes_vector_from_amplitudes(hh,vh)
-
-        if np.abs(hh)**2 + np.abs(hv)**2 > np.abs(vh)**2 + np.abs(vv)**2:
-            vector_2, l2 = _stokes_vector_from_amplitudes(hh,hv)
-        else:
-            vector_2, l2 = _stokes_vector_from_amplitudes(vh,vv)
-
-        return (vector_1, vector_2,length_of_amplitudes)
-
+_VERSION = '1.0.2'
 
 def _probability_from_stokes_vectors(vector1, vector2,quantumness_value: int = 1) -> float:
     """ Calculates the correlation probability. This is the probability to get the same outcome behind 
@@ -459,39 +279,6 @@ def _measure_collection_with_pr_correlation(collection: CollectionOfStates) -> l
     Returns:
         list: List of output states and their probabilities
     """
-    # define some helper functions
-    def generate_matrix_from_dict(input_dictionary):
-        """ Generate an d-dimensional matrix from a dict with keys of length d, where the keys are like '012', '231'
-            The length of each dimension is 4, so the characters in the key should be '0', '1', '2' or '3' """
-        dimensions = len(list(input_dictionary.keys())[0])
-        resulting_matrix = np.zeros(shape=tuple([4]*dimensions),dtype=np.csingle)
-        for label,value in input_dictionary.items():
-            coordinates = tuple([int(c) for c in label])
-            resulting_matrix[coordinates] = value
-        return resulting_matrix
-    
-    def vector_from_matrix(matrix):
-        # first rescale the matrix to make the sum of the absolute values squared equal to one
-        absolute_square = np.square(np.abs(matrix))
-        rescaled_matrix = matrix/ np.sqrt(np.sum(absolute_square))
-        # then make the phase of the highest element 0 (so the highest value is a positive, real number)
-        indices_of_max= np.unravel_index(np.argmax(absolute_square, axis=None), absolute_square.shape)
-        phase = rescaled_matrix[indices_of_max] / np.abs(rescaled_matrix[indices_of_max])
-        rescaled_matrix = matrix / phase
-
-        # determine the ratios of the absolute values
-        squares = np.array([np.sum(absolute_square[d,:]) for d in range(absolute_square.shape[0])])
-        squares = squares / np.sum(squares)
-        ratios = np.sqrt(squares)
-        #print('ratios', ratios)
-        
-        # determine the phase between the elements
-        angles = np.array([np.angle(rescaled_matrix[tuple([d]+list(indices_of_max[1:]))]) for d in range(rescaled_matrix.shape[0])])
-        #print('angles', angles)
-        new_vector = [radius*np.exp(1j*angle) for radius,angle in zip(ratios,angles)]
-        return new_vector
-    
-
     if len(collection) == 0:
         raise Exception('Empty collection passed as argument when measuring NS boxes')
 
@@ -512,68 +299,33 @@ def _measure_collection_with_pr_correlation(collection: CollectionOfStates) -> l
     histogram = []
 
     # per outcome adjust the probability based on configurations of ns-boxes
-    # dict_of_configs_and_amps is a dictionary for a specific outcome, with as keys the c
+    # dict_of_configs_and_amps is a dictionary for a specific outcome, with as keys the 
     # configurations that contribute to that outcome as values the amplitude of that
     for outcome, dict_of_configs_and_amps in configurations_and_amplitudes_grouped_per_outcome.items():
-        amplitudes_for_this_outcome = [amp for amp in dict_of_configs_and_amps.values()]
+        # the class PopescuRohrlichPhotonPairAmplitudes handles the 'unraveling' of the total state
+        # into the states of the individual photons and their polarization and indicates
+        # whether the state is 'entangled' of not. First creat the instance for this
+        # measurement outcome.
+        PR_amplitudes = PopescuRohrlichPhotonPairAmplitudes(input_dictionary=dict_of_configs_and_amps)
 
-        # initialize the probability for this outcome from the total amplitudes
-        probability = sum([np.abs(amp)**2 for amp in amplitudes_for_this_outcome])
-        # for every outcome iterate over all the ns boxes to come to factor in the 
-        # probability caused by 'alignment' of that box, for that specific outcome
+        # first check if we can determine the state of the individual photons. If the overall state
+        # is entangled this is not possible and we have to stop
+        if not PR_amplitudes.is_dict_factorable() and PR_amplitudes.are_all_photon_pairs_factorable():
+            raise Exception("Cannot calculate Popescu_Rohrlich correlation since entanglement has been generated")
+
+        # initialize the probability for this outcome from the total amplitudes. This is the highest
+        # probability in case all photons are aligned in polarization to give correlation 1
+        probability = PR_amplitudes.overall_probability
+
+        # for every outcome iterate over all the photon pairs to come to factor in the 
+        # probability caused by 'alignment' of that pair, for that specific outcome
         for box_number, quantumness_indicator in enumerate(quantumness_indicators):
-            print_outcome = 'replace with something usefull if you want to print for debugging'
-            if outcome == print_outcome:
-                print('box', box_number)
-            # amplitudes_for_this_box = [0]*4
-            # the configuration is a string of characters '0', '1', '2' and '3' indicating configs
-            # hh, hv, vh and vv
-            # the amplitudes have to be added to allow 'quantum interference' 
-            #for configuration, amplitude in dict_of_configs_and_amps.items():
-            # for one box amplitudes can be directly read from the dict
-            if len(quantumness_indicators) == 1: 
-                amplitudes_for_this_box = [0]*4
-                for key,value in dict_of_configs_and_amps.items():
-                    amplitudes_for_this_box[int(key)] = value
-
-            else:
-                # dict_of_configs_and_amps looks like {'000': 1, '001': 0.4 + 0.1*1j, '020': 0.003*1j}
-                # this dict represent a matrix. The dimensions are equal to the length of the key, and each dimension has size 4
-                # the matrix element m[a,b,c] is the same as the value for key 'abc', where a,b and c can be 0,1,2 or 3
-                # we first create the matrix from the dictionary values
-                matrix = generate_matrix_from_dict(dict_of_configs_and_amps)
-                # now we assume the matrix elements are a product of d vectors of length 4, with d the dimension of the matrix
-                # so if the keys in the dictionary are '000' and '001' teh nnumber of dimensions is 3 and we assume there are 3 vectors
-                # the matrix elements are then m[a,b,c] = vector0[a] * vector1[b] * vector2[c]
-                # the statement that the matrix is build like this is teh same as as saying the that NS boxes are independent and not entangled.
-                # we want to know the vector representing the current box_number
-                # first reorganize the axis of the matrix to get the vector to be the first dimension
-                swapped_matrix = np.swapaxes(matrix,box_number,0)
-                # then we extract this first vector, which represents the amplitudes for components hh,hv,vh and vv for this box.
-                amplitudes_for_this_box = vector_from_matrix(swapped_matrix)
-            #    index_of_this_config = int(configuration[box_number])
-            #    amplitudes_for_this_box[index_of_this_config] += amplitude
-            if outcome == print_outcome:
-                print('amps for box', amplitudes_for_this_box)
-            if np.round(sum([np.abs(amplitude)**2 for amplitude in amplitudes_for_this_box]),5) != 0:
-                try:
-                    vector1, vector2, length = _stokes_vector_for_pair_from_amplitudes_hh_hv_vh_vv(tuple(amplitudes_for_this_box))
-                except:
-                    amplitudes = _repair_amplitudes_for_photon_pair(amplitudes)
-                    vector1, vector2, length = _stokes_vector_for_pair_from_amplitudes_hh_hv_vh_vv(tuple(amplitudes_for_this_box))
-                if outcome == print_outcome:
-                    print('vectors',outcome, vector1, vector2)
-
-                alignment_probability = _probability_from_stokes_vectors(vector1, vector2,quantumness_indicator)
-            else:
-                alignment_probability = 0
-            
-            if outcome == print_outcome:
-                    print('alignment prob',outcome, alignment_probability)
+            vector1 = PR_amplitudes.stokes_vectors[PR_amplitudes.photon_indices_per_pair[box_number][0]][0]
+            vector2 = PR_amplitudes.stokes_vectors[PR_amplitudes.photon_indices_per_pair[box_number][1]][0]
+            alignment_probability = _probability_from_stokes_vectors(vector1, vector2,quantumness_indicator)
             probability = probability*alignment_probability
-            if outcome == print_outcome:
-                print('final',outcome, probability)
-
+      
+        # add the outcome and the probability to the histogram of possible outcomes
         histogram.append({ 'output_state' : outcome, 'probability' : probability*superentanglement_info['original_cumulative_probability']})
 
     return histogram
@@ -585,6 +337,7 @@ def perform_measurement_popescu_rohrlich_correlation(collection_of_states: Colle
     """ Performs a FULL measurement (i.e., measures all optical channels) where the detection probability is determined
         from the 'popescu_rohrich_correlation'. The collection of states needs to be build by using the gate 'popescu_rohrlich_correlation_gate'.
 
+        NOTE: This is the function called from the measurement gate in FockStateCircuit
     Args:
         collection_of_states (fsc.CollectionOfStates): Collection of states to be measured
         optical_channels_to_be_measured (list[int]): list of of optical channel numbers to be measured

@@ -166,9 +166,9 @@ class FockStateCircuit(OpticalNodes,BridgeNodes, MeasurementNodes, ClassicalNode
                 conventions(self) 
                     Function to print return the conventions used in this class as a string     
 
-        Last modified: June 8th, 2024              
+        Last modified: June 1st, 2024              
     """
-    _VERSION = '1.0.4'
+    _VERSION = '1.0.5'
 
     def __init__(self, length_of_fock_state: int = 2, 
                  no_of_optical_channels: int = 2, 

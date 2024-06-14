@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module fock_state_circuit.circuit</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="fock_state_circuit.html" class="white">fock_state_circuit</a>.circuit</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cnly99857%5Conedrive%20-%20philips%5Csw%20projects%5Cgithubclones-newpc%5Cfockstatecircuit100%5Csrc%5Cfock_state_circuit%5Ccircuit.py">c:\users\nly99857\onedrive - philips\sw projects\githubclones-newpc\fockstatecircuit100\src\fock_state_circuit\circuit.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="math.html">math</a><br>
+<a href="matplotlib.html">matplotlib</a><br>
+</td><td class="multicolumn"><a href="matplotlib.html">matplotlib</a><br>
+<a href="numpy.html">numpy</a><br>
+</td><td class="multicolumn"><a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+<a href="string.html">string</a><br>
+</td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>(<a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>(<a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>(<a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>(<a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>(<a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>(<a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>(<a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>(<a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>(<a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+<dt class="heading-text"><a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>(<a href="builtins.html#object">builtins.object</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="FockStateCircuit">class <strong>FockStateCircuit</strong></a>(<a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>, <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>, <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>, <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>, <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>, <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>, <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>, <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>, <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>, <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#FockStateCircuit">FockStateCircuit</a>(length_of_fock_state:&nbsp;int&nbsp;=&nbsp;2,&nbsp;no_of_optical_channels:&nbsp;int&nbsp;=&nbsp;2,&nbsp;no_of_classical_channels:&nbsp;int&nbsp;=&nbsp;0,&nbsp;channel_0_left_in_state_name:&nbsp;bool&nbsp;=&nbsp;True,&nbsp;threshold_probability_for_setting_to_zero:&nbsp;float&nbsp;=&nbsp;0.0001,&nbsp;use_full_fock_matrix:&nbsp;bool&nbsp;=&nbsp;False,&nbsp;circuit_name:&nbsp;str&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+Class&nbsp;for&nbsp;<a href="#FockStateCircuit">FockStateCircuit</a>.&nbsp;The&nbsp;class&nbsp;is&nbsp;used&nbsp;to&nbsp;model&nbsp;the&nbsp;behavior&nbsp;of&nbsp;systems&nbsp;consisting&nbsp;of&nbsp;optical&nbsp;channels&nbsp;which&nbsp;can&nbsp;be&nbsp;<br>
+populates&nbsp;with&nbsp;Fock&nbsp;states,&nbsp;or&nbsp;photon&nbsp;number&nbsp;states&nbsp;(<a href="https://en.wikipedia.org/wiki/Fock_state">https://en.wikipedia.org/wiki/Fock_state</a>).&nbsp;The&nbsp;circuit&nbsp;consistes&nbsp;of<br>
+multiple&nbsp;channels&nbsp;(minimally&nbsp;2&nbsp;channels)&nbsp;which&nbsp;interact&nbsp;through&nbsp;optical&nbsp;components&nbsp;like&nbsp;beamsplitters&nbsp;and&nbsp;wave&nbsp;plates.&nbsp;The<br>
+number&nbsp;states&nbsp;can&nbsp;be&nbsp;detected&nbsp;by&nbsp;detectors.&nbsp;Results&nbsp;from&nbsp;measurement&nbsp;are&nbsp;written&nbsp;to&nbsp;classical&nbsp;channels&nbsp;in&nbsp;the&nbsp;circuit.&nbsp;We&nbsp;also<br>
+have&nbsp;the&nbsp;option&nbsp;to&nbsp;make&nbsp;the&nbsp;exact&nbsp;function&nbsp;of&nbsp;the&nbsp;optical&nbsp;components&nbsp;depending&nbsp;on&nbsp;the&nbsp;value&nbsp;in&nbsp;a&nbsp;classical&nbsp;channel.&nbsp;We&nbsp;can&nbsp;<br>
+for&nbsp;instance&nbsp;let&nbsp;the&nbsp;orientation&nbsp;of&nbsp;a&nbsp;wave&nbsp;plate&nbsp;depend&nbsp;on&nbsp;the&nbsp;value&nbsp;of&nbsp;the&nbsp;classical&nbsp;channels.&nbsp;<br>
+&nbsp;<br>
+A&nbsp;<a href="#FockStateCircuit">FockStateCircuit</a>&nbsp;takes&nbsp;a&nbsp;CollectionOfStates&nbsp;(a&nbsp;separate&nbsp;classs)&nbsp;as&nbsp;input&nbsp;and&nbsp;produces&nbsp;a&nbsp;CollectionOfStates&nbsp;as&nbsp;output.&nbsp;The&nbsp;<br>
+circuit&nbsp;models&nbsp;the&nbsp;evolution&nbsp;of&nbsp;optical&nbsp;and&nbsp;classical&nbsp;channels&nbsp;from&nbsp;initial&nbsp;state&nbsp;to&nbsp;final&nbsp;state.<br>
+&nbsp;<br>
+A&nbsp;CollectionOfStates&nbsp;consists&nbsp;of&nbsp;States&nbsp;(a&nbsp;separate&nbsp;class).&nbsp;States&nbsp;hold&nbsp;the&nbsp;values&nbsp;for&nbsp;classical&nbsp;and&nbsp;optical&nbsp;channels&nbsp;as&nbsp;well&nbsp;as<br>
+the&nbsp;history&nbsp;of&nbsp;evolution&nbsp;through&nbsp;the&nbsp;circuit.<br>
+&nbsp;<br>
+The&nbsp;<a href="#FockStateCircuit">FockStateCircuit</a>&nbsp;consists&nbsp;of&nbsp;'nodes'.&nbsp;Each&nbsp;node&nbsp;performs&nbsp;a&nbsp;function,&nbsp;like&nbsp;interacting&nbsp;two&nbsp;optical&nbsp;channels,&nbsp;measuring&nbsp;a&nbsp;set&nbsp;of<br>
+of&nbsp;channels,&nbsp;modifying&nbsp;the&nbsp;values&nbsp;in&nbsp;the&nbsp;classical&nbsp;channels.&nbsp;<br>
+&nbsp;<br>
+Methods:<br>
+&nbsp;<br>
+Method(s)&nbsp;to&nbsp;create&nbsp;an&nbsp;instance:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#FockStateCircuit-__init__">__init__</a>(self,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;length_of_fock_state:&nbsp;int&nbsp;=&nbsp;2,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_of_optical_channels:&nbsp;int&nbsp;=&nbsp;2,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;no_of_classical_channels:&nbsp;int&nbsp;=&nbsp;0,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel_0_left_in_state_name:&nbsp;bool&nbsp;=&nbsp;True,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;threshold_probability_for_setting_to_zero:&nbsp;float&nbsp;=&nbsp;0.0001,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use_full_fock_matrix:&nbsp;bool&nbsp;=&nbsp;False)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constructor&nbsp;for&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;<a href="#FockStateCircuit">FockStateCircuit</a>&nbsp;class.&nbsp;The&nbsp;instance&nbsp;will&nbsp;be&nbsp;created&nbsp;'empty'&nbsp;without&nbsp;any&nbsp;nodes.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;instance&nbsp;has&nbsp;a&nbsp;fixed&nbsp;number&nbsp;of&nbsp;channels&nbsp;(optical&nbsp;channels&nbsp;for&nbsp;photons&nbsp;and&nbsp;classical&nbsp;channels&nbsp;which&nbsp;can&nbsp;contain<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any&nbsp;number).&nbsp;The&nbsp;maximum&nbsp;number&nbsp;of&nbsp;photos&nbsp;in&nbsp;each&nbsp;channel&nbsp;is&nbsp;limited&nbsp;and&nbsp;specified&nbsp;by&nbsp;the&nbsp;argument&nbsp;'length_of_fock_state'.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;'length_of_fock_state'&nbsp;is&nbsp;for&nbsp;instance&nbsp;3&nbsp;the&nbsp;possible&nbsp;values&nbsp;for&nbsp;any&nbsp;optical&nbsp;channel&nbsp;are&nbsp;0,&nbsp;1&nbsp;or&nbsp;2&nbsp;photons.&nbsp;So&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;maximum&nbsp;photon&nbsp;number&nbsp;in&nbsp;this&nbsp;case&nbsp;is&nbsp;2.&nbsp;In&nbsp;general&nbsp;the&nbsp;maximum&nbsp;photon&nbsp;number&nbsp;is&nbsp;equal&nbsp;to&nbsp;'length_of_fock_state'-1.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;instance&nbsp;also&nbsp;has&nbsp;parameters&nbsp;for&nbsp;how&nbsp;to&nbsp;'write'&nbsp;an&nbsp;optical&nbsp;state&nbsp;('channel_0_left_in_state_name').&nbsp;Of&nbsp;channel&nbsp;0&nbsp;has<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one&nbsp;photon&nbsp;and&nbsp;the&nbsp;other&nbsp;channels&nbsp;zero&nbsp;photon&nbsp;then&nbsp;default&nbsp;the&nbsp;state&nbsp;is&nbsp;written&nbsp;as&nbsp;'1000'.&nbsp;With&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'channel_0_left_in_state_name'&nbsp;set&nbsp;to&nbsp;False&nbsp;this&nbsp;state&nbsp;would&nbsp;be&nbsp;written&nbsp;as&nbsp;'0001'.&nbsp;The&nbsp;value&nbsp;only&nbsp;affects&nbsp;the&nbsp;string&nbsp;value&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;indicate&nbsp;the&nbsp;state.&nbsp;All&nbsp;underlying&nbsp;mathematics&nbsp;and&nbsp;ordering&nbsp;of&nbsp;matrices&nbsp;and&nbsp;vectors&nbsp;is&nbsp;unaffected.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;paramater&nbsp;'threshold_probability_for_setting_to_zero'&nbsp;forces&nbsp;rounding&nbsp;to&nbsp;zero&nbsp;for&nbsp;probabilities&nbsp;below&nbsp;the&nbsp;given&nbsp;level.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default&nbsp;the&nbsp;class&nbsp;optimizes&nbsp;calculations&nbsp;by&nbsp;reducing&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;Fock&nbsp;state&nbsp;matrix&nbsp;to&nbsp;match&nbsp;the&nbsp;photon&nbsp;population<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(i.e.,&nbsp;if&nbsp;states&nbsp;are&nbsp;empty&nbsp;they&nbsp;are&nbsp;discarded&nbsp;from&nbsp;the&nbsp;fock&nbsp;matrix).&nbsp;When&nbsp;the&nbsp;bool&nbsp;'use_full_fock_matrix'&nbsp;is&nbsp;set&nbsp;to&nbsp;True&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;system&nbsp;will&nbsp;always&nbsp;use&nbsp;the&nbsp;full&nbsp;size&nbsp;Fock&nbsp;matrix&nbsp;and&nbsp;skip&nbsp;the&nbsp;optimization.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Method(s)&nbsp;to&nbsp;run&nbsp;the&nbsp;simulation:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#FockStateCircuit-evaluate_circuit">evaluate_circuit</a>(self,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collection_of_states_input:&nbsp;collection_of_states.CollectionOfStates&nbsp;=&nbsp;None,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nodes_to_be_evaluated:&nbsp;list&nbsp;=&nbsp;['all']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;-&gt;&nbsp;collection_of_states.CollectionOfStates<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Evaluate&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit&nbsp;for&nbsp;a&nbsp;given&nbsp;collection&nbsp;of&nbsp;input&nbsp;states.&nbsp;If&nbsp;no&nbsp;collection&nbsp;of&nbsp;input&nbsp;states<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;given&nbsp;the&nbsp;function&nbsp;will&nbsp;generate&nbsp;a&nbsp;collection&nbsp;consisting&nbsp;of&nbsp;all&nbsp;basis&nbsp;states.&nbsp;If&nbsp;a&nbsp;list&nbsp;is&nbsp;given&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'nodes_to_be_evaluated'&nbsp;only&nbsp;those&nbsp;nodes&nbsp;are&nbsp;included&nbsp;(first&nbsp;node&nbsp;being&nbsp;'0',&nbsp;second&nbsp;node&nbsp;'1').&nbsp;The&nbsp;function<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;returns&nbsp;a&nbsp;collection&nbsp;of&nbsp;states&nbsp;as&nbsp;the&nbsp;output&nbsp;of&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit&nbsp;consisting&nbsp;of&nbsp;the&nbsp;selected&nbsp;nodes.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;function&nbsp;is&nbsp;called&nbsp;recursively.&nbsp;At&nbsp;first&nbsp;call&nbsp;the&nbsp;function&nbsp;evaluates&nbsp;the&nbsp;first&nbsp;node(s)&nbsp;in&nbsp;the&nbsp;circuit&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;calculates&nbsp;the&nbsp;'collection&nbsp;of&nbsp;states'&nbsp;that&nbsp;results&nbsp;from&nbsp;applying&nbsp;these&nbsp;nodes/this&nbsp;node&nbsp;to&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'collection_of_states_input',&nbsp;The&nbsp;the&nbsp;function&nbsp;'evaluate_circuit'&nbsp;is&nbsp;called&nbsp;again&nbsp;for&nbsp;the&nbsp;next&nbsp;nodes.&nbsp;When<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'evaluate_circuit'&nbsp;is&nbsp;finally&nbsp;called&nbsp;with&nbsp;an&nbsp;emply&nbsp;list&nbsp;of&nbsp;nodes&nbsp;not&nbsp;be&nbsp;evaluated&nbsp;the&nbsp;collection_of_states&nbsp;is&nbsp;retured.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;function&nbsp;groups&nbsp;the&nbsp;first&nbsp;nodes&nbsp;in&nbsp;the&nbsp;list&nbsp;of&nbsp;nodes_to_be_evaluated&nbsp;together&nbsp;if&nbsp;they&nbsp;are&nbsp;all&nbsp;of&nbsp;type&nbsp;'optical'.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In&nbsp;this&nbsp;case&nbsp;a&nbsp;single&nbsp;fock&nbsp;state&nbsp;matrix&nbsp;can&nbsp;be&nbsp;calculated&nbsp;for&nbsp;these&nbsp;nodes&nbsp;combined.&nbsp;All&nbsp;other&nbsp;node&nbsp;types&nbsp;are&nbsp;handled&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;one-by-one.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Method(s)&nbsp;to&nbsp;generate&nbsp;information&nbsp;on&nbsp;the&nbsp;circuit:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#FockStateCircuit-basis">basis</a>(self)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;returns&nbsp;a&nbsp;dictonary&nbsp;with&nbsp;valid&nbsp;components&nbsp;names&nbsp;as&nbsp;keys&nbsp;and&nbsp;the&nbsp;corresponding&nbsp;photon&nbsp;numbers&nbsp;in&nbsp;the&nbsp;channels&nbsp;as&nbsp;values.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#FockStateCircuit-get_fock_state_matrix">get_fock_state_matrix</a>(self,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nodes_to_be_evaluated:&nbsp;list[int]&nbsp;=&nbsp;'all'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;-&gt;&nbsp;np.array:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;returns&nbsp;the&nbsp;fock&nbsp;state&nbsp;matrix&nbsp;for&nbsp;a&nbsp;given&nbsp;set&nbsp;of&nbsp;nodes&nbsp;in&nbsp;the&nbsp;circuit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+Last&nbsp;modified:&nbsp;June&nbsp;1st,&nbsp;2024<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt>Method resolution order:</dt>
+<dd><a href="fock_state_circuit.circuit.html#FockStateCircuit">FockStateCircuit</a></dd>
+<dd><a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a></dd>
+<dd><a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a></dd>
+<dd><a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a></dd>
+<dd><a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a></dd>
+<dd><a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a></dd>
+<dd><a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a></dd>
+<dd><a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a></dd>
+<dd><a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a></dd>
+<dd><a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a></dd>
+<dd><a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a></dd>
+<dd><a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="FockStateCircuit-__init__"><strong>__init__</strong></a>(self, length_of_fock_state: int = 2, no_of_optical_channels: int = 2, no_of_classical_channels: int = 0, channel_0_left_in_state_name: bool = True, threshold_probability_for_setting_to_zero: float = 0.0001, use_full_fock_matrix: bool = False, circuit_name: str = None)</dt><dd><span class="code">Constructor&nbsp;for&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;<a href="#FockStateCircuit">FockStateCircuit</a>&nbsp;class.&nbsp;The&nbsp;instance&nbsp;will&nbsp;be&nbsp;created&nbsp;'empty'&nbsp;without&nbsp;any&nbsp;nodes.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;instance&nbsp;has&nbsp;a&nbsp;fixed&nbsp;number&nbsp;of&nbsp;channels&nbsp;(optical&nbsp;channels&nbsp;for&nbsp;photons&nbsp;and&nbsp;classical&nbsp;channels&nbsp;which&nbsp;can&nbsp;contain<br>
+&nbsp;&nbsp;&nbsp;&nbsp;any&nbsp;number).&nbsp;The&nbsp;maximum&nbsp;number&nbsp;of&nbsp;photos&nbsp;in&nbsp;each&nbsp;channel&nbsp;is&nbsp;limited&nbsp;and&nbsp;specified&nbsp;by&nbsp;the&nbsp;argument&nbsp;'length_of_fock_state'.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;'length_of_fock_state'&nbsp;is&nbsp;for&nbsp;instance&nbsp;3&nbsp;the&nbsp;possible&nbsp;values&nbsp;for&nbsp;any&nbsp;optical&nbsp;channel&nbsp;are&nbsp;0,&nbsp;1&nbsp;or&nbsp;2&nbsp;photons.&nbsp;So&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;maximum&nbsp;photon&nbsp;number&nbsp;in&nbsp;this&nbsp;case&nbsp;is&nbsp;2.&nbsp;In&nbsp;general&nbsp;the&nbsp;maximum&nbsp;photon&nbsp;number&nbsp;is&nbsp;equal&nbsp;to&nbsp;'length_of_fock_state'-1.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;instance&nbsp;also&nbsp;has&nbsp;parameters&nbsp;for&nbsp;how&nbsp;to&nbsp;'write'&nbsp;an&nbsp;optical&nbsp;state&nbsp;('channel_0_left_in_state_name').&nbsp;Of&nbsp;channel&nbsp;0&nbsp;has<br>
+&nbsp;&nbsp;&nbsp;&nbsp;one&nbsp;photon&nbsp;and&nbsp;the&nbsp;other&nbsp;channels&nbsp;zero&nbsp;photon&nbsp;then&nbsp;default&nbsp;the&nbsp;state&nbsp;is&nbsp;written&nbsp;as&nbsp;'1000'.&nbsp;With&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'channel_0_left_in_state_name'&nbsp;set&nbsp;to&nbsp;False&nbsp;this&nbsp;state&nbsp;would&nbsp;be&nbsp;written&nbsp;as&nbsp;'0001'.&nbsp;Teh&nbsp;value&nbsp;only&nbsp;affects&nbsp;the&nbsp;string&nbsp;value&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;indicate&nbsp;the&nbsp;state.&nbsp;All&nbsp;underlying&nbsp;mathematics&nbsp;and&nbsp;ordering&nbsp;of&nbsp;matrices&nbsp;and&nbsp;vectors&nbsp;is&nbsp;unaffected.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;parameter&nbsp;'threshold_probability_for_setting_to_zero'&nbsp;forces&nbsp;rounding&nbsp;to&nbsp;zero&nbsp;for&nbsp;probabilities&nbsp;below&nbsp;the&nbsp;given&nbsp;level.&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Default&nbsp;the&nbsp;class&nbsp;optimizes&nbsp;calculations&nbsp;by&nbsp;reducing&nbsp;the&nbsp;size&nbsp;of&nbsp;the&nbsp;Fock&nbsp;state&nbsp;matrix&nbsp;to&nbsp;match&nbsp;the&nbsp;photon&nbsp;population<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(i.e.,&nbsp;if&nbsp;states&nbsp;are&nbsp;empty&nbsp;they&nbsp;are&nbsp;discarded&nbsp;from&nbsp;the&nbsp;fock&nbsp;matrix).&nbsp;When&nbsp;the&nbsp;bool&nbsp;'use_full_fock_matrix'&nbsp;is&nbsp;set&nbsp;to&nbsp;True&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;system&nbsp;will&nbsp;always&nbsp;use&nbsp;the&nbsp;full&nbsp;size&nbsp;Fock&nbsp;matrix&nbsp;and&nbsp;skip&nbsp;the&nbsp;optimization.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;length_of_fock_state&nbsp;(int,&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;2.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;no_of_optical_channels&nbsp;(int,&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;2.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;no_of_classical_channels&nbsp;(int,&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;0.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_0_left_in_state_name&nbsp;(bool,&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;True.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;threshold_probability_for_setting_to_zero&nbsp;(float,&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;0.0001.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;use_full_fock_matrix&nbsp;(bool,&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;False.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;circuit_name&nbsp;(str,&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;None<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;_description_</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-__str__"><strong>__str__</strong></a>(self) -&gt; str</dt><dd><span class="code">Return&nbsp;the&nbsp;string&nbsp;for&nbsp;'pretty&nbsp;printing'&nbsp;the&nbsp;circuit.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;string&nbsp;describing&nbsp;the&nbsp;circuit</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-basis"><strong>basis</strong></a>(self) -&gt; dict</dt><dd><span class="code">Function&nbsp;returns&nbsp;a&nbsp;dictonary&nbsp;with&nbsp;valid&nbsp;components&nbsp;names&nbsp;as&nbsp;keys&nbsp;and&nbsp;the&nbsp;corresponding&nbsp;photon&nbsp;numbers&nbsp;in&nbsp;the&nbsp;channels&nbsp;as&nbsp;values.</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-evaluate_circuit"><strong>evaluate_circuit</strong></a>(self, collection_of_states_input: fock_state_circuit.collection_of_states.CollectionOfStates = None, nodes_to_be_evaluated: list = ['all']) -&gt; fock_state_circuit.collection_of_states.CollectionOfStates</dt><dd><span class="code">Evaluate&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit&nbsp;for&nbsp;a&nbsp;give&nbsp;collection&nbsp;of&nbsp;input&nbsp;states.&nbsp;If&nbsp;no&nbsp;collection&nbsp;of&nbsp;input&nbsp;states<br>
+&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;given&nbsp;the&nbsp;function&nbsp;will&nbsp;generate&nbsp;a&nbsp;collection&nbsp;consisting&nbsp;of&nbsp;all&nbsp;basis&nbsp;states.&nbsp;If&nbsp;a&nbsp;list&nbsp;is&nbsp;given&nbsp;for<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'nodes_to_be_evaluated'&nbsp;only&nbsp;those&nbsp;nodes&nbsp;are&nbsp;included&nbsp;(first&nbsp;node&nbsp;being&nbsp;'0',&nbsp;second&nbsp;node&nbsp;'1').&nbsp;The&nbsp;function<br>
+&nbsp;&nbsp;&nbsp;&nbsp;returns&nbsp;a&nbsp;collection&nbsp;of&nbsp;states&nbsp;as&nbsp;the&nbsp;output&nbsp;of&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit&nbsp;consisting&nbsp;of&nbsp;the&nbsp;selected&nbsp;nodes.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;function&nbsp;is&nbsp;called&nbsp;recursively.&nbsp;At&nbsp;first&nbsp;call&nbsp;the&nbsp;function&nbsp;evaluates&nbsp;the&nbsp;first&nbsp;node(s)&nbsp;in&nbsp;the&nbsp;circuit&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;calculates&nbsp;the&nbsp;'collection&nbsp;of&nbsp;states'&nbsp;that&nbsp;results&nbsp;from&nbsp;applying&nbsp;these&nbsp;nodes/this&nbsp;node&nbsp;to&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'collection_of_states_input',&nbsp;The&nbsp;the&nbsp;function&nbsp;'evaluate_circuit'&nbsp;is&nbsp;called&nbsp;again&nbsp;for&nbsp;the&nbsp;next&nbsp;nodes.&nbsp;When<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'evaluate_circuit'&nbsp;is&nbsp;finally&nbsp;called&nbsp;with&nbsp;an&nbsp;emply&nbsp;list&nbsp;of&nbsp;nodes&nbsp;not&nbsp;be&nbsp;evaluated&nbsp;the&nbsp;collection_of_states&nbsp;is&nbsp;retured.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;function&nbsp;groups&nbsp;the&nbsp;first&nbsp;nodes&nbsp;in&nbsp;the&nbsp;list&nbsp;of&nbsp;nodes_to_be_evaluated&nbsp;together&nbsp;if&nbsp;they&nbsp;are&nbsp;all&nbsp;of&nbsp;type&nbsp;'optical'.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;In&nbsp;this&nbsp;case&nbsp;a&nbsp;single&nbsp;fock&nbsp;state&nbsp;matrix&nbsp;can&nbsp;be&nbsp;calculated&nbsp;for&nbsp;these&nbsp;nodes&nbsp;combined.&nbsp;All&nbsp;other&nbsp;node&nbsp;types&nbsp;are&nbsp;handled&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;one-by-one.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;collection_of_states_input&nbsp;(CollectionOfStates,&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;None.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nodes_to_be_evaluated&nbsp;(list[int],&nbsp;optional):&nbsp;Defaults&nbsp;to&nbsp;['all'].<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;Exception&nbsp;will&nbsp;be&nbsp;triggered&nbsp;does&nbsp;not&nbsp;match&nbsp;with&nbsp;the&nbsp;nodes&nbsp;in&nbsp;the&nbsp;circuit<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;Exception&nbsp;will&nbsp;be&nbsp;triggered&nbsp;if&nbsp;the&nbsp;nodes&nbsp;in&nbsp;the&nbsp;circuit&nbsp;contain&nbsp;an&nbsp;invalid&nbsp;node&nbsp;type<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;Exception&nbsp;will&nbsp;be&nbsp;triggered&nbsp;if&nbsp;if&nbsp;the&nbsp;optical&nbsp;node&nbsp;with&nbsp;classical&nbsp;control&nbsp;is&nbsp;of&nbsp;unknown&nbsp;type<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;CollectionOfStates&nbsp;:&nbsp;collection&nbsp;of&nbsp;states&nbsp;as&nbsp;output&nbsp;of&nbsp;the&nbsp;circuit</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-get_fock_state_matrix"><strong>get_fock_state_matrix</strong></a>(self, nodes_to_be_evaluated: list[int] = 'all') -&gt; &lt;built-in function array&gt;</dt><dd><span class="code">Function&nbsp;returns&nbsp;the&nbsp;fock&nbsp;state&nbsp;matrix&nbsp;for&nbsp;a&nbsp;given&nbsp;set&nbsp;of&nbsp;nodes&nbsp;in&nbsp;the&nbsp;circuit<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nodes_to_be_evaluated&nbsp;(list[int]):&nbsp;nodes&nbsp;to&nbsp;be&nbsp;includes&nbsp;in&nbsp;the&nbsp;matrix&nbsp;calculation&nbsp;(first&nbsp;node&nbsp;is&nbsp;node&nbsp;0).&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default&nbsp;all&nbsp;nodes&nbsp;are&nbsp;included&nbsp;(value&nbsp;for&nbsp;nodes_to_be_evaluated&nbsp;=&nbsp;'all'&nbsp;)<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;np.array:&nbsp;fock_state_matrix</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="fock_state_circuit.nodes.optical_nodes.html#OpticalNodes">fock_state_circuit.nodes.optical_nodes.OpticalNodes</a>:<br>
+<dl><dt><a name="FockStateCircuit-half_wave_plate"><strong>half_wave_plate</strong></a>(self, channel_horizontal: int = 0, channel_vertical: int = 1, angle: float = 0, node_info: dict = None) -&gt; None</dt><dd><span class="code">Add&nbsp;a&nbsp;half&nbsp;wave&nbsp;plate&nbsp;to&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit&nbsp;with&nbsp;axis&nbsp;rotated&nbsp;over&nbsp;angle.&nbsp;The&nbsp;phase&nbsp;shift&nbsp;of&nbsp;'pi'&nbsp;will&nbsp;be&nbsp;applied&nbsp;to&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel&nbsp;for&nbsp;vertical&nbsp;polarization.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_horizontal&nbsp;(int):&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical&nbsp;(int):&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;angle&nbsp;(float):&nbsp;rotation&nbsp;of&nbsp;the&nbsp;axis&nbsp;in&nbsp;radians<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-half_wave_plate_225"><strong>half_wave_plate_225</strong></a>(self, channel_horizontal: int = 0, channel_vertical: int = 1, node_info: dict = None) -&gt; None</dt><dd><span class="code">Add&nbsp;a&nbsp;half&nbsp;wave&nbsp;plate&nbsp;at&nbsp;22.5&nbsp;degrees&nbsp;to&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.&nbsp;The&nbsp;phase&nbsp;shift&nbsp;of&nbsp;'pi'&nbsp;will&nbsp;be&nbsp;applied&nbsp;to&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel&nbsp;for&nbsp;vertical&nbsp;polarization&nbsp;in&nbsp;the&nbsp;frame&nbsp;of&nbsp;reference&nbsp;of&nbsp;the&nbsp;wave&nbsp;plate.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_horizontal:&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical:&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-half_wave_plate_45"><strong>half_wave_plate_45</strong></a>(self, channel_horizontal: int = 0, channel_vertical: int = 1, node_info: dict = None) -&gt; None</dt><dd><span class="code">Add&nbsp;a&nbsp;half&nbsp;wave&nbsp;plate&nbsp;at&nbsp;45&nbsp;degrees&nbsp;to&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.&nbsp;The&nbsp;phase&nbsp;shift&nbsp;of&nbsp;'pi'&nbsp;will&nbsp;be&nbsp;applied&nbsp;to&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel&nbsp;for&nbsp;vertical&nbsp;polarization&nbsp;in&nbsp;the&nbsp;frame&nbsp;of&nbsp;reference&nbsp;of&nbsp;the&nbsp;wave&nbsp;plate.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_horizontal:&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical:&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-mix_50_50"><strong>mix_50_50</strong></a>(self, first_channel: int = 0, second_channel: int = 1, node_info: dict = None) -&gt; None</dt><dd><span class="code">Mix&nbsp;two&nbsp;channels&nbsp;50%/50%.&nbsp;Phase&nbsp;shift&nbsp;is&nbsp;applied&nbsp;to&nbsp;the&nbsp;second&nbsp;of&nbsp;the&nbsp;channels.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;first_channel&nbsp;(int):&nbsp;channel&nbsp;number&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;second_channel&nbsp;(int):&nbsp;channel&nbsp;number&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-mix_generic_refl_transm"><strong>mix_generic_refl_transm</strong></a>(self, first_channel: int = 0, second_channel: int = 1, reflection: float = 0, transmission: float = 1, node_info: dict = None) -&gt; None</dt><dd><span class="code">Mix&nbsp;two&nbsp;channels&nbsp;with&nbsp;reflection&nbsp;and&nbsp;transmission&nbsp;percentages.&nbsp;Phase&nbsp;shift&nbsp;is&nbsp;applied&nbsp;to&nbsp;one&nbsp;of&nbsp;the&nbsp;channels.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;sum&nbsp;(reflection&nbsp;+&nbsp;transmission)&nbsp;has&nbsp;to&nbsp;be&nbsp;equal&nbsp;to&nbsp;1,&nbsp;e.g.,&nbsp;as&nbsp;in&nbsp;reflection=sin(theta)**2,&nbsp;tranmission=cos(theta)**2.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Note:&nbsp;reflection&nbsp;and&nbsp;transmissions&nbsp;are&nbsp;coefficients&nbsp;for&nbsp;'probability'&nbsp;not&nbsp;for&nbsp;the&nbsp;'amplitude'&nbsp;of&nbsp;the&nbsp;electrical&nbsp;field.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;first_channel&nbsp;(int):&nbsp;channel&nbsp;number&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;second_channel&nbsp;(int):&nbsp;channel&nbsp;number&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;reflection&nbsp;(float):&nbsp;reflection&nbsp;fraction<br>
+&nbsp;&nbsp;&nbsp;&nbsp;transmission&nbsp;(float):&nbsp;transmission&nbsp;fraction<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;If&nbsp;(reflection&nbsp;+&nbsp;transmission)&nbsp;is&nbsp;not&nbsp;1</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-non_polarizing_50_50_beamsplitter"><strong>non_polarizing_50_50_beamsplitter</strong></a>(self, input_channels_a: tuple[int, int] = (0, 1), input_channels_b: tuple[int, int] = (2, 3), node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;non-polarizing&nbsp;50%/50%&nbsp;beamsplitter&nbsp;to&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_channels_a&nbsp;will&nbsp;be&nbsp;mixed&nbsp;with&nbsp;input_channels_b:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_channels_a[0]&nbsp;with&nbsp;input_channels_b[0]&nbsp;and&nbsp;input_channels_a[1]&nbsp;with&nbsp;input_channels_b[1].<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Typical&nbsp;use&nbsp;case&nbsp;is&nbsp;that&nbsp;input_channels_a&nbsp;would&nbsp;contain&nbsp;the&nbsp;horizontal&nbsp;and&nbsp;vertical&nbsp;polarization&nbsp;channels&nbsp;at<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;port&nbsp;'a'&nbsp;of&nbsp;the&nbsp;beamsplitter,&nbsp;and&nbsp;input_channels_b&nbsp;the&nbsp;hor.&nbsp;and&nbsp;vert.&nbsp;channels&nbsp;at&nbsp;input&nbsp;port&nbsp;'b'.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_channels_a&nbsp;(tuple[int,int]):&nbsp;tuple&nbsp;with&nbsp;channel&nbsp;numbers&nbsp;for&nbsp;input&nbsp;port&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_channels_b&nbsp;(tuple[int,int]):&nbsp;tuple&nbsp;with&nbsp;channel&nbsp;numbers&nbsp;for&nbsp;input&nbsp;port&nbsp;b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;If&nbsp;number&nbsp;of&nbsp;channels&nbsp;in&nbsp;the&nbsp;circuit&nbsp;does&nbsp;not&nbsp;match&nbsp;requirement&nbsp;for&nbsp;the&nbsp;operation</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-non_polarizing_beamsplitter"><strong>non_polarizing_beamsplitter</strong></a>(self, input_channels_a: tuple[int, int] = (0, 1), input_channels_b: tuple[int, int] = (2, 3), reflection: float = 0, transmission: float = 1, node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;non-polarizing&nbsp;generic&nbsp;beamsplitter&nbsp;to&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.&nbsp;Beamsplitter&nbsp;transmission/reflection&nbsp;can&nbsp;be&nbsp;set.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;All&nbsp;channels&nbsp;will&nbsp;be&nbsp;mixed&nbsp;input_channels_a[0]&nbsp;with&nbsp;input_channels_b[0]&nbsp;and&nbsp;input_channels_a[1]&nbsp;with&nbsp;input_channels_b[1]<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Note&nbsp;1:&nbsp;The&nbsp;sum&nbsp;(reflection&nbsp;+&nbsp;transmission)&nbsp;has&nbsp;to&nbsp;be&nbsp;equal&nbsp;to&nbsp;1,&nbsp;e.g.,&nbsp;as&nbsp;in&nbsp;reflection=sin(theta)**2,&nbsp;tranmission=cos(theta)**2.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;reflection&nbsp;and&nbsp;transmissions&nbsp;are&nbsp;coefficients&nbsp;for&nbsp;'probability'&nbsp;not&nbsp;for&nbsp;the&nbsp;'amplitude'&nbsp;of&nbsp;the&nbsp;electrical&nbsp;field.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Note&nbsp;2:&nbsp;Typical&nbsp;use&nbsp;case&nbsp;is&nbsp;that&nbsp;input_channels_a&nbsp;would&nbsp;contain&nbsp;the&nbsp;horizontal&nbsp;and&nbsp;vertical&nbsp;polarization&nbsp;channels&nbsp;at<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input&nbsp;port&nbsp;'a'&nbsp;of&nbsp;the&nbsp;beamsplitter,&nbsp;and&nbsp;input_channels_b&nbsp;the&nbsp;hor.&nbsp;and&nbsp;vert.&nbsp;channels&nbsp;at&nbsp;input&nbsp;port&nbsp;'b'.&nbsp;Howver&nbsp;also&nbsp;different<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'channels_optical'&nbsp;can&nbsp;be&nbsp;mixed&nbsp;by&nbsp;this&nbsp;beamsplitter.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_channels_a&nbsp;(tuple[int,int]):&nbsp;tuple&nbsp;with&nbsp;channel&nbsp;numbers&nbsp;for&nbsp;input&nbsp;port&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_channels_b&nbsp;(tuple[int,int]):&nbsp;tuple&nbsp;with&nbsp;channel&nbsp;numbers&nbsp;for&nbsp;input&nbsp;port&nbsp;b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;reflection&nbsp;(float):&nbsp;reflection&nbsp;fraction<br>
+&nbsp;&nbsp;&nbsp;&nbsp;transmission&nbsp;(float):&nbsp;transmission&nbsp;fraction<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception&nbsp;if&nbsp;number&nbsp;of&nbsp;channels&nbsp;in&nbsp;the&nbsp;circuit&nbsp;does&nbsp;not&nbsp;match&nbsp;requirement&nbsp;for&nbsp;the&nbsp;operation</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-phase_shift_single_channel"><strong>phase_shift_single_channel</strong></a>(self, channel_for_shift=0, phase_shift=0, node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;phase&nbsp;shift&nbsp;of&nbsp;'phi'&nbsp;(in&nbsp;radians)&nbsp;to&nbsp;specified&nbsp;channel&nbsp;of&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_for_shift:&nbsp;channel&nbsp;to&nbsp;apply&nbsp;phase&nbsp;shift&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;phase_shift:&nbsp;phase&nbsp;shift&nbsp;in&nbsp;radians&nbsp;to&nbsp;be&nbsp;applied<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-polarizing_beamsplitter"><strong>polarizing_beamsplitter</strong></a>(self, input_channels_a: tuple[int, int] = (0, 1), input_channels_b: tuple[int, int] = (2, 3), node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;polarizing&nbsp;beamsplitter&nbsp;to&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Horizontal&nbsp;polarization&nbsp;will&nbsp;be&nbsp;transmitted&nbsp;without&nbsp;loss&nbsp;or&nbsp;phase&nbsp;shift.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Vertical&nbsp;polarization&nbsp;is&nbsp;reflected&nbsp;without&nbsp;loss&nbsp;or&nbsp;phase&nbsp;shift.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_channels_a&nbsp;(tuple[int,int]):&nbsp;tuple&nbsp;with&nbsp;channel&nbsp;numbers&nbsp;for&nbsp;input&nbsp;port&nbsp;a.&nbsp;First&nbsp;index&nbsp;is&nbsp;hor.,&nbsp;2nd&nbsp;index&nbsp;vert.&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;input_channels_b&nbsp;(tuple[int,int]):&nbsp;tuple&nbsp;with&nbsp;channel&nbsp;numbers&nbsp;for&nbsp;input&nbsp;port&nbsp;b.&nbsp;First&nbsp;index&nbsp;is&nbsp;hor.,&nbsp;2nd&nbsp;index&nbsp;vert.&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;If&nbsp;number&nbsp;of&nbsp;channels&nbsp;in&nbsp;the&nbsp;circuit&nbsp;does&nbsp;not&nbsp;match&nbsp;requirement&nbsp;for&nbsp;the&nbsp;operation</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-quarter_wave_plate"><strong>quarter_wave_plate</strong></a>(self, channel_horizontal: int = 0, channel_vertical: int = 1, angle: float = 0, node_info: dict = None) -&gt; None</dt><dd><span class="code">Add&nbsp;a&nbsp;quarter&nbsp;wave&nbsp;plate&nbsp;to&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit&nbsp;with&nbsp;axis&nbsp;rotated&nbsp;over&nbsp;a&nbsp;given&nbsp;angle&nbsp;(in&nbsp;radians).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;phase&nbsp;shift&nbsp;of&nbsp;'pi/2'&nbsp;will&nbsp;be&nbsp;applied&nbsp;to&nbsp;the&nbsp;channel&nbsp;for&nbsp;vertical&nbsp;polarization&nbsp;in&nbsp;the&nbsp;frame&nbsp;of&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;reference&nbsp;of&nbsp;the&nbsp;wave&nbsp;plate.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_horizontal:&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical:&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;angle:&nbsp;rotation&nbsp;of&nbsp;the&nbsp;axis&nbsp;in&nbsp;radians<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-quarter_wave_plate_225"><strong>quarter_wave_plate_225</strong></a>(self, channel_horizontal: int = 0, channel_vertical: int = 1, node_info: dict = None) -&gt; None</dt><dd><span class="code">Add&nbsp;a&nbsp;quarter&nbsp;wave&nbsp;plate&nbsp;at&nbsp;22.5&nbsp;degrees&nbsp;to&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.&nbsp;The&nbsp;phase&nbsp;shift&nbsp;of&nbsp;'pi/2'&nbsp;will&nbsp;be&nbsp;applied&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;the&nbsp;channel&nbsp;for&nbsp;vertical&nbsp;polarization&nbsp;in&nbsp;the&nbsp;frame&nbsp;of&nbsp;reference&nbsp;of&nbsp;the&nbsp;wave&nbsp;plate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_horizontal:&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical:&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-quarter_wave_plate_45"><strong>quarter_wave_plate_45</strong></a>(self, channel_horizontal: int = 0, channel_vertical: int = 1, node_info: dict = None) -&gt; None</dt><dd><span class="code">Add&nbsp;a&nbsp;quarter&nbsp;wave&nbsp;plate&nbsp;at&nbsp;45&nbsp;degrees&nbsp;to&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.&nbsp;The&nbsp;phase&nbsp;shift&nbsp;of&nbsp;'pi/2'&nbsp;will&nbsp;be&nbsp;applied&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;the&nbsp;channel&nbsp;for&nbsp;vertical&nbsp;polarization&nbsp;in&nbsp;the&nbsp;frame&nbsp;of&nbsp;reference&nbsp;of&nbsp;the&nbsp;wave&nbsp;plate.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_horizontal:&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical:&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-swap"><strong>swap</strong></a>(self, first_channel: int = 0, second_channel: int = 1, node_info: dict = None) -&gt; None</dt><dd><span class="code">Swap&nbsp;two&nbsp;channels&nbsp;without&nbsp;loss&nbsp;or&nbsp;phase&nbsp;shift.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;first_channel&nbsp;(int):&nbsp;channel&nbsp;number&nbsp;for&nbsp;swap<br>
+&nbsp;&nbsp;&nbsp;&nbsp;second_channel&nbsp;(int):&nbsp;channel&nbsp;number&nbsp;for&nbsp;swap<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-wave_plate"><strong>wave_plate</strong></a>(self, channel_horizontal: int = 0, channel_vertical: int = 1, theta: float = 0, phi: float = 0, node_type: str = 'optical', node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;wave&nbsp;plate&nbsp;with&nbsp;phase&nbsp;delay&nbsp;between&nbsp;fast&nbsp;and&nbsp;slow&nbsp;axis&nbsp;of&nbsp;Phi,&nbsp;and&nbsp;a&nbsp;rotation&nbsp;of&nbsp;the&nbsp;axis&nbsp;over&nbsp;Theta&nbsp;to&nbsp;the&nbsp;two&nbsp;channels.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;Phi&nbsp;is&nbsp;equal&nbsp;to&nbsp;pi&nbsp;this&nbsp;will&nbsp;be&nbsp;a&nbsp;half&nbsp;wave&nbsp;plate,&nbsp;if&nbsp;Phi&nbsp;is&nbsp;equal&nbsp;to&nbsp;pi/2&nbsp;this&nbsp;is&nbsp;a&nbsp;quarter&nbsp;wave&nbsp;plate.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_horizontal:&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical:&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;theta:&nbsp;rotation&nbsp;of&nbsp;the&nbsp;axis&nbsp;in&nbsp;radians<br>
+&nbsp;&nbsp;&nbsp;&nbsp;phi:&nbsp;phase&nbsp;difference&nbsp;between&nbsp;fast&nbsp;and&nbsp;slow&nbsp;axis&nbsp;in&nbsp;radians<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="fock_state_circuit.nodes.bridge_nodes.html#BridgeNodes">fock_state_circuit.nodes.bridge_nodes.BridgeNodes</a>:<br>
+<dl><dt><a name="FockStateCircuit-bridge"><strong>bridge</strong></a>(self, next_fock_state_circuit, node_type: str = 'bridge', node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;bridge&nbsp;node&nbsp;to&nbsp;the&nbsp;circuit&nbsp;to&nbsp;transfer&nbsp;the&nbsp;collection&nbsp;of&nbsp;states&nbsp;from&nbsp;one&nbsp;circuit&nbsp;to&nbsp;another.&nbsp;Used&nbsp;when&nbsp;the&nbsp;characteristics<br>
+of&nbsp;the&nbsp;circuit&nbsp;change&nbsp;(i.e.,&nbsp;change&nbsp;number&nbsp;of&nbsp;optical/classical&nbsp;channels).</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="fock_state_circuit.nodes.measurement_nodes.html#MeasurementNodes">fock_state_circuit.nodes.measurement_nodes.MeasurementNodes</a>:<br>
+<dl><dt><a name="FockStateCircuit-measure_optical_to_classical"><strong>measure_optical_to_classical</strong></a>(self, optical_channels_to_be_measured: list[int] = [0], classical_channels_to_be_written: list[int] = [0], list_of_projections: list[str] = None, node_info: dict = None) -&gt; None</dt><dd><span class="code">Read&nbsp;photon&nbsp;number&nbsp;in&nbsp;a&nbsp;optical&nbsp;channel&nbsp;and&nbsp;write&nbsp;to&nbsp;classical&nbsp;channel.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;optical_channels_to_be_measured&nbsp;(list[int]):&nbsp;list&nbsp;of&nbsp;of&nbsp;optical&nbsp;channel&nbsp;numbers&nbsp;to&nbsp;be&nbsp;measured<br>
+&nbsp;&nbsp;&nbsp;&nbsp;classical_channels_to_be_written&nbsp;(list[int]):&nbsp;list&nbsp;of&nbsp;classical&nbsp;channel&nbsp;numbers&nbsp;to&nbsp;write&nbsp;the&nbsp;measurement&nbsp;result&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;when&nbsp;list&nbsp;of&nbsp;optical&nbsp;channels&nbsp;and&nbsp;list&nbsp;of&nbsp;classical&nbsp;channels&nbsp;are&nbsp;not&nbsp;of&nbsp;equal&nbsp;length</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="fock_state_circuit.nodes.classical_nodes.html#ClassicalNodes">fock_state_circuit.nodes.classical_nodes.ClassicalNodes</a>:<br>
+<dl><dt><a name="FockStateCircuit-classical_channel_function"><strong>classical_channel_function</strong></a>(self, function, affected_channels: list[int] = None, new_input_values: list[int] = None, node_info: dict = None) -&gt; None</dt><dd><span class="code">Perform&nbsp;a&nbsp;calculation/operation&nbsp;on&nbsp;the&nbsp;classical&nbsp;channels&nbsp;only.&nbsp;Function&nbsp;should&nbsp;use&nbsp;the&nbsp;full&nbsp;list&nbsp;of&nbsp;channels&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;input&nbsp;and&nbsp;as&nbsp;output.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Example&nbsp;function&nbsp;to&nbsp;inverse&nbsp;the&nbsp;order&nbsp;of&nbsp;classical&nbsp;channels:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;test_function(current_values,&nbsp;new_input_values,&nbsp;affected_channels):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_list&nbsp;=&nbsp;current_values[::-1]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;output_list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Example&nbsp;function&nbsp;to&nbsp;set&nbsp;values&nbsp;in&nbsp;the&nbsp;classical&nbsp;channels&nbsp;to&nbsp;fixed&nbsp;values<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;function(current_values,&nbsp;new_input_values,&nbsp;affected_channels):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;index,&nbsp;channel&nbsp;in&nbsp;enumerate(affected_channels):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;current_values[channel]&nbsp;=&nbsp;new_input_values[index]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;current_values<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;function:&nbsp;function&nbsp;using&nbsp;list&nbsp;of&nbsp;classical&nbsp;channels&nbsp;as&nbsp;input&nbsp;and&nbsp;as&nbsp;output<br>
+&nbsp;&nbsp;&nbsp;&nbsp;affected_channels&nbsp;(list[int]):&nbsp;=&nbsp;None,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;new_input_values&nbsp;(list[int]):&nbsp;=&nbsp;None,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-set_classical_channels"><strong>set_classical_channels</strong></a>(self, list_of_values_for_classical_channels: list[int] = None, list_of_classical_channel_numbers: list[int] = None, node_info: dict = None) -&gt; None</dt><dd><span class="code">Sets&nbsp;values&nbsp;for&nbsp;classical&nbsp;channels.&nbsp;Input&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;channels&nbsp;and&nbsp;a&nbsp;list&nbsp;of&nbsp;values&nbsp;to&nbsp;be&nbsp;written&nbsp;to&nbsp;the&nbsp;classical&nbsp;channel.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;two&nbsp;lists&nbsp;should&nbsp;have&nbsp;same&nbsp;length.&nbsp;First&nbsp;value&nbsp;in&nbsp;the&nbsp;list&nbsp;of&nbsp;values&nbsp;is&nbsp;written&nbsp;to&nbsp;the&nbsp;first&nbsp;channel&nbsp;in&nbsp;list&nbsp;of&nbsp;channels.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list_of_values_for_classical_channels&nbsp;(list[int]):&nbsp;list&nbsp;of&nbsp;values<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list_of_classical_channel_numbers&nbsp;(list[int]):&nbsp;list&nbsp;of&nbsp;channel&nbsp;numbers<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;exception&nbsp;is&nbsp;channel&nbsp;number&nbsp;is/are&nbsp;invalid&nbsp;or&nbsp;list&nbsp;of&nbsp;values&nbsp;does&nbsp;not&nbsp;match&nbsp;channels</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="fock_state_circuit.nodes.controlled_nodes.html#ControlledNodes">fock_state_circuit.nodes.controlled_nodes.ControlledNodes</a>:<br>
+<dl><dt><a name="FockStateCircuit-phase_shift_single_channel_classical_control"><strong>phase_shift_single_channel_classical_control</strong></a>(self, optical_channel_to_shift: int = 0, classical_channel_for_phase_shift: int = 0, node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;phase&nbsp;shift&nbsp;to&nbsp;a&nbsp;specified&nbsp;channel&nbsp;of&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit.&nbsp;The&nbsp;phase&nbsp;shift&nbsp;(in&nbsp;radians)&nbsp;is&nbsp;read&nbsp;from&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;given&nbsp;classical&nbsp;channel.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Example:&nbsp;circuit.<a href="#FockStateCircuit-phase_shift_single_channel_classical_control">phase_shift_single_channel_classical_control</a>(optical_channel_to_shift&nbsp;=&nbsp;2,&nbsp;classical_channel_for_phase_shift&nbsp;=&nbsp;1)&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;would&nbsp;read&nbsp;classical&nbsp;channel&nbsp;'1'.&nbsp;If&nbsp;that&nbsp;channel&nbsp;has&nbsp;value&nbsp;'pi'&nbsp;a&nbsp;phase&nbsp;shift&nbsp;of&nbsp;'pi'&nbsp;is&nbsp;applied&nbsp;to&nbsp;optical&nbsp;channel&nbsp;2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;optical_channel_to_shift:&nbsp;channel&nbsp;to&nbsp;apply&nbsp;phase&nbsp;shift&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_for_phase_shift:&nbsp;classical&nbsp;control&nbsp;channel&nbsp;to&nbsp;read&nbsp;phase&nbsp;shift&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;exception&nbsp;if&nbsp;the&nbsp;requested&nbsp;channels&nbsp;are&nbsp;not&nbsp;available</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-wave_plate_classical_control"><strong>wave_plate_classical_control</strong></a>(self, optical_channel_horizontal: int = 0, optical_channel_vertical: int = 1, classical_channel_for_orientation: int = 0, classical_channel_for_phase_shift: int = 0, node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;wave&nbsp;plate&nbsp;to&nbsp;specified&nbsp;channels&nbsp;of&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit&nbsp;getting&nbsp;the&nbsp;phase&nbsp;shift&nbsp;and&nbsp;plate&nbsp;orientation&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;a&nbsp;the&nbsp;classical&nbsp;channels.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Example:&nbsp;<a href="#FockStateCircuit-wave_plate_classical_control">wave_plate_classical_control</a>(self,&nbsp;channel_horizontal&nbsp;=&nbsp;3,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical&nbsp;=&nbsp;2,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_for_orientation&nbsp;=&nbsp;0,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_for_phase_shift&nbsp;=&nbsp;2)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;would&nbsp;read&nbsp;a&nbsp;orientation&nbsp;angel&nbsp;'theta'&nbsp;from&nbsp;classical&nbsp;channel&nbsp;0&nbsp;and&nbsp;a&nbsp;phase&nbsp;shift&nbsp;'phi'&nbsp;from&nbsp;classical&nbsp;channel&nbsp;2.&nbsp;This<br>
+&nbsp;&nbsp;&nbsp;&nbsp;would&nbsp;be&nbsp;applied&nbsp;as&nbsp;a&nbsp;wave&nbsp;plate&nbsp;to&nbsp;optical&nbsp;channels&nbsp;3&nbsp;and&nbsp;2).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;optical_channel_horizontal:&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;optical_channel_vertical:&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_for_orientation:&nbsp;classical&nbsp;control&nbsp;channel&nbsp;to&nbsp;read&nbsp;orientation&nbsp;angle&nbsp;'theta'&nbsp;(radians)&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_for_phase_shift:&nbsp;classical&nbsp;control&nbsp;channel&nbsp;to&nbsp;read&nbsp;phase&nbsp;shift&nbsp;'phi'&nbsp;(radians)&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;exception&nbsp;if&nbsp;the&nbsp;requested&nbsp;channels&nbsp;are&nbsp;not&nbsp;available</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="fock_state_circuit.nodes.custom_nodes.html#CustomNodes">fock_state_circuit.nodes.custom_nodes.CustomNodes</a>:<br>
+<dl><dt><a name="FockStateCircuit-c_shift"><strong>c_shift</strong></a>(self, control_channels: list[int] = [0], target_channels: list[int] = [1], node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;controlled-shift&nbsp;(c-shift)&nbsp;node&nbsp;to&nbsp;the&nbsp;circuit.&nbsp;The&nbsp;photon&nbsp;value&nbsp;in&nbsp;the&nbsp;target&nbsp;channel(s)&nbsp;is&nbsp;increased&nbsp;by&nbsp;the&nbsp;value&nbsp;in&nbsp;<br>
+the&nbsp;control&nbsp;channels(s)&nbsp;modulo&nbsp;the&nbsp;maximum&nbsp;allowed&nbsp;photon&nbsp;number.&nbsp;So&nbsp;if&nbsp;'length_of_fock_state'&nbsp;is&nbsp;3,&nbsp;control&nbsp;channel&nbsp;value&nbsp;is&nbsp;2&nbsp;and&nbsp;<br>
+target&nbsp;channel&nbsp;valie&nbsp;is&nbsp;1&nbsp;the&nbsp;result&nbsp;is&nbsp;that&nbsp;control&nbsp;value&nbsp;remains&nbsp;2&nbsp;and&nbsp;target&nbsp;becomes&nbsp;(2+1)%3&nbsp;=&nbsp;0The&nbsp;control&nbsp;channel(s)&nbsp;remain&nbsp;unaffected.&nbsp;<br>
+This&nbsp;is&nbsp;not&nbsp;a&nbsp;linear&nbsp;optical&nbsp;operation&nbsp;(photons&nbsp;are&nbsp;created&nbsp;in&nbsp;this&nbsp;process).&nbsp;The&nbsp;node&nbsp;can&nbsp;create&nbsp;entanglement&nbsp;and&nbsp;allows&nbsp;'coupling'&nbsp;<br>
+between&nbsp;optical&nbsp;channels.<br>
+&nbsp;<br>
+Args:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;control_channels&nbsp;(list[int]):&nbsp;Channels&nbsp;that&nbsp;'control'&nbsp;the&nbsp;target&nbsp;channel&nbsp;and&nbsp;remain&nbsp;unchanged&nbsp;themselves<br>
+&nbsp;&nbsp;&nbsp;&nbsp;target_channels&nbsp;(list[int]):&nbsp;Channels&nbsp;that&nbsp;change&nbsp;value&nbsp;based&nbsp;on&nbsp;the&nbsp;values&nbsp;in&nbsp;the&nbsp;control&nbsp;channels<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Raises:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception&nbsp;when&nbsp;the&nbsp;input&nbsp;channel&nbsp;numbers&nbsp;do&nbsp;not&nbsp;match&nbsp;with&nbsp;the&nbsp;circuit.</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-c_shift_direct"><strong>c_shift_direct</strong></a>(self, control_channels: list[int] = [0], target_channels: list[int] = [1], node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;controlled-shift&nbsp;(c-shift)&nbsp;node&nbsp;to&nbsp;the&nbsp;circuit.&nbsp;The&nbsp;photon&nbsp;value&nbsp;in&nbsp;the&nbsp;target&nbsp;channel(s)&nbsp;is&nbsp;increased&nbsp;by&nbsp;the&nbsp;value&nbsp;in&nbsp;<br>
+the&nbsp;control&nbsp;channels(s)&nbsp;modulo&nbsp;the&nbsp;maximum&nbsp;allowed&nbsp;photon&nbsp;number.&nbsp;So&nbsp;if&nbsp;'length_of_fock_state'&nbsp;is&nbsp;3,&nbsp;control&nbsp;channel&nbsp;value&nbsp;is&nbsp;2&nbsp;and&nbsp;<br>
+target&nbsp;channel&nbsp;valie&nbsp;is&nbsp;1&nbsp;the&nbsp;result&nbsp;is&nbsp;that&nbsp;control&nbsp;value&nbsp;remains&nbsp;2&nbsp;and&nbsp;target&nbsp;becomes&nbsp;(2+1)%3&nbsp;=&nbsp;0The&nbsp;control&nbsp;channel(s)&nbsp;remain&nbsp;unaffected.&nbsp;<br>
+This&nbsp;is&nbsp;not&nbsp;a&nbsp;linear&nbsp;optical&nbsp;operation&nbsp;(photons&nbsp;are&nbsp;created&nbsp;in&nbsp;this&nbsp;process).&nbsp;The&nbsp;node&nbsp;can&nbsp;create&nbsp;entanglement&nbsp;and&nbsp;allows&nbsp;'coupling'&nbsp;<br>
+between&nbsp;optical&nbsp;channels.<br>
+&nbsp;<br>
+NOTE:&nbsp;This&nbsp;'direct'&nbsp;node&nbsp;does&nbsp;not&nbsp;create&nbsp;a&nbsp;FockState&nbsp;matrix&nbsp;but&nbsp;directly&nbsp;changes&nbsp;the&nbsp;'optical_components'&nbsp;of&nbsp;the&nbsp;states&nbsp;in&nbsp;the&nbsp;collection.&nbsp;<br>
+functionality&nbsp;is&nbsp;the&nbsp;same&nbsp;as&nbsp;for&nbsp;the&nbsp;c_shift&nbsp;node&nbsp;but&nbsp;the&nbsp;implementation&nbsp;can&nbsp;be&nbsp;faster,&nbsp;depending&nbsp;on&nbsp;number&nbsp;of&nbsp;states&nbsp;in&nbsp;the&nbsp;collection&nbsp;<br>
+and&nbsp;the&nbsp;number&nbsp;of&nbsp;channels&nbsp;in&nbsp;the&nbsp;circuit.<br>
+&nbsp;<br>
+Args:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;control_channels&nbsp;(list[int]):&nbsp;Channels&nbsp;that&nbsp;'control'&nbsp;the&nbsp;target&nbsp;channel&nbsp;and&nbsp;remain&nbsp;unchanged&nbsp;themselves<br>
+&nbsp;&nbsp;&nbsp;&nbsp;target_channels&nbsp;(list[int]):&nbsp;Channels&nbsp;that&nbsp;change&nbsp;value&nbsp;based&nbsp;on&nbsp;the&nbsp;values&nbsp;in&nbsp;the&nbsp;control&nbsp;channels<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Raises:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception&nbsp;when&nbsp;the&nbsp;input&nbsp;channel&nbsp;numbers&nbsp;do&nbsp;not&nbsp;match&nbsp;with&nbsp;the&nbsp;circuit.</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-channel_coupling"><strong>channel_coupling</strong></a>(self, control_channels: list[int] = [0], target_channels: list[int] = [1], coupling_strength: float = 0, node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;node&nbsp;to&nbsp;the&nbsp;circuit&nbsp;to&nbsp;couple&nbsp;channels&nbsp;with&nbsp;the&nbsp;given&nbsp;'coupling_strength'.&nbsp;The&nbsp;node&nbsp;will&nbsp;effectively&nbsp;<br>
+apply&nbsp;a&nbsp;controlled&nbsp;shift&nbsp;from&nbsp;control&nbsp;channels&nbsp;to&nbsp;target&nbsp;channels.<br>
+&nbsp;<br>
+Args:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;control_channels&nbsp;(list[int]):&nbsp;Channels&nbsp;that&nbsp;'control'&nbsp;the&nbsp;target&nbsp;channel&nbsp;and&nbsp;remain&nbsp;unchanged&nbsp;themselves<br>
+&nbsp;&nbsp;&nbsp;&nbsp;target_channels&nbsp;(list[int]):&nbsp;Channels&nbsp;that&nbsp;change&nbsp;value&nbsp;based&nbsp;on&nbsp;the&nbsp;values&nbsp;in&nbsp;the&nbsp;control&nbsp;channels<br>
+&nbsp;&nbsp;&nbsp;&nbsp;coupling_strength&nbsp;(float):&nbsp;Set&nbsp;coupling&nbsp;strength&nbsp;between&nbsp;0&nbsp;(no&nbsp;coupling,&nbsp;node&nbsp;does&nbsp;nothing)&nbsp;and&nbsp;1&nbsp;(full&nbsp;coupling)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Raises:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception&nbsp;when&nbsp;the&nbsp;input&nbsp;channel&nbsp;numbers&nbsp;do&nbsp;not&nbsp;match&nbsp;with&nbsp;the&nbsp;circuit.</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-custom_fock_state_node"><strong>custom_fock_state_node</strong></a>(self, custom_fock_matrix, node_type: str = 'custom fock matrix', node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;custom&nbsp;Fock&nbsp;state&nbsp;matrix&nbsp;to&nbsp;the&nbsp;circuit.&nbsp;The&nbsp;matrix&nbsp;has&nbsp;to&nbsp;be&nbsp;an&nbsp;LxL&nbsp;numpy&nbsp;array&nbsp;with&nbsp;numpy&nbsp;cdouble&nbsp;entries.&nbsp;L&nbsp;is&nbsp;the&nbsp;total&nbsp;size<br>
+of&nbsp;the&nbsp;Fock&nbsp;state&nbsp;basis&nbsp;(which&nbsp;can&nbsp;be&nbsp;retrieved&nbsp;via&nbsp;<a href="#FockStateCircuit">FockStateCircuit</a>.<a href="#FockStateCircuit-basis">basis</a>()&nbsp;)The&nbsp;function&nbsp;does&nbsp;NOT&nbsp;check&nbsp;whether&nbsp;the&nbsp;matrix&nbsp;is&nbsp;physically&nbsp;<br>
+possible&nbsp;(i.e.,invertible,&nbsp;unitary).</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-custom_optical_node"><strong>custom_optical_node</strong></a>(self, matrix_optical, optical_channels: list[int], node_type: str = 'optical', node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;custom&nbsp;optical&nbsp;matrix&nbsp;to&nbsp;the&nbsp;circuit.&nbsp;The&nbsp;matris&nbsp;has&nbsp;to&nbsp;be&nbsp;a&nbsp;2x2&nbsp;numpy&nbsp;array&nbsp;with&nbsp;numpy&nbsp;cdouble&nbsp;entries.&nbsp;The&nbsp;function&nbsp;does<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NOT&nbsp;check&nbsp;whether&nbsp;the&nbsp;matrix&nbsp;is&nbsp;physically&nbsp;possible&nbsp;(i.e.,invertible,&nbsp;unitary).&nbsp;<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;matrix_optical&nbsp;(np.array[np.cdouble]):&nbsp;optical&nbsp;matrix&nbsp;to&nbsp;be&nbsp;applied<br>
+&nbsp;&nbsp;&nbsp;&nbsp;optical_channels&nbsp;(list[int]):&nbsp;channels&nbsp;to&nbsp;apply&nbsp;the&nbsp;optical&nbsp;matrix&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_type&nbsp;(str):&nbsp;type&nbsp;of&nbsp;optical&nbsp;node&nbsp;('optical'&nbsp;or&nbsp;'optical&nbsp;non-linear'&nbsp;)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;If&nbsp;the&nbsp;matrix&nbsp;is&nbsp;not&nbsp;2x2</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-generic_function_on_collection"><strong>generic_function_on_collection</strong></a>(self, function, affected_optical_channels: list[int] = None, affected_classical_channels: list[int] = None, parameters: list[int] = None, node_info: dict = None) -&gt; None</dt><dd><span class="code">Perform&nbsp;a&nbsp;calculation/operation&nbsp;on&nbsp;the&nbsp;full&nbsp;collection&nbsp;of&nbsp;states.&nbsp;The&nbsp;function&nbsp;should&nbsp;return&nbsp;a&nbsp;transformed&nbsp;collection&nbsp;matching&nbsp;the&nbsp;layout&nbsp;of&nbsp;the&nbsp;circuit.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;the&nbsp;most&nbsp;generic&nbsp;node&nbsp;giving&nbsp;full&nbsp;freedom&nbsp;for&nbsp;a&nbsp;transformation&nbsp;on&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;function&nbsp;that&nbsp;is&nbsp;passed&nbsp;as&nbsp;argument&nbsp;will&nbsp;be&nbsp;called&nbsp;as:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collection_of_states_output&nbsp;=&nbsp;generic_function(collection_of_states_input,generic_function_parameters)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Example&nbsp;1,&nbsp;fill&nbsp;classical&nbsp;channels:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;generic_function(input_collection,parameters):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;state&nbsp;in&nbsp;input_collection:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state.classical_channel_values&nbsp;=&nbsp;parameters[:2]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;input_collection<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Example&nbsp;2,&nbsp;perform&nbsp;controlled&nbsp;shift&nbsp;operation:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;def&nbsp;generic_function(input_collection,parameters):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;control_channel&nbsp;=&nbsp;parameters[0]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;target_channel&nbsp;=&nbsp;parameters[1]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;state&nbsp;in&nbsp;input_collection:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_components&nbsp;=&nbsp;dict([])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_components&nbsp;=&nbsp;state.optical_components<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;name,&nbsp;amp_prob&nbsp;in&nbsp;old_components.items():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_values&nbsp;=&nbsp;state._dict_of_valid_component_names[name].copy()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;old_values[target_channel]&nbsp;=&nbsp;(old_values[target_channel]&nbsp;+&nbsp;old_values[control_channel])%input_collection._length_of_fock_state<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_name&nbsp;=&nbsp;input_collection._get_state_name_from_list_of_photon_numbers(old_values)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new_components.update({new_name:amp_prob})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state.optical_components&nbsp;&nbsp;=&nbsp;new_components<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;input_collection<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;(_type_):&nbsp;function&nbsp;to&nbsp;be&nbsp;executed&nbsp;on&nbsp;the&nbsp;full&nbsp;collection&nbsp;of&nbsp;states<br>
+&nbsp;&nbsp;&nbsp;&nbsp;affected_optical_channels&nbsp;(list[int],&nbsp;optional):&nbsp;optical&nbsp;channels&nbsp;(only&nbsp;used&nbsp;in&nbsp;drawing&nbsp;circuit).&nbsp;Defaults&nbsp;to&nbsp;None.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;affected_classical_channels&nbsp;(list[int],&nbsp;optional):&nbsp;classical&nbsp;channels&nbsp;(only&nbsp;used&nbsp;in&nbsp;drawing&nbsp;circuit).&nbsp;Defaults&nbsp;to&nbsp;None.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;parameters&nbsp;(list[int],&nbsp;optional):&nbsp;list&nbsp;of&nbsp;parameters&nbsp;passed&nbsp;to&nbsp;the&nbsp;function.&nbsp;Defaults&nbsp;to&nbsp;None.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict,&nbsp;optional):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.&nbsp;Defaults&nbsp;to&nbsp;None.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-shift"><strong>shift</strong></a>(self, target_channels: list[int] = [1], shift_per_channel: list[int] = [0], node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;shift&nbsp;node&nbsp;to&nbsp;the&nbsp;circuit.&nbsp;The&nbsp;photon&nbsp;value&nbsp;in&nbsp;the&nbsp;target&nbsp;channel(s)&nbsp;is&nbsp;increased&nbsp;by&nbsp;the&nbsp;value&nbsp;in&nbsp;<br>
+the&nbsp;list&nbsp;'shift_per_channel'&nbsp;modulo&nbsp;the&nbsp;maximum&nbsp;allowed&nbsp;photon&nbsp;number.&nbsp;So&nbsp;if&nbsp;'length_of_fock_state'&nbsp;is&nbsp;3,&nbsp;<br>
+shift&nbsp;value&nbsp;is&nbsp;2&nbsp;and&nbsp;target&nbsp;channel&nbsp;value&nbsp;is&nbsp;1&nbsp;the&nbsp;result&nbsp;is&nbsp;that&nbsp;target&nbsp;becomes&nbsp;(2+1)%3&nbsp;=&nbsp;0.&nbsp;This&nbsp;is&nbsp;not&nbsp;a&nbsp;<br>
+linear&nbsp;optical&nbsp;operation&nbsp;(photons&nbsp;are&nbsp;created&nbsp;in&nbsp;this&nbsp;process).&nbsp;<br>
+&nbsp;<br>
+Args:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;target_channels&nbsp;(list[int]):&nbsp;Channels&nbsp;that&nbsp;change&nbsp;value&nbsp;based&nbsp;on&nbsp;the&nbsp;values&nbsp;in&nbsp;'shift_per_channel'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;shift_per_channel&nbsp;(list[int]):&nbsp;Shift&nbsp;value&nbsp;per&nbsp;channel<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Raises:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception&nbsp;when&nbsp;the&nbsp;input&nbsp;channel&nbsp;numbers&nbsp;do&nbsp;not&nbsp;match&nbsp;with&nbsp;the&nbsp;circuit.</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-shift_direct"><strong>shift_direct</strong></a>(self, target_channels: list[int] = [1], shift_per_channel: list[int] = [0], node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;shift&nbsp;node&nbsp;to&nbsp;the&nbsp;circuit.&nbsp;The&nbsp;photon&nbsp;value&nbsp;in&nbsp;the&nbsp;target&nbsp;channel(s)&nbsp;is&nbsp;increased&nbsp;by&nbsp;the&nbsp;value&nbsp;in&nbsp;<br>
+the&nbsp;list&nbsp;'shift_per_channel'&nbsp;modulo&nbsp;the&nbsp;maximum&nbsp;allowed&nbsp;photon&nbsp;number.&nbsp;So&nbsp;if&nbsp;'length_of_fock_state'&nbsp;is&nbsp;3,&nbsp;<br>
+shift&nbsp;value&nbsp;is&nbsp;2&nbsp;and&nbsp;target&nbsp;channel&nbsp;value&nbsp;is&nbsp;1&nbsp;the&nbsp;result&nbsp;is&nbsp;that&nbsp;target&nbsp;becomes&nbsp;(2+1)%3&nbsp;=&nbsp;0.&nbsp;This&nbsp;is&nbsp;not&nbsp;a&nbsp;<br>
+linear&nbsp;optical&nbsp;operation&nbsp;(photons&nbsp;are&nbsp;created&nbsp;in&nbsp;this&nbsp;process).&nbsp;<br>
+&nbsp;<br>
+NOTE:&nbsp;This&nbsp;'direct'&nbsp;node&nbsp;does&nbsp;not&nbsp;create&nbsp;a&nbsp;FockState&nbsp;matrix&nbsp;but&nbsp;directly&nbsp;changes&nbsp;the&nbsp;'optical_components'&nbsp;of&nbsp;the&nbsp;states&nbsp;in&nbsp;the&nbsp;collection.&nbsp;<br>
+functionality&nbsp;is&nbsp;the&nbsp;same&nbsp;as&nbsp;for&nbsp;the&nbsp;regular&nbsp;'shift'&nbsp;node&nbsp;but&nbsp;the&nbsp;implementation&nbsp;can&nbsp;be&nbsp;faster,&nbsp;depending&nbsp;on&nbsp;number&nbsp;of&nbsp;states&nbsp;in&nbsp;the&nbsp;collection&nbsp;<br>
+and&nbsp;the&nbsp;number&nbsp;of&nbsp;channels&nbsp;in&nbsp;the&nbsp;circuit.<br>
+&nbsp;<br>
+Args:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;target_channels&nbsp;(list[int]):&nbsp;Channels&nbsp;that&nbsp;change&nbsp;value&nbsp;based&nbsp;on&nbsp;the&nbsp;values&nbsp;in&nbsp;'shift_per_channel'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;shift_per_channel&nbsp;(list[int]):&nbsp;Shift&nbsp;value&nbsp;per&nbsp;channel<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Raises:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception&nbsp;when&nbsp;the&nbsp;input&nbsp;channel&nbsp;numbers&nbsp;do&nbsp;not&nbsp;match&nbsp;with&nbsp;the&nbsp;circuit.</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="fock_state_circuit.nodes.spectral_nodes.html#SpectralNodes">fock_state_circuit.nodes.spectral_nodes.SpectralNodes</a>:<br>
+<dl><dt><a name="FockStateCircuit-set_pulse_width"><strong>set_pulse_width</strong></a>(self, affected_channels: list[int] = None, pulse_width: float = None, node_type: str = 'spectrum', node_info: dict = None) -&gt; None</dt><dd><span class="code">Set&nbsp;pulse&nbsp;width&nbsp;for&nbsp;requested&nbsp;optical&nbsp;channels.&nbsp;If&nbsp;affected&nbsp;channels&nbsp;is&nbsp;None&nbsp;(default)&nbsp;all&nbsp;channels&nbsp;will&nbsp;be&nbsp;set.&nbsp;<br>
+If&nbsp;affected_channels&nbsp;is&nbsp;an&nbsp;empty&nbsp;list&nbsp;the&nbsp;node&nbsp;will&nbsp;have&nbsp;no&nbsp;effect.<br>
+&nbsp;<br>
+NOTE:&nbsp;Changing&nbsp;pulse&nbsp;width&nbsp;in&nbsp;some&nbsp;channels&nbsp;can&nbsp;lead&nbsp;to&nbsp;non-physical&nbsp;results.&nbsp;We&nbsp;do&nbsp;not&nbsp;take&nbsp;into&nbsp;account&nbsp;absorption&nbsp;<br>
+in&nbsp;spectral&nbsp;filters&nbsp;or&nbsp;'chirp'&nbsp;in&nbsp;stretched&nbsp;pulses.&nbsp;It&nbsp;is&nbsp;safer&nbsp;to&nbsp;keep&nbsp;pulse-width&nbsp;the&nbsp;same&nbsp;for&nbsp;all&nbsp;photons&nbsp;and&nbsp;all&nbsp;<br>
+channels.</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-time_delay"><strong>time_delay</strong></a>(self, affected_channels: list[int] = None, delay: float = 0, pulse_width: float = None, bandwidth: float = None, node_type: str = 'spectrum', node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;time&nbsp;delay&nbsp;for&nbsp;a&nbsp;given&nbsp;pulse_width.&nbsp;The&nbsp;node&nbsp;will&nbsp;turn&nbsp;a&nbsp;pure&nbsp;state&nbsp;into&nbsp;a&nbsp;statistical&nbsp;mixture&nbsp;where&nbsp;states<br>
+obtain&nbsp;a&nbsp;time&nbsp;shift&nbsp;that&nbsp;depends&nbsp;on&nbsp;the&nbsp;time&nbsp;delay.&nbsp;<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;the&nbsp;QUICK&nbsp;implementation&nbsp;allowing&nbsp;only&nbsp;a&nbsp;single&nbsp;time&nbsp;gates&nbsp;in&nbsp;the&nbsp;circuit.&nbsp;<br>
+&nbsp;<br>
+The&nbsp;use&nbsp;of&nbsp;argument&nbsp;bandwidth&nbsp;is&nbsp;deprecated&nbsp;an&nbsp;only&nbsp;provided&nbsp;for&nbsp;backward&nbsp;compatibility.&nbsp;Please&nbsp;use&nbsp;pulse_width</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-time_delay_classical_control"><strong>time_delay_classical_control</strong></a>(self, affected_channels: list[int] = None, classical_channel_for_delay: int = 0, pulse_width: float = None, bandwidth: float = None, node_type: str = 'spectrum', node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;time&nbsp;delay&nbsp;for&nbsp;a&nbsp;given&nbsp;pulse_width.&nbsp;The&nbsp;delay&nbsp;is&nbsp;read&nbsp;from&nbsp;the&nbsp;provided&nbsp;classical&nbsp;channel.<br>
+The&nbsp;node&nbsp;will&nbsp;turn&nbsp;a&nbsp;pure&nbsp;state&nbsp;into&nbsp;a&nbsp;statistical&nbsp;mixture&nbsp;where&nbsp;states<br>
+obtain&nbsp;a&nbsp;time&nbsp;shift&nbsp;that&nbsp;depends&nbsp;on&nbsp;the&nbsp;time&nbsp;delay.&nbsp;<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;the&nbsp;QUICK&nbsp;implementation&nbsp;allowing&nbsp;only&nbsp;a&nbsp;single&nbsp;time&nbsp;gates&nbsp;in&nbsp;the&nbsp;circuit.<br>
+&nbsp;<br>
+The&nbsp;use&nbsp;of&nbsp;argument&nbsp;bandwidth&nbsp;is&nbsp;deprecated&nbsp;an&nbsp;only&nbsp;provided&nbsp;for&nbsp;backward&nbsp;compatibility.&nbsp;Please&nbsp;use&nbsp;pulse_width</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-time_delay_classical_control_full"><strong>time_delay_classical_control_full</strong></a>(self, affected_channels: list[int] = None, classical_channel_for_delay: int = 0, pulse_width: float = 1, node_type: str = 'spectrum', node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;time&nbsp;delay&nbsp;for&nbsp;a&nbsp;given&nbsp;pulse_width.&nbsp;The&nbsp;delay&nbsp;is&nbsp;read&nbsp;from&nbsp;the&nbsp;provided&nbsp;classical&nbsp;channel.<br>
+The&nbsp;node&nbsp;will&nbsp;turn&nbsp;a&nbsp;pure&nbsp;state&nbsp;into&nbsp;a&nbsp;statistical&nbsp;mixture&nbsp;where&nbsp;states<br>
+obtain&nbsp;a&nbsp;time&nbsp;shift&nbsp;that&nbsp;depends&nbsp;on&nbsp;the&nbsp;time&nbsp;delay.&nbsp;<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;the&nbsp;FULL&nbsp;implementation&nbsp;allowing&nbsp;successive&nbsp;timing&nbsp;gates&nbsp;in&nbsp;the&nbsp;circuit.</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-time_delay_full"><strong>time_delay_full</strong></a>(self, affected_channels: list[int] = None, delay: float = 0, pulse_width: float = 1, node_type: str = 'spectrum', node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;time&nbsp;delay&nbsp;for&nbsp;a&nbsp;given&nbsp;pulse_width.&nbsp;The&nbsp;node&nbsp;will&nbsp;turn&nbsp;a&nbsp;pure&nbsp;state&nbsp;into&nbsp;a&nbsp;statistical&nbsp;mixture&nbsp;where&nbsp;states<br>
+obtain&nbsp;a&nbsp;time&nbsp;shift&nbsp;that&nbsp;depends&nbsp;on&nbsp;the&nbsp;time&nbsp;delay.&nbsp;<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;the&nbsp;FULL&nbsp;implementation&nbsp;allowing&nbsp;successive&nbsp;timing&nbsp;gates&nbsp;in&nbsp;the&nbsp;circuit.</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="fock_state_circuit.nodes.quantum_operator_nodes.html#QuantumOperatorNodes">fock_state_circuit.nodes.quantum_operator_nodes.QuantumOperatorNodes</a>:<br>
+<dl><dt><a name="FockStateCircuit-hamiltonian_operator_gate"><strong>hamiltonian_operator_gate</strong></a>(self, channels: list[int], operators: list[fock_state_circuit.quantum_operator_functionality.quantum_operators.Hamiltonian], node_type: str = 'generic function on collection', node_info: dict = None) -&gt; None</dt></dl>
+
+<dl><dt><a name="FockStateCircuit-wave_plate_from_hamiltonian"><strong>wave_plate_from_hamiltonian</strong></a>(self, channel_horizontal: int = 0, channel_vertical: int = 1, theta: float = 0, phi: float = 0, node_type: str = 'generic function on collection', node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;wave&nbsp;plate&nbsp;with&nbsp;phase&nbsp;delay&nbsp;between&nbsp;fast&nbsp;and&nbsp;slow&nbsp;axis&nbsp;of&nbsp;Phi,&nbsp;and&nbsp;a&nbsp;rotation&nbsp;of&nbsp;the&nbsp;axis&nbsp;over&nbsp;Theta&nbsp;to&nbsp;the&nbsp;two&nbsp;channels.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;Phi&nbsp;is&nbsp;equal&nbsp;to&nbsp;pi&nbsp;this&nbsp;will&nbsp;be&nbsp;a&nbsp;half&nbsp;wave&nbsp;plate,&nbsp;if&nbsp;Phi&nbsp;is&nbsp;equal&nbsp;to&nbsp;pi/2&nbsp;this&nbsp;is&nbsp;a&nbsp;quarter&nbsp;wave&nbsp;plate.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_horizontal:&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical:&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;theta:&nbsp;rotation&nbsp;of&nbsp;the&nbsp;axis&nbsp;in&nbsp;radians<br>
+&nbsp;&nbsp;&nbsp;&nbsp;phi:&nbsp;phase&nbsp;difference&nbsp;between&nbsp;fast&nbsp;and&nbsp;slow&nbsp;axis&nbsp;in&nbsp;radians<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-wave_plate_from_hamiltonian_classical_control"><strong>wave_plate_from_hamiltonian_classical_control</strong></a>(self, optical_channel_horizontal: int = 0, optical_channel_vertical: int = 1, classical_channel_for_orientation: int = 0, classical_channel_for_phase_shift: int = 0, node_info: dict = None) -&gt; None</dt><dd><span class="code">Apply&nbsp;a&nbsp;wave&nbsp;plate&nbsp;to&nbsp;specified&nbsp;channels&nbsp;of&nbsp;the&nbsp;fock&nbsp;state&nbsp;circuit&nbsp;getting&nbsp;the&nbsp;phase&nbsp;shift&nbsp;and&nbsp;plate&nbsp;orientation&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;a&nbsp;the&nbsp;classical&nbsp;channels.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Example:&nbsp;<a href="#FockStateCircuit-wave_plate_classical_control">wave_plate_classical_control</a>(self,&nbsp;channel_horizontal&nbsp;=&nbsp;3,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel_vertical&nbsp;=&nbsp;2,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_for_orientation&nbsp;=&nbsp;0,&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_for_phase_shift&nbsp;=&nbsp;2)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;would&nbsp;read&nbsp;a&nbsp;orientation&nbsp;angel&nbsp;'theta'&nbsp;from&nbsp;classical&nbsp;channel&nbsp;0&nbsp;and&nbsp;a&nbsp;phase&nbsp;shift&nbsp;'phi'&nbsp;from&nbsp;classical&nbsp;channel&nbsp;2.&nbsp;This<br>
+&nbsp;&nbsp;&nbsp;&nbsp;would&nbsp;be&nbsp;applied&nbsp;as&nbsp;a&nbsp;wave&nbsp;plate&nbsp;to&nbsp;optical&nbsp;channels&nbsp;3&nbsp;and&nbsp;2).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;optical_channel_horizontal:&nbsp;channel&nbsp;number&nbsp;for&nbsp;horizontal&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;optical_channel_vertical:&nbsp;channel&nbsp;number&nbsp;for&nbsp;vertical&nbsp;polarization<br>
+&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_for_orientation:&nbsp;classical&nbsp;control&nbsp;channel&nbsp;to&nbsp;read&nbsp;orientation&nbsp;angle&nbsp;'theta'&nbsp;(radians)&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;classical_channel_for_phase_shift:&nbsp;classical&nbsp;control&nbsp;channel&nbsp;to&nbsp;read&nbsp;phase&nbsp;shift&nbsp;'phi'&nbsp;(radians)&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;exception&nbsp;if&nbsp;the&nbsp;requested&nbsp;channels&nbsp;are&nbsp;not&nbsp;available</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="fock_state_circuit.nodes.superquantum_nodes.html#SuperQuantumNodes">fock_state_circuit.nodes.superquantum_nodes.SuperQuantumNodes</a>:<br>
+<dl><dt><a name="FockStateCircuit-create_no_signalling_boxes"><strong>create_no_signalling_boxes</strong></a>(self, ns_boxes: list, node_info: dict = None) -&gt; None</dt><dd><span class="code">DEPRECATED:&nbsp;Use&nbsp;popescu_rohrlich_correlation_gate&nbsp;instead&nbsp;!<br>
+&nbsp;<br>
+Creates&nbsp;(a&nbsp;set&nbsp;of)&nbsp;no-signalling&nbsp;boxes.&nbsp;The&nbsp;collection&nbsp;at&nbsp;input&nbsp;of&nbsp;this&nbsp;gate&nbsp;is&nbsp;completely&nbsp;replaced,&nbsp;so&nbsp;what&nbsp;happens&nbsp;before&nbsp;this&nbsp;gate<br>
+does&nbsp;not&nbsp;affect&nbsp;the&nbsp;outcome&nbsp;(so&nbsp;this&nbsp;should&nbsp;be&nbsp;first&nbsp;gate&nbsp;in&nbsp;any&nbsp;circuit).&nbsp;When&nbsp;a&nbsp;measurement&nbsp;node&nbsp;is&nbsp;applied&nbsp;later&nbsp;in&nbsp;the&nbsp;circuit<br>
+all&nbsp;optical&nbsp;states&nbsp;are&nbsp;measured,&nbsp;classical&nbsp;channels&nbsp;are&nbsp;written&nbsp;as&nbsp;specified&nbsp;in&nbsp;the&nbsp;measurement&nbsp;node.&nbsp;The&nbsp;'initial_state'&nbsp;for&nbsp;the&nbsp;<br>
+resulting&nbsp;collection&nbsp;(after&nbsp;measurement)&nbsp;is&nbsp;'no_signalling_boxes'<br>
+&nbsp;<br>
+See&nbsp;example&nbsp;code&nbsp;a&nbsp;bit&nbsp;below.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ns_boxes:&nbsp;List&nbsp;of&nbsp;form&nbsp;[{'channels_Ah_Av_Bh_Bv':[0,1,2,3],'quantumness_indicator':1},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'channels_Ah_Av_Bh_Bv':[4,5,6,7],'quantumness_indicator':5}]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used<br>
+&nbsp;<br>
+Example&nbsp;code:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;N&nbsp;=&nbsp;10<br>
+&nbsp;&nbsp;&nbsp;&nbsp;angles&nbsp;=&nbsp;[0]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;circuit_is_already_drawn&nbsp;=&nbsp;False<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ns_boxes&nbsp;=&nbsp;[{'channels_Ah_Av_Bh_Bv':[0,1,2,3],'quantumness_indicator':1},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'channels_Ah_Av_Bh_Bv':[4,5,6,7],'quantumness_indicator':5}]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;angle_first&nbsp;in&nbsp;angles:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict_for_plotting&nbsp;=&nbsp;dict([])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;angle&nbsp;in&nbsp;[(a/N)*np.pi/2&nbsp;for&nbsp;a&nbsp;in&nbsp;range(N)]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit&nbsp;=&nbsp;fsc.<a href="#FockStateCircuit">FockStateCircuit</a>(length_of_fock_state=3,no_of_optical_channels=8,no_of_classical_channels=8)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-create_no_signalling_boxes">create_no_signalling_boxes</a>(ns_boxes=ns_boxes)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-half_wave_plate">half_wave_plate</a>(channel_horizontal=2,channel_vertical=3,angle=angle)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-half_wave_plate">half_wave_plate</a>(channel_horizontal=6,channel_vertical=7,angle=angle)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-half_wave_plate">half_wave_plate</a>(channel_horizontal=0,channel_vertical=1,angle=angle_first)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-half_wave_plate">half_wave_plate</a>(channel_horizontal=4,channel_vertical=5,angle=angle_first)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-measure_optical_to_classical">measure_optical_to_classical</a>(optical_channels_to_be_measured=[n&nbsp;for&nbsp;n&nbsp;in&nbsp;range(8)],classical_channels_to_be_written=[n&nbsp;for&nbsp;n&nbsp;in&nbsp;range(8)])<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;not&nbsp;circuit_is_already_drawn:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-draw">draw</a>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit_is_already_drawn&nbsp;=&nbsp;True<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collection&nbsp;=&nbsp;fsc.CollectionOfStates(fock_state_circuit=circuit,input_collection_as_a_dict=dict([]))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state&nbsp;=&nbsp;fsc.State(collection_of_states=collection)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collection.add_state(state)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_collection&nbsp;=&nbsp;circuit.<a href="#FockStateCircuit-evaluate_circuit">evaluate_circuit</a>(collection_of_states_input=collection)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel_combis_for_correlation&nbsp;=&nbsp;[(0,2),(4,6)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;label_for_channel_combinations&nbsp;=&nbsp;['first&nbsp;pair,&nbsp;K&nbsp;=&nbsp;1','second&nbsp;pair,&nbsp;K&nbsp;=&nbsp;5']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correlations&nbsp;=&nbsp;output_collection.plot_correlations(channel_combis_for_correlation=channel_combis_for_correlation,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correlation_output_instead_of_plot=True)['no_signalling_boxes']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lst&nbsp;=&nbsp;[]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lst.append({'output_state':&nbsp;'first&nbsp;pair,&nbsp;K&nbsp;=&nbsp;1',&nbsp;'probability':&nbsp;correlations[0]})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lst.append({'output_state':&nbsp;'second&nbsp;pair,&nbsp;K&nbsp;=&nbsp;5',&nbsp;'probability':&nbsp;correlations[1]})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict_for_plotting.update({str(np.round(angle/np.pi,3))&nbsp;+&nbsp;'&nbsp;pi':&nbsp;lst})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;plot&nbsp;the&nbsp;resulting&nbsp;correlations&nbsp;for&nbsp;the&nbsp;no-signalling&nbsp;boxes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fsc.plot_correlations_from_dict(dict_for_plotting)</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-popescu_rohrlich_correlation_gate"><strong>popescu_rohrlich_correlation_gate</strong></a>(self, pr_correlation: list, node_info: dict = None) -&gt; None</dt><dd><span class="code">Creates&nbsp;(a&nbsp;set&nbsp;of)&nbsp;with&nbsp;superquantum&nbsp;correlations.&nbsp;The&nbsp;collection&nbsp;at&nbsp;input&nbsp;of&nbsp;this&nbsp;gate&nbsp;is&nbsp;completely&nbsp;replaced,&nbsp;so&nbsp;what&nbsp;happens&nbsp;before&nbsp;this&nbsp;gate<br>
+does&nbsp;not&nbsp;affect&nbsp;the&nbsp;outcome&nbsp;(so&nbsp;this&nbsp;should&nbsp;be&nbsp;first&nbsp;gate&nbsp;in&nbsp;any&nbsp;circuit).&nbsp;When&nbsp;a&nbsp;measurement&nbsp;node&nbsp;is&nbsp;applied&nbsp;later&nbsp;in&nbsp;the&nbsp;circuit<br>
+all&nbsp;optical&nbsp;states&nbsp;are&nbsp;measured,&nbsp;classical&nbsp;channels&nbsp;are&nbsp;written&nbsp;as&nbsp;specified&nbsp;in&nbsp;the&nbsp;measurement&nbsp;node.&nbsp;The&nbsp;'initial_state'&nbsp;for&nbsp;the&nbsp;<br>
+resulting&nbsp;collection&nbsp;(after&nbsp;measurement)&nbsp;is&nbsp;'popescu-rohrlich-photons'<br>
+&nbsp;<br>
+See&nbsp;example&nbsp;code&nbsp;a&nbsp;bit&nbsp;below.<br>
+&nbsp;<br>
+Arguments:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pr_correlation:&nbsp;List&nbsp;of&nbsp;form&nbsp;[{'channels_Ah_Av_Bh_Bv':[0,1,2,3],'quantumness_indicator':1},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'channels_Ah_Av_Bh_Bv':[4,5,6,7],'quantumness_indicator':5}]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node_info&nbsp;(dict):&nbsp;Information&nbsp;for&nbsp;displaying&nbsp;the&nbsp;node&nbsp;when&nbsp;drawing&nbsp;circuit.&nbsp;Defaults&nbsp;to&nbsp;None,&nbsp;in&nbsp;that&nbsp;case&nbsp;default&nbsp;image&nbsp;is&nbsp;used<br>
+&nbsp;<br>
+Example&nbsp;code:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;N&nbsp;=&nbsp;10<br>
+&nbsp;&nbsp;&nbsp;&nbsp;angles&nbsp;=&nbsp;[0]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;circuit_is_already_drawn&nbsp;=&nbsp;False<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pr_correlation&nbsp;=&nbsp;[{'channels_Ah_Av_Bh_Bv':[0,1,2,3],'quantumness_indicator':1},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'channels_Ah_Av_Bh_Bv':[4,5,6,7],'quantumness_indicator':5}]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;angle_first&nbsp;in&nbsp;angles:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict_for_plotting&nbsp;=&nbsp;dict([])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;angle&nbsp;in&nbsp;[(a/N)*np.pi/2&nbsp;for&nbsp;a&nbsp;in&nbsp;range(N)]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit&nbsp;=&nbsp;fsc.<a href="#FockStateCircuit">FockStateCircuit</a>(length_of_fock_state=3,no_of_optical_channels=8,no_of_classical_channels=8)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-popescu_rohrlich_correlation_gate">popescu_rohrlich_correlation_gate</a>(ns_boxes=ns_boxes)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-half_wave_plate">half_wave_plate</a>(channel_horizontal=2,channel_vertical=3,angle=angle)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-half_wave_plate">half_wave_plate</a>(channel_horizontal=6,channel_vertical=7,angle=angle)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-half_wave_plate">half_wave_plate</a>(channel_horizontal=0,channel_vertical=1,angle=angle_first)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-half_wave_plate">half_wave_plate</a>(channel_horizontal=4,channel_vertical=5,angle=angle_first)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-measure_optical_to_classical">measure_optical_to_classical</a>(optical_channels_to_be_measured=[n&nbsp;for&nbsp;n&nbsp;in&nbsp;range(8)],classical_channels_to_be_written=[n&nbsp;for&nbsp;n&nbsp;in&nbsp;range(8)])<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;not&nbsp;circuit_is_already_drawn:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit.<a href="#FockStateCircuit-draw">draw</a>()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;circuit_is_already_drawn&nbsp;=&nbsp;True<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collection&nbsp;=&nbsp;fsc.CollectionOfStates(fock_state_circuit=circuit,input_collection_as_a_dict=dict([]))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;state&nbsp;=&nbsp;fsc.State(collection_of_states=collection)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collection.add_state(state)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;output_collection&nbsp;=&nbsp;circuit.<a href="#FockStateCircuit-evaluate_circuit">evaluate_circuit</a>(collection_of_states_input=collection)<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel_combis_for_correlation&nbsp;=&nbsp;[(0,2),(4,6)]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;label_for_channel_combinations&nbsp;=&nbsp;['first&nbsp;pair,&nbsp;q&nbsp;=&nbsp;1','second&nbsp;pair,&nbsp;q&nbsp;=&nbsp;5']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correlations&nbsp;=&nbsp;output_collection.plot_correlations(channel_combis_for_correlation=channel_combis_for_correlation,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;correlation_output_instead_of_plot=True)['popescu-rohrlich-photons']<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lst&nbsp;=&nbsp;[]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lst.append({'output_state':&nbsp;'first&nbsp;pair,&nbsp;q&nbsp;=&nbsp;1',&nbsp;'probability':&nbsp;correlations[0]})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lst.append({'output_state':&nbsp;'second&nbsp;pair,&nbsp;q&nbsp;=&nbsp;5',&nbsp;'probability':&nbsp;correlations[1]})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dict_for_plotting.update({str(np.round(angle/np.pi,3))&nbsp;+&nbsp;'&nbsp;pi':&nbsp;lst})<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;plot&nbsp;the&nbsp;resulting&nbsp;correlations&nbsp;for&nbsp;the&nbsp;no-signalling&nbsp;boxes<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fsc.plot_correlations_from_dict(dict_for_plotting)</span></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="fock_state_circuit.nodes.nodelist.node_list.html#NodeList">fock_state_circuit.nodes.nodelist.node_list.NodeList</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</span></dd>
+</dl>
+<hr>
+Methods inherited from <a href="fock_state_circuit.visualization.draw.html#Draw">fock_state_circuit.visualization.draw.Draw</a>:<br>
+<dl><dt><a name="FockStateCircuit-conventions"><strong>conventions</strong></a>(self) -&gt; str</dt><dd><span class="code">Function&nbsp;to&nbsp;print&nbsp;return&nbsp;the&nbsp;conventions&nbsp;used&nbsp;in&nbsp;this&nbsp;class&nbsp;as&nbsp;a&nbsp;string<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;String&nbsp;describing&nbsp;the&nbsp;conventions&nbsp;used&nbsp;in&nbsp;this&nbsp;class</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-create_settings_for_drawing_stations"><strong>create_settings_for_drawing_stations</strong></a>(self, stations, settings_for_drawing_circuit: dict = {}) -&gt; dict</dt><dd><span class="code">Create&nbsp;settings&nbsp;for&nbsp;each&nbsp;stations,&nbsp;where&nbsp;the&nbsp;title&nbsp;and&nbsp;the&nbsp;channel&nbsp;labels&nbsp;are&nbsp;specific&nbsp;for&nbsp;the&nbsp;circuit.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;function&nbsp;returns&nbsp;a&nbsp;dictionary&nbsp;with&nbsp;stations&nbsp;names&nbsp;as&nbsp;keys.&nbsp;Also&nbsp;the&nbsp;dictionary&nbsp;has&nbsp;the&nbsp;key&nbsp;'total_circuit'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;which&nbsp;contains&nbsp;settings&nbsp;for&nbsp;drawing&nbsp;the&nbsp;total&nbsp;circuit&nbsp;with&nbsp;channel&nbsp;labels&nbsp;indicating&nbsp;to&nbsp;which&nbsp;station&nbsp;the&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channel&nbsp;belongs.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stations&nbsp;(dict):&nbsp;Dictionary&nbsp;with&nbsp;information&nbsp;on&nbsp;the&nbsp;channels&nbsp;per&nbsp;station,&nbsp;as&nbsp;well&nbsp;as&nbsp;what&nbsp;stations&nbsp;to&nbsp;draw.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;settings_for_drawing_circuit&nbsp;(dict,&nbsp;optional):&nbsp;Dictionary&nbsp;with&nbsp;settings&nbsp;for&nbsp;circuit&nbsp;drawing.&nbsp;If&nbsp;none&nbsp;given&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default&nbsp;will&nbsp;be&nbsp;taken.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Exception:&nbsp;If&nbsp;'total_circuit'&nbsp;is&nbsp;the&nbsp;name&nbsp;of&nbsp;a&nbsp;station.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict:&nbsp;Dictionary&nbsp;stations&nbsp;as&nbsp;keys&nbsp;and&nbsp;settings&nbsp;for&nbsp;that&nbsp;specific&nbsp;station&nbsp;as&nbsp;values.</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-draw"><strong>draw</strong></a>(self, print_defaults: bool = False, settings_for_drawing_circuit: dict = None, compound_circuit_settings: dict = None) -&gt; None</dt><dd><span class="code"><a href="fock_state_circuit.visualization.draw.html#Draw">Draw</a>&nbsp;the&nbsp;optical&nbsp;circuit.&nbsp;self.<strong>settings_for_drawing_circuit</strong>&nbsp;is&nbsp;the&nbsp;dict&nbsp;with&nbsp;settings&nbsp;for&nbsp;circuit&nbsp;drawing.&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;this&nbsp;dict&nbsp;is&nbsp;not&nbsp;defined&nbsp;default&nbsp;values&nbsp;will&nbsp;be&nbsp;taken.&nbsp;If&nbsp;the&nbsp;boolean&nbsp;print_defaults&nbsp;is&nbsp;set&nbsp;to&nbsp;True&nbsp;the&nbsp;function&nbsp;will&nbsp;print<br>
+&nbsp;&nbsp;&nbsp;&nbsp;out&nbsp;the&nbsp;default&nbsp;values&nbsp;to&nbsp;console.&nbsp;The&nbsp;parameter&nbsp;compound_circuit_settings&nbsp;is&nbsp;used&nbsp;when&nbsp;drawing&nbsp;a&nbsp;circuit&nbsp;with&nbsp;bridges&nbsp;to&nbsp;other&nbsp;circuits&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(a.k.a.&nbsp;compound&nbsp;circuit).<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print_defaults&nbsp;(bool):&nbsp;If&nbsp;'True'&nbsp;function&nbsp;will&nbsp;print&nbsp;default&nbsp;settings&nbsp;to&nbsp;console.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;settings_for_drawing_circuit&nbsp;(dict):&nbsp;dict&nbsp;with&nbsp;settings&nbsp;for&nbsp;circuit&nbsp;drawing.&nbsp;If&nbsp;none&nbsp;given&nbsp;default&nbsp;will&nbsp;be&nbsp;taken.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;compound_circuit_settings&nbsp;(dict):&nbsp;only&nbsp;used&nbsp;for&nbsp;drawing&nbsp;compound&nbsp;circuits.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;station_channels&nbsp;(dict):&nbsp;used&nbsp;when&nbsp;circuit&nbsp;is&nbsp;distributed&nbsp;over&nbsp;multiple&nbsp;stations<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nothing</span></dd></dl>
+
+<dl><dt><a name="FockStateCircuit-draw_station"><strong>draw_station</strong></a>(self, stations, settings_for_drawing_circuit: dict = None) -&gt; None</dt><dd><span class="code"><a href="fock_state_circuit.visualization.draw.html#Draw">Draw</a>&nbsp;the&nbsp;circuit&nbsp;by&nbsp;station.&nbsp;A&nbsp;station&nbsp;is&nbsp;a&nbsp;set&nbsp;of&nbsp;channels&nbsp;locally&nbsp;present&nbsp;(for&nbsp;instance&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;channels&nbsp;for&nbsp;'Alice',&nbsp;'Bob'&nbsp;and&nbsp;'Charlie).&nbsp;The&nbsp;parameter&nbsp;'stations'&nbsp;passes&nbsp;the&nbsp;information&nbsp;on&nbsp;the&nbsp;stations,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;including&nbsp;which&nbsp;station(s)&nbsp;is/are&nbsp;to&nbsp;be&nbsp;drawn.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;format&nbsp;for&nbsp;the&nbsp;parameter&nbsp;'stations'&nbsp;is:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stations&nbsp;=&nbsp;{'station_to_draw'&nbsp;:&nbsp;'alice',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'station_channels':&nbsp;{&nbsp;'bob':&nbsp;{'optical_channels':&nbsp;[0,1],&nbsp;'classical_channels':&nbsp;[0,1]},&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'alice':&nbsp;{'optical_channels':&nbsp;[2,3],&nbsp;'classical_channels':&nbsp;[2,3]}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;'stations_to_draw'&nbsp;is&nbsp;omitted&nbsp;all&nbsp;stations&nbsp;are&nbsp;drawn.&nbsp;'stations_to_draw'&nbsp;can&nbsp;be&nbsp;a&nbsp;single&nbsp;station&nbsp;('Bob'),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;or&nbsp;can&nbsp;be&nbsp;a&nbsp;list&nbsp;(['Bob','Alice']<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;stations&nbsp;(dict):&nbsp;Dictionary&nbsp;with&nbsp;information&nbsp;on&nbsp;the&nbsp;channels&nbsp;per&nbsp;station,&nbsp;as&nbsp;well&nbsp;as&nbsp;what&nbsp;stations&nbsp;to&nbsp;draw.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;settings_for_drawing_circuit&nbsp;(dict,&nbsp;optional):&nbsp;Dictionary&nbsp;with&nbsp;settings&nbsp;for&nbsp;circuit&nbsp;drawing.&nbsp;If&nbsp;none&nbsp;given&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default&nbsp;will&nbsp;be&nbsp;taken.</span></dd></dl>
+
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-about"><strong>about</strong></a>()</dt><dd><span class="code">About&nbsp;box&nbsp;for&nbsp;<a href="#FockStateCircuit">FockStateCircuit</a>.&nbsp;Gives&nbsp;version&nbsp;numbers&nbsp;for<br>
+<a href="#FockStateCircuit">FockStateCircuit</a>,&nbsp;CollectionOfStates,&nbsp;NumPy&nbsp;and&nbsp;MatPlotLib.</span></dd></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>tf_VERSION</strong> = '1.0.0'</td></tr></table>
+</body></html>
