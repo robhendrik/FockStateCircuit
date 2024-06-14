@@ -121,6 +121,8 @@ On github you will find:
 You can also check https://armchairquantumphysicist.com/ where a number of applications are covered in blogposts
 
 ## Version history
+### Version 1.05
+* Minor bug fixes and performance improvement
 ### Version 1.04
 * Minor bug fixes and performance improvements
 ### Version 1.0.2
