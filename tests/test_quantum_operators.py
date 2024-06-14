@@ -325,3 +325,28 @@ def test_full_consistency_with_general_wave_plate_optical_node_3():
                         angle_difference = np.round((np.angle(amp1) -np.angle(amp2))%(np.pi *2),2)
                         errors.append(angle_difference == 0 or angle_difference == np.round(np.pi*2,2))
     assert all(errors)
+
+
+def test_no_error_when_photon_numbers_at_fock_state_length():
+    length_of_fock_state = 3
+    _no_of_optical_channels = 5
+    circuit1 = fsc.FockStateCircuit(length_of_fock_state=length_of_fock_state,
+                                    no_of_optical_channels=_no_of_optical_channels,
+                                    no_of_classical_channels=_no_of_optical_channels)
+    circuit1.wave_plate_from_hamiltonian(0,1,np.pi/8,np.pi) 
+    circuit1.wave_plate_from_hamiltonian(1,2,np.pi/8,np.pi) 
+    circuit1.wave_plate_from_hamiltonian(2,3,np.pi/8,np.pi) 
+    circuit1.wave_plate_from_hamiltonian(3,4,np.pi/8,np.pi) 
+    circuit1.measure_optical_to_classical(optical_channels_to_be_measured=[0,1,2],
+                                            classical_channels_to_be_written=[1,2,3]
+                                            )  
+    circuit1.wave_plate_from_hamiltonian(0,1,np.pi/8,np.pi) 
+    circuit1.wave_plate_from_hamiltonian(1,2,np.pi/8,np.pi) 
+    circuit1.wave_plate_from_hamiltonian(2,3,np.pi/8,np.pi) 
+    circuit1.wave_plate_from_hamiltonian(3,4,np.pi/8,np.pi) 
+    circuit1.measure_optical_to_classical(optical_channels_to_be_measured=[n for n in range(_no_of_optical_channels)],
+                                            classical_channels_to_be_written=[n for n in range(_no_of_optical_channels)]
+                                            )                                                        
+    overall_collection = fsc.CollectionOfStates(fock_state_circuit=circuit1)
+    result = circuit1.evaluate_circuit(collection_of_states_input=overall_collection)
+    assert True

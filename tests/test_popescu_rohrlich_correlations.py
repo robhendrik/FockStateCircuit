@@ -2,7 +2,7 @@ import sys
 sys.path.append("./src")
 import fock_state_circuit as fsc
 
-from fock_state_circuit.popescu_rohrlich_correlation_functionality.popescu_rohrlich_correlations import _stokes_vector_from_amplitudes,_group_configurations_per_outcome,_probability_from_stokes_vectors,_repair_amplitudes_for_photon_pair,_stokes_vector_for_pair_from_amplitudes_hh_hv_vh_vv
+from fock_state_circuit.popescu_rohrlich_correlation_functionality.popescu_rohrlich_correlations import _group_configurations_per_outcome,_probability_from_stokes_vectors
 import importlib
 import math
 import numpy as np
@@ -17,128 +17,6 @@ import matplotlib.testing.compare as plt_test
 import pytest
 
 generate_reference_images = False
-
-
-def test_stokes_vector_from_amplitudes():
-    no_error_found = True
-    angles_s = [
-        tuple([np.pi/2,0,0,0]),
-        tuple([0,0,0,0]),
-        tuple([np.pi/2,0,np.pi/2,0]),
-        tuple([0,np.pi/2,0,np.pi/2]),
-        tuple([np.pi/2,np.pi/2,np.pi/2,np.pi/2]),
-        tuple([np.pi/4,0,0,1.1*np.pi]),
-        tuple([np.pi/4,np.pi/2,0,0]),
-        tuple([np.pi/5,np.pi/3,np.pi/6,np.pi/8]),
-        tuple([0,np.pi/3,np.pi/6,np.pi/8]),
-        tuple([np.pi/5,np.pi/3,0,np.pi/8]),
-        tuple([np.pi/5,np.pi/3,np.pi/6,0]),
-        tuple([np.pi/5,np.pi/16,1.9*np.pi,0.1]),
-        tuple([10*np.pi/25,8*np.pi/17,0,0]),
-        tuple([np.pi/5,10*np.pi/33,0,1.5]),
-        tuple([np.pi/18,2*np.pi/3,0,0])
-        ]
-    lengths = [0.1,0.001, 3.14, np.pi, np.sqrt(2)]
-    for index, angles in enumerate(angles_s):
-        for indices in [(0,1),(2,3),(1,2),(0,3)]:
-            if angles[indices[0]] > np.pi/2 or angles[indices[1]] > np.pi:
-                      continue
-            length = lengths[index%len(lengths)]
-            phase = np.cos(angles[indices[1]]) + 1j*np.sin(angles[indices[1]])
-            amplitude_north = length*np.cos(angles[indices[0]])*phase
-            amplitude_south = length*np.sin(angles[indices[0]])
- 
-            vector, norm = _stokes_vector_from_amplitudes(amplitude_north, amplitude_south)
-            no_error_found = no_error_found and np.round(sum([c**2 for c in vector]),4) == 1
-            no_error_found = no_error_found and np.round(length,4) == np.round(norm,4)
-            angle_psi = np.arccos(vector[2])
-            no_error_found = no_error_found and np.round(angle_psi,4) == np.round(2*angles[indices[0]],4)
-            if np.round(np.cos(angles[indices[0]])) != 0 and np.round(np.sin(angles[indices[0]])) != 0:
-                angle_phi = np.arctan2(vector[0],vector[1])
-                no_error_found = no_error_found and np.round(angle_phi,4) == np.round(angles[indices[1]],4)
-            else:
-                angle_phi = 0
-            if not no_error_found:
-                print(angles,[angle/np.pi for angle in angles], indices)
-                print(np.round(length,2),np.round(norm,2),'-',np.round(angle_psi,4),np.round(2*angles[indices[0]],4),'-',np.round(angle_phi,2),np.round(angles[indices[1]],2))
-                print(vector)
-    assert no_error_found
-
-def test_repair_amplitudes():
-    no_error_found = True
-    no_error_found = no_error_found and _repair_amplitudes_for_photon_pair([1,0,0,0]) == _repair_amplitudes_for_photon_pair([1,0,0,0])
-    no_error_found = no_error_found and _repair_amplitudes_for_photon_pair([1,0,1,0]) == _repair_amplitudes_for_photon_pair([1,0,1,0])
-    no_error_found = no_error_found and _repair_amplitudes_for_photon_pair([0,1,0,1]) == _repair_amplitudes_for_photon_pair([0,1,0,1])
-    no_error_found = no_error_found and _repair_amplitudes_for_photon_pair([1,1,2,1]) == _repair_amplitudes_for_photon_pair([1,1,2,1])
-    no_error_found = no_error_found and _repair_amplitudes_for_photon_pair([0,0,0,0]) == _repair_amplitudes_for_photon_pair([0,0,0,0])
-    no_error_found = no_error_found and _repair_amplitudes_for_photon_pair([1,0,0,0]) == _repair_amplitudes_for_photon_pair([1,0,0,0])
-    no_error_found = no_error_found and _repair_amplitudes_for_photon_pair([0,3,0,0]) == _repair_amplitudes_for_photon_pair([0,3,0,0])
-    no_error_found = no_error_found and _repair_amplitudes_for_photon_pair([0,0,0,4]) == _repair_amplitudes_for_photon_pair([0,0,0,4])
-    no_error_found = no_error_found and all(np.round(_repair_amplitudes_for_photon_pair([100,10,10,0]),4) == np.round(_repair_amplitudes_for_photon_pair([100,10,10,1]),4))
-    no_error_found = no_error_found and _repair_amplitudes_for_photon_pair([1,0,0,0]) == _repair_amplitudes_for_photon_pair([1,0,0,0])
-    assert no_error_found
-
-def test_amplitudes_for_photon_from_photon_pairs_hh_hv_vh_vv():
-    no_error_found = True
-    angles_s = [
-        tuple([np.pi/4,0,0,0]),
-        tuple([np.pi/2,0,0,0]),
-        tuple([0,0,0,0]),
-        tuple([np.pi/2,0,np.pi/2,0]),
-        tuple([0,np.pi/2,0,np.pi/2]),
-        tuple([np.pi/2,np.pi/2,np.pi/2,np.pi/2]),
-        tuple([np.pi/4,0,0,1.1*np.pi]),
-        tuple([np.pi/4,np.pi/2,0,0]),
-        tuple([np.pi/5,np.pi/3,np.pi/6,np.pi/8]),
-        tuple([0,np.pi/3,np.pi/6,np.pi/8]),
-        tuple([np.pi/5,np.pi/3,0,np.pi/8]),
-        tuple([np.pi/5,np.pi/3,np.pi/6,0]),
-        tuple([np.pi/5,np.pi/16,1.9*np.pi,0.1]),
-        tuple([10*np.pi/25,8*np.pi/17,0,0]),
-        tuple([np.pi/5,10*np.pi/33,0,1.5]),
-        tuple([np.pi/18,2*np.pi/3,0,0])
-        ]    
-    lengths = [0.1,0.001, 3.14, np.pi, np.sqrt(2)]
-    for index, angles in enumerate(angles_s):
-        if angles[0] > np.pi/2 or angles[1] > np.pi:
-            continue
-        if angles[2] > np.pi/2 or angles[3] > np.pi:
-            continue
-        for indices in [(0,1),(2,3)]:
-
-            length_1 = lengths[index%len(lengths)]
-            length_2 = lengths[index%len(lengths)]
-
-            
-            if indices == (0,1):
-                phase_1 = np.cos(angles[indices[1]]) + 1j*np.sin(angles[indices[1]])
-                amplitude_north_1 = length_1*np.cos(angles[indices[0]])*phase_1
-                amplitude_south_1 = length_1*np.sin(angles[indices[0]])
-                vector_1, norm_1 = _stokes_vector_from_amplitudes(amplitude_north_1, amplitude_south_1)
-            else:
-                phase_2 = np.cos(angles[indices[1]]) + 1j*np.sin(angles[indices[1]])
-                amplitude_north_2 = length_2*np.cos(angles[indices[0]])*phase_2
-                amplitude_south_2 = length_2*np.sin(angles[indices[0]])
-                vector_2, norm_2 = _stokes_vector_from_amplitudes(amplitude_north_2, amplitude_south_2)
-        hh = amplitude_north_1 * amplitude_north_2
-        hv = amplitude_north_1 * amplitude_south_2
-        vh = amplitude_south_1 * amplitude_north_2
-        vv = amplitude_south_1 * amplitude_south_2
-        amplitudes = (hh, hv, vh, vv)
-        vector_1_from_pair, vector_2_from_pair, length_of_amplitudes = _stokes_vector_for_pair_from_amplitudes_hh_hv_vh_vv(amplitudes)
-   
-        no_error_found = no_error_found and np.round(length_1*length_2,4) == np.round(length_of_amplitudes,4)
-        no_error_found = no_error_found and all([np.round(a,4) == np.round(b,4) for a,b in zip(vector_1,vector_1_from_pair)])
-        no_error_found = no_error_found and all([np.round(a,4) == np.round(b,4) for a,b in zip(vector_2,vector_2_from_pair)])
-
-        if not no_error_found:
-            print(angles,np.round([angle/np.pi for angle in angles],2), indices)
-            print(amplitude_north_1, amplitude_south_1, amplitude_north_2, amplitude_south_2)
-            print(hh, hv, vh, vv)
-            print(length_1,length_2,norm_1, norm_2,np.round(length_1*length_2,4),np.round(length_of_amplitudes,4))
-            print(np.round(vector_1,4),np.round(vector_1_from_pair,4))
-            print(np.round(vector_2,4),np.round(vector_2_from_pair,4))
-    assert no_error_found
 
 def test_probability_from_stokes_vectors():
     vectors = [
@@ -942,4 +820,88 @@ def test_reverse_state_notation():
       
     no_error_found.append(len(no_error_found)==4)
     assert  all(no_error_found)
+
+def test_entangled_boxes():
+    # check that the correct error is raised when we create entanglement between photons.
+    with pytest.raises(Exception, match='Cannot calculate Popescu_Rohrlich correlation since entanglement has been generated'):
+        def quantum_teleportation_with_two_pr_boxes(quantumness):
+            # initialize the circuit 
+            teleportation_circuit = fsc.FockStateCircuit(   length_of_fock_state = 3, 
+                                                            no_of_optical_channels = 8,
+                                                            no_of_classical_channels=14
+                                                            )
+
+            # prepare the source photon pair as Popescu-Rohrlich photon pair 
+            pr_correlation=  [{'channels_Ah_Av_Bh_Bv':[0,1,2,3],'quantumness_indicator':quantumness},
+                            {'channels_Ah_Av_Bh_Bv':[4,5,6,7],'quantumness_indicator':quantumness}]
+            teleportation_circuit.popescu_rohrlich_correlation_gate(pr_correlation=pr_correlation)
+            teleportation_circuit.swap(4,5)
+
+            # ========= Starting the teleportation =================
+
+            # Bell state measurement by sender on source photon and first photon of shared pair
+            # write the result to classical channels 2-5
+            teleportation_circuit.non_polarizing_50_50_beamsplitter(input_channels_a = (2,3), 
+                                                                    input_channels_b = (4,5)
+                                                                    )
+
+
+            # ========= Teleportation complete ================= 
+            # perform a measurement on the target photon in optical channel 6 and 7 
+            teleportation_circuit.wave_plate_classical_control( optical_channel_horizontal = 6,
+                                                                optical_channel_vertical = 7,
+                                                                classical_channel_for_orientation = 12,
+                                                                classical_channel_for_phase_shift = 13)
+
+
+
+            # finally the sender can measure the photon that was originally entangled with the source, 
+            # after optional manipulation in a phase plate
+            teleportation_circuit.wave_plate_classical_control( optical_channel_horizontal = 0,
+                                                                optical_channel_vertical = 1,
+                                                                classical_channel_for_orientation = 0,
+                                                                classical_channel_for_phase_shift = 1)
+
+            # perform complete measurement
+            teleportation_circuit.measure_optical_to_classical( optical_channels_to_be_measured=[0,1,2,3,4,5,6,7],
+                                                                classical_channels_to_be_written=[0,1,2,3,4,5,10,11])
+            
+            # define communication in channels 6 and 7 to receiver based on outcome of Bell State measurement
+            def define_communication_bits(input_list, new_values = [], affected_channels = []):
+                # if a Bell state is detected the two bits are 0-0 or 0-1
+                lookup_table = {(0,1,1,0) : (0,1),
+                                (1,0,0,1) : (0,1)
+                                }
+                
+                # default value for the two bits is 1-1
+                communication = lookup_table.get(tuple(input_list[2:6]),(1,1))
+                
+                input_list[6], input_list[7] = communication[0], communication[1]
+                return input_list
+
+            teleportation_circuit.classical_channel_function(define_communication_bits, affected_channels=[2,3,4,5,6,7])
+            
+            return teleportation_circuit
+        
+        teleportation_circuit = quantum_teleportation_with_two_pr_boxes(1)
+        dictionary_of_measurement_settings = {'SS': (2*np.pi/16,np.pi/16),'ST':(2*np.pi/16,3*np.pi/16), 'TS':(0,np.pi/16), 'TT':(0,3*np.pi/16)}
+        initial_collection_of_states = fsc.CollectionOfStates(fock_state_circuit=teleportation_circuit, input_collection_as_a_dict=dict([]))
+        for name, setting in dictionary_of_measurement_settings.items():      
+            state = fsc.State(collection_of_states=initial_collection_of_states)
+            state.initial_state = name
+
+            amp = 1
+            state.optical_components = {'01010000' :  {'amplitude': amp, 'probability': amp**2}}
+            state.classical_channel_values = [0]*14
+            state.classical_channel_values[0] = setting[0]
+            state.classical_channel_values[1] = np.pi
+            state.classical_channel_values[12] = setting[1]
+            state.classical_channel_values[13] = np.pi
+            initial_collection_of_states.add_state(state)
+        for quantumness in [1,5,15]:
+            teleportation_circuit = quantum_teleportation_with_two_pr_boxes(quantumness)
+            result = teleportation_circuit.evaluate_circuit(collection_of_states_input=initial_collection_of_states)
+            result.filter_on_classical_channel(classical_channel_numbers=[6], values_to_filter=[0])
+            channel_combinations_for_correlations = [(0,10)]
+            correlation = result.plot_correlations(channel_combis_for_correlation=channel_combinations_for_correlations,correlation_output_instead_of_plot=True)
 

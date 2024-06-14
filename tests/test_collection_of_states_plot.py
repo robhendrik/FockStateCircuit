@@ -189,3 +189,34 @@ def test_plot_correlations():
         channel_combis_for_correlation = [(2,3),(4,5),(2,4),(3,5)]
         result.plot_correlations(channel_combis_for_correlation)
         assert plt_test.compare_images(img1, img2, 0.001) is None
+
+def test_internal_name_creation_for_correlation():
+    circuit = fsc.FockStateCircuit(5,4,2)
+    result = fsc.CollectionOfStates(fock_state_circuit=circuit)
+
+    no_error = True
+    input = [0,1,2]
+    name =result._create_state_name_from_list_of_photon_numbers(input)
+    no_error &= result._create_list_of_values_from_name(name) == [0,1,2]
+
+    input = [0,1,-2]
+    name = result._create_state_name_from_list_of_photon_numbers(input)
+    no_error &=result._create_list_of_values_from_name(name) == [0,1,3]
+
+    input = [0,1,22]
+    name = result._create_state_name_from_list_of_photon_numbers(input)
+    no_error &=result._create_list_of_values_from_name(name) == [0,1,2]
+
+    input = [0,0,100]
+    name = result._create_state_name_from_list_of_photon_numbers(input)
+    no_error &=result._create_list_of_values_from_name(name) == [0,0,0]
+
+    input = [0,1,2,3,4]
+    name = result._create_state_name_from_list_of_photon_numbers(input)
+    no_error &=result._create_list_of_values_from_name(name) == [0,1,2,3,4]
+
+    input = [-1,-2,-3,-4,-5]
+    name = result._create_state_name_from_list_of_photon_numbers(input)
+    no_error &=result._create_list_of_values_from_name(name) == [4,3,2,1,0]
+
+    print(no_error)
